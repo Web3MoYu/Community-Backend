@@ -25,12 +25,38 @@ public class CarController {
     @GetMapping("/list/{owner}")
     public CommonResult<Car> getCarById(@PathVariable("owner") Long owner) {
         Car car = carService.getCarByOwner(owner);
-        return CommonResult.success(car);
+        if (car!=null) {
+            return CommonResult.success(car);
+        }else {
+            return CommonResult.error(1,"车辆信息获取失败!");
+        }
     }
 
+    /**
+     * 查看所有车辆信息
+     * @return
+     */
     @GetMapping("/all")
     public CommonResult<Car> getAllCar(){
         Car car=carService.getAllCar();
-        return CommonResult.success(car);
+        if (car!=null) {
+            return CommonResult.success(car);
+        }else {
+            return CommonResult.error(1,"车辆信息获取失败!");
+        }
+    }
+
+    /**
+     * 获取未审核车辆信息
+     * @return
+     */
+    @GetMapping("/vet")
+    public CommonResult<Car> getVetCar(){
+        Car car=carService.getVetCar();
+        if (car!=null) {
+            return CommonResult.success(car);
+        }else {
+            return CommonResult.error(1,"未审核车辆信息获取失败!");
+        }
     }
 }

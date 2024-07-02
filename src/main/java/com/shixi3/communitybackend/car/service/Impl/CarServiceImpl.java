@@ -18,6 +18,10 @@ public class CarServiceImpl implements CarService {
         return carMapper.getCarByOwner(owner);
     }
 
-    @Resource
+    @Override
     public Car getAllCar(){return carMapper.getAllCar();}
+
+    @Override
+    public Car getVetCar(){return carMapper.getAllCar();}
+
 }

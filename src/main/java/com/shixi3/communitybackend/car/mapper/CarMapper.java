@@ -10,4 +10,5 @@ public interface CarMapper extends BaseMapper<Car> {
 
     Car getCarByOwner(Long owner);
     Car getAllCar();
+    Car getVetCar();
 }
