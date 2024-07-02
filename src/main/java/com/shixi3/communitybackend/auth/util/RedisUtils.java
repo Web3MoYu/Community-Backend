@@ -1,4 +1,4 @@
-package com.shixi3.communitybackend.common.util;
+package com.shixi3.communitybackend.auth.util;
 
 public class RedisUtils {
 

@@ -1,5 +1,6 @@
 package com.shixi3.communitybackend;
 
+import com.shixi3.communitybackend.auth.util.DigestsUtils;
 import com.shixi3.communitybackend.sys.service.MenuService;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,11 @@ class CommunityBackendApplicationTests {
     @Test
     void contextLoads() {
         System.out.println(menuService.getTreeMenu(1L));
+    }
+
+    @Test
+    void getPassword(){
+        System.out.println(DigestsUtils.getPassword());
     }
 
 }

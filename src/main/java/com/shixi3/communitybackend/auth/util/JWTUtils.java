@@ -1,4 +1,4 @@
-package com.shixi3.communitybackend.common.util;
+package com.shixi3.communitybackend.auth.util;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;

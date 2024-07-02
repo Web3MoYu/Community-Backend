@@ -1,4 +1,4 @@
-package com.shixi3.communitybackend.common.util;
+package com.shixi3.communitybackend.auth.util;
 
 import cn.hutool.crypto.digest.BCrypt;
 import cn.hutool.crypto.digest.DigestAlgorithm;
@@ -16,7 +16,7 @@ public class DigestsUtils {
     // 迭代次数
     public static final Integer ITERATIONS = 520;
 
-    public static final String DEFAULT_PASSWORD = "dms123456";
+    public static final String DEFAULT_PASSWORD = "test123456.";
 
     public static final String SALT = "salt";
 
