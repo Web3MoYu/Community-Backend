@@ -22,6 +22,7 @@ public class AuthController {
         return authService.login(loginReqVo);
     }
 
+    // 使用token进行验证及登录
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/token")
     public CommonResult<TokenRepVo> token() {

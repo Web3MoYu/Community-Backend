@@ -13,6 +13,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 public class SpringConfig {
     @Bean
     @Order(0)
+    // 添加异常处理器
     public SpringMVCExceptionHandler springMVCExceptionHandler() {
         return new SpringMVCExceptionHandler();
     }

@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 public class CommonConfigure {
 
     @Bean
+    // 配置公共异常处理器
     public CommonExceptionHandler commonExceptionHandler() {
         return new CommonExceptionHandler();
     }

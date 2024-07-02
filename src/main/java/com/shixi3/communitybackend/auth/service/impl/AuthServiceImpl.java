@@ -67,6 +67,7 @@ public class AuthServiceImpl implements AuthService {
         User user = userMapper.selectById(userID);
         TokenRepVo tokenRepVo = new TokenRepVo();
         BeanUtils.copyProperties(user, tokenRepVo);
+        // 拿到当前用户的菜单信息
         List<MenuTree> treeMenu = menuService.getTreeMenu(tokenRepVo.getUserId());
         tokenRepVo.setMenuTree(treeMenu);
         return CommonResult.success(tokenRepVo);
@@ -75,6 +76,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public CommonResult<?> logout() {
         Long userID = SecurityUtil.getUserID();
+        // 删除权限和身份信息在redis服务器中
         redisTemplate.delete(RedisUtils.TOKEN_KEY + userID);
         redisTemplate.delete(RedisUtils.PERMISSIONS_KEY + userID);
         return CommonResult.success("");

@@ -18,6 +18,7 @@ public class SecurityUtil {
         return (DMSUserDetail) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
+    // 将字符串转换为GrantedAuthority
     public static List<GrantedAuthority> convertStringToGrantedAuthority(List<String> auths) {
         ArrayList<GrantedAuthority> result = new ArrayList<>();
         for (String auth : auths) {

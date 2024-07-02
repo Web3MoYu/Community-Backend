@@ -41,6 +41,7 @@ public class TokenFilter extends OncePerRequestFilter {
                 Long userId = JWTUtils.getUserId(token);
                 String cacheToken = redisTemplate
                         .opsForValue().get(RedisUtils.TOKEN_KEY + userId);
+                // 验证token是否被修改
                 if (cacheToken == null || !cacheToken.equals(token)) {
                     throw new BadCredentialsException("Token error");
                 }
