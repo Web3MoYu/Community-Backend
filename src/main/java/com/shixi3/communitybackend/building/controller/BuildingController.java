@@ -73,4 +73,15 @@ public class BuildingController {
         Building building = buildingService.getOne(wrapper);
         return CommonResult.success(Objects.isNull(building));
     }
+
+    /**
+     * 根据id获取楼栋信息
+     * @param id 楼栋id
+     * @return 楼栋信息
+     */
+    @GetMapping("/getOne/{id}")
+    public CommonResult<Building> getBuildingById(@PathVariable Long id) {
+        Building building = buildingService.getById(id);
+        return CommonResult.success(building);
+    }
 }
