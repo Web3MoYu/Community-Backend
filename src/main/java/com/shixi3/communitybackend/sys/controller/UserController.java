@@ -7,16 +7,20 @@ import com.shixi3.communitybackend.auth.service.UserService;
 import com.shixi3.communitybackend.auth.util.DigestsUtils;
 import com.shixi3.communitybackend.common.entity.User;
 import com.shixi3.communitybackend.common.model.CommonResult;
+import com.shixi3.communitybackend.sys.mapper.RoleMapper;
 import com.shixi3.communitybackend.sys.mapper.UserRoleMapper;
 import com.shixi3.communitybackend.sys.vo.UserVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -28,6 +32,9 @@ public class UserController {
     UserService userService;
 
     @Resource
+    RoleMapper roleMapper;
+
+    @Resource
     UserRoleMapper userRoleMapper;
 
     /**
@@ -35,12 +42,23 @@ public class UserController {
      */
     @GetMapping("/list")
     @PreAuthorize("hasAuthority('sys:user:list')")
-    public CommonResult<Page<User>> search(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int pageSize, @RequestParam(required = false) String name) {
+    public CommonResult<Page<UserVo>> search(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int pageSize, @RequestParam(required = false) String name) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.select(User::getUserId, User::getName, User::getPhone, User::getUsername, User::getSex)
                 .like(name != null, User::getName, name);
         Page<User> result = userService.page(new Page<>(page, pageSize), wrapper);
-        return CommonResult.success(result);
+        List<UserVo> collect = result.getRecords().stream().map((item) -> {
+            Long userId = item.getUserId();
+            String roleName = roleMapper.getRoleByUserID(userId).getRoleName();
+            UserVo userVo = new UserVo();
+            BeanUtils.copyProperties(item, userVo);
+            userVo.setRoleName(roleName);
+            return userVo;
+        }).toList();
+        Page<UserVo> userVoPage = new Page<>();
+        BeanUtils.copyProperties(result, userVoPage, "records");
+        userVoPage.setRecords(collect);
+        return CommonResult.success(userVoPage);
     }
 
     /**
