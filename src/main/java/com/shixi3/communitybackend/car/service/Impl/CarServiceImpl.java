@@ -21,7 +21,5 @@ public class CarServiceImpl implements CarService {
     @Override
     public Car getAllCar(){return carMapper.getAllCar();}
 
-    @Override
-    public Car getVetCar(){return carMapper.getAllCar();}
 
 }

@@ -24,8 +24,4 @@ public class Car {
      * 车辆型号
      */
     private String type;
-    /**
-     * 审核状态
-     */
-    private Integer status;
 }

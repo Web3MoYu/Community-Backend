@@ -45,18 +45,4 @@ public class CarController {
             return CommonResult.error(1,"车辆信息获取失败!");
         }
     }
-
-    /**
-     * 获取未审核车辆信息
-     * @return
-     */
-    @GetMapping("/vet")
-    public CommonResult<Car> getVetCar(){
-        Car car=carService.getVetCar();
-        if (car!=null) {
-            return CommonResult.success(car);
-        }else {
-            return CommonResult.error(1,"未审核车辆信息获取失败!");
-        }
-    }
 }

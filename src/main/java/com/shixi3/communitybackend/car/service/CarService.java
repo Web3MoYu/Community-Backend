@@ -6,5 +6,4 @@ public interface CarService {
 
     Car getCarByOwner(Long owner);
     Car getAllCar();
-    Car getVetCar();
 }

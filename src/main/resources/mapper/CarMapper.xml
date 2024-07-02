@@ -9,7 +9,6 @@
             owner,
             licence,
             type,
-            status
         from car
         where owner=#{owner};
     </select>
@@ -20,18 +19,6 @@
             owner,
             licence,
             type,
-            status
         from car;
-    </select>
-    
-    <select id="getVetCar" resultType="com.shixi3.communitybackend.car.entity.Car">
-        select
-            car_id,
-            owner,
-            licence,
-            type,
-            status
-        from car
-        where status=0;
     </select>
 </mapper>
