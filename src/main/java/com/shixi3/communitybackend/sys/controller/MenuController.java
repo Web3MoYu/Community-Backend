@@ -40,4 +40,15 @@ public class MenuController {
         return CommonResult.success(menuService.getTreeMenuByRoleId(id));
     }
 
+    /**
+     * 得到所有的非按钮id
+     *
+     * @return
+     */
+    @GetMapping("/getContent")
+    @PreAuthorize("hasAuthority('sys:menu:list')")
+    public CommonResult<List<MenuTree>> getContent() {
+        List<MenuTree> treeMenu = menuService.getTreeMenu(null);
+        return CommonResult.success(treeMenu);
+    }
 }
