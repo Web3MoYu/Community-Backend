@@ -66,4 +66,32 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu>
         }
         return list;
     }
+
+    @Override
+    public List<MenuTree> allTreeMenu() {
+        List<Menu> menus = menuMapper.getMenus();
+        Map<Long, MenuTree> map = new HashMap<>();
+        List<MenuTree> list = new ArrayList<>();
+        // 将数据全部放在map集合中
+        for (Menu menu : menus) {
+            MenuTree menuTree = new MenuTree();
+            menuTree.setMenu(menu);
+            if (menu.getParentId() == 0) {
+                list.add(menuTree);
+            }
+            map.put(menu.getMenuId(), menuTree);
+        }
+        return getMenuTrees(map, list);
+    }
+
+    public List<Long> getTreeMenuByRoleId(Long roleId) {
+        List<UserRoleVo> menusByRoleId = menuMapper.getMenusByRoleId(roleId);
+        // 获取所有id
+        List<Long> menus = new ArrayList<>(menusByRoleId.stream().map(UserRoleVo::getMenuId).toList());
+        List<Long> parentIds = menusByRoleId.stream().map(UserRoleVo::getParentId).toList();
+
+        // 移除父id
+        menus.removeAll(parentIds);
+        return menus;
+    }
 }

@@ -15,4 +15,12 @@ public interface MenuService extends IService<Menu> {
      * @return
      */
     List<MenuTree> getTreeMenu(Long userId);
+
+    /**
+     * 树形查询所有菜单
+     * @return
+     */
+    List<MenuTree> allTreeMenu();
+
+    List<Long> getTreeMenuByRoleId(Long roleId);
 }
