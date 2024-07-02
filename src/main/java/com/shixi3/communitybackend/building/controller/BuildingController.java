@@ -84,4 +84,18 @@ public class BuildingController {
         Building building = buildingService.getById(id);
         return CommonResult.success(building);
     }
+
+    /**
+     * 编辑楼栋信息
+     * @param building 修改的楼栋信息
+     * @return 提示信息
+     */
+    @PutMapping("/edit")
+    public CommonResult<String> updateBuilding(@RequestBody Building building) {
+        boolean update = buildingService.updateById(building);
+        if(update) {
+            return CommonResult.success("修改楼栋信息成功！");
+        }
+        return CommonResult.error(500,"修改楼栋信息失败！");
+    }
 }
