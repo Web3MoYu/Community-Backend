@@ -1,4 +1,4 @@
-package com.shixi3.communitybackend.UserHouseRelation.entity;
+package com.shixi3.communitybackend.Family.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserHouseRelationship {
+public class UserHouse {
     private Long Id;//所属关系id
     private Long UserId;//用户id
     private Long HouseId;//房屋id
