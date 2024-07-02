@@ -73,4 +73,17 @@ public class RoleController {
         }
         return CommonResult.success("修改成功");
     }
+
+    /**
+     * 添加角色信息
+     */
+    @PostMapping("/add")
+    @PreAuthorize("hasAuthority('sys:role:add')")
+    public CommonResult<String> addRole(@RequestBody Role role) {
+        boolean save = roleService.save(role);
+        if (!save) {
+            throw new BizException("添加失败");
+        }
+        return CommonResult.success("添加成功");
+    }
 }
