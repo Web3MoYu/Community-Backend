@@ -1,7 +1,9 @@
 package com.shixi3.communitybackend.sys.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.shixi3.communitybackend.common.entity.Menu;
 import com.shixi3.communitybackend.common.entity.MenuTree;
+import com.shixi3.communitybackend.common.exception.BizException;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import com.shixi3.communitybackend.sys.service.MenuService;
 import jakarta.annotation.Resource;
@@ -62,7 +64,7 @@ public class MenuController {
         }
         boolean save = menuService.save(menu);
         if (!save) {
-            return CommonResult.success("添加失败");
+            throw new BizException("添加失败");
         }
         return CommonResult.success("添加成功");
     }
@@ -77,8 +79,22 @@ public class MenuController {
         }
         boolean save = menuService.updateById(menu);
         if (!save) {
-            return CommonResult.success("修改失败");
+            throw new BizException("修改失败");
         }
         return CommonResult.success("修改成功");
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('sys:menu:delete')")
+    public CommonResult<String> updateMenus(@PathVariable Long id) {
+        System.out.println(id);
+        LambdaQueryWrapper<Menu> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Menu::getParentId, id);
+        List<Menu> list = menuService.list(wrapper);
+        if (!list.isEmpty()){
+            throw new BizException("该菜单拥有子菜单,无法删除");
+        }
+        menuService.removeById(id);
+        return CommonResult.success("删除成功");
     }
 }
