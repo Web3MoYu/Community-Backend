@@ -8,6 +8,7 @@ import com.shixi3.communitybackend.common.model.CommonResult;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Objects;
 
 
@@ -97,5 +98,14 @@ public class BuildingController {
             return CommonResult.success("修改楼栋信息成功！");
         }
         return CommonResult.error(500,"修改楼栋信息失败！");
+    }
+
+    @DeleteMapping("/delBatch")
+    public CommonResult<String> delBatchById(@RequestBody List<Long> ids) {
+        boolean delBatch = buildingService.removeBatchByIds(ids);
+        if(delBatch) {
+            return CommonResult.success("批量删除成功！");
+        }
+        return CommonResult.error(500,"批量删除失败！");
     }
 }
