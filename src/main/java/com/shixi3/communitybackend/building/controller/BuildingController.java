@@ -43,4 +43,18 @@ public class BuildingController {
         return CommonResult.error(500,"新增楼栋失败！");
 
     }
+
+    /**
+     * 删除楼栋信息
+     * @param id 楼栋id
+     * @return 提示信息
+     */
+    @DeleteMapping("/delete/{id}")
+    public CommonResult<String> deleteBuilding(@PathVariable Integer id) {
+        boolean delete = buildingService.removeById(id);
+        if(delete) {
+            return CommonResult.success("删除楼栋成功！");
+        }
+        return CommonResult.error(500,"删除楼栋失败！");
+    }
 }
