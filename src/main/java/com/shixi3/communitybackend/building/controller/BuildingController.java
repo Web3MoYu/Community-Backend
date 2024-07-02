@@ -1,11 +1,14 @@
 package com.shixi3.communitybackend.building.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.shixi3.communitybackend.building.entity.Building;
 import com.shixi3.communitybackend.building.service.BuildingService;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Objects;
 
 
 @RestController
@@ -50,11 +53,24 @@ public class BuildingController {
      * @return 提示信息
      */
     @DeleteMapping("/delete/{id}")
-    public CommonResult<String> deleteBuilding(@PathVariable Integer id) {
+    public CommonResult<String> deleteBuilding(@PathVariable Long id) {
         boolean delete = buildingService.removeById(id);
         if(delete) {
             return CommonResult.success("删除楼栋成功！");
         }
         return CommonResult.error(500,"删除楼栋失败！");
+    }
+
+    /**
+     * 校验楼栋编号是否重复
+     * @param number 楼栋编号
+     * @return 楼栋查询信息
+     */
+    @GetMapping("/check/{number}")
+    public CommonResult<Boolean> checkBuildingNumber(@PathVariable Long number) {
+        LambdaQueryWrapper<Building> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(number != null,Building::getBuildingNumber,number);
+        Building building = buildingService.getOne(wrapper);
+        return CommonResult.success(Objects.isNull(building));
     }
 }
