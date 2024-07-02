@@ -3,6 +3,8 @@ package com.shixi3.communitybackend.auth.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.shixi3.communitybackend.auth.mapper.UserMapper;
 import com.shixi3.communitybackend.auth.service.AuthService;
+import com.shixi3.communitybackend.auth.util.SecurityUtil;
+import com.shixi3.communitybackend.auth.vo.TokenRepVo;
 import com.shixi3.communitybackend.sys.service.MenuService;
 import com.shixi3.communitybackend.auth.vo.LoginRepVo;
 import com.shixi3.communitybackend.auth.vo.LoginReqVo;
@@ -14,6 +16,7 @@ import com.shixi3.communitybackend.auth.util.DigestsUtils;
 import com.shixi3.communitybackend.auth.util.JWTUtils;
 import com.shixi3.communitybackend.auth.util.RedisUtils;
 import jakarta.annotation.Resource;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -58,5 +61,23 @@ public class AuthServiceImpl implements AuthService {
         return CommonResult.success(loginRepVo);
     }
 
+    @Override
+    public CommonResult<TokenRepVo> token() {
+        Long userID = SecurityUtil.getUserID();
+        User user = userMapper.selectById(userID);
+        TokenRepVo tokenRepVo = new TokenRepVo();
+        BeanUtils.copyProperties(user, tokenRepVo);
+        List<MenuTree> treeMenu = menuService.getTreeMenu(tokenRepVo.getUserId());
+        tokenRepVo.setMenuTree(treeMenu);
+        return CommonResult.success(tokenRepVo);
+    }
+
+    @Override
+    public CommonResult<?> logout() {
+        Long userID = SecurityUtil.getUserID();
+        redisTemplate.delete(RedisUtils.TOKEN_KEY + userID);
+        redisTemplate.delete(RedisUtils.PERMISSIONS_KEY + userID);
+        return CommonResult.success("");
+    }
 
 }
