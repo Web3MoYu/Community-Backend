@@ -10,9 +10,11 @@ import com.shixi3.communitybackend.sys.entity.UserRole;
 import com.shixi3.communitybackend.sys.mapper.RoleMapper;
 import com.shixi3.communitybackend.sys.mapper.UserRoleMapper;
 import com.shixi3.communitybackend.sys.service.RoleService;
+import com.shixi3.communitybackend.sys.vo.UserRoleVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -110,5 +112,16 @@ public class RoleController {
             throw new BizException("删除失败");
         }
         return CommonResult.success("删除成功");
+    }
+
+    @Transactional
+    @PutMapping("/updatePermissions/{roleId}")
+    @PreAuthorize("hasAuthority('sys:role:allot')")
+    public CommonResult<String> allotPermissions(@PathVariable Long roleId, @RequestBody UserRoleVo userRoleVo) {
+        boolean per = roleService.allotPermissions(userRoleVo.getPermissions(), roleId);
+        if (!per) {
+            throw new BizException("分配失败");
+        }
+        return CommonResult.success("分配成功");
     }
 }
