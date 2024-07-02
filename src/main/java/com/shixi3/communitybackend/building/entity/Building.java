@@ -16,7 +16,7 @@ public class Building implements Serializable {
     /**
     * 楼栋编号
     */
-    private String buildingNumber;
+    private Long buildingNumber;
     /**
     * 楼层数
     */
