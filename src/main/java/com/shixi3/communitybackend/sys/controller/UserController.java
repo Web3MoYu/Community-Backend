@@ -144,4 +144,15 @@ public class UserController {
         userRoleMapper.insert(userRole);
         return CommonResult.success("添加成功");
     }
+
+    @DeleteMapping("/delete/{userId}")
+    @PreAuthorize("hasAuthority('sys:user:delete')")
+    @Transactional
+    public CommonResult<String> delete(@PathVariable Long userId) {
+        // 首先删除角色信息
+        userRoleMapper.deleteUserRoleById(userId);
+        //删除角色
+        userService.removeById(userId);
+        return CommonResult.success("删除成功");
+    }
 }
