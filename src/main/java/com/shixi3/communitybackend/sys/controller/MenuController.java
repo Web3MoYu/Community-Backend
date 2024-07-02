@@ -1,5 +1,6 @@
 package com.shixi3.communitybackend.sys.controller;
 
+import com.shixi3.communitybackend.common.entity.Menu;
 import com.shixi3.communitybackend.common.entity.MenuTree;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import com.shixi3.communitybackend.sys.service.MenuService;
@@ -50,5 +51,19 @@ public class MenuController {
     public CommonResult<List<MenuTree>> getContent() {
         List<MenuTree> treeMenu = menuService.getTreeMenu(null);
         return CommonResult.success(treeMenu);
+    }
+
+    @PostMapping("/add")
+    @PreAuthorize("hasAuthority('sys:menu:add')")
+    public CommonResult<String> addMenus(@RequestBody Menu menu) {
+        System.out.println(menu);
+        if (menu.getParentId() == null){
+            menu.setParentId(0L);
+        }
+        boolean save = menuService.save(menu);
+        if (!save) {
+            return CommonResult.success("添加失败");
+        }
+        return CommonResult.success("添加成功");
     }
 }
