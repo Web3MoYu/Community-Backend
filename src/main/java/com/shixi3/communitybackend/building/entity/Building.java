@@ -1,5 +1,6 @@
 package com.shixi3.communitybackend.building.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import java.io.Serializable;
@@ -12,6 +13,7 @@ public class Building implements Serializable {
     /**
     * 楼栋id
     */
+    @TableId
     private Long buildingId;
     /**
     * 楼栋编号
