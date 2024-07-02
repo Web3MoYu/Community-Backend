@@ -66,4 +66,19 @@ public class MenuController {
         }
         return CommonResult.success("添加成功");
     }
+
+    @PutMapping("/update/{id}")
+    @PreAuthorize("hasAuthority('sys:menu:update')")
+    public CommonResult<String> updateMenus(@RequestBody Menu menu, @PathVariable Long id) {
+        menu.setMenuId(id);
+        // 判断父菜单
+        if (menu.getParentId() == null){
+            menu.setParentId(0L);
+        }
+        boolean save = menuService.updateById(menu);
+        if (!save) {
+            return CommonResult.success("修改失败");
+        }
+        return CommonResult.success("修改成功");
+    }
 }
