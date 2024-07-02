@@ -7,6 +7,7 @@ import com.shixi3.communitybackend.auth.service.UserService;
 import com.shixi3.communitybackend.auth.util.DigestsUtils;
 import com.shixi3.communitybackend.common.entity.User;
 import com.shixi3.communitybackend.common.model.CommonResult;
+import com.shixi3.communitybackend.sys.entity.UserRole;
 import com.shixi3.communitybackend.sys.mapper.RoleMapper;
 import com.shixi3.communitybackend.sys.mapper.UserRoleMapper;
 import com.shixi3.communitybackend.sys.vo.UserVo;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
 
 @Slf4j
@@ -44,7 +45,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('sys:user:list')")
     public CommonResult<Page<UserVo>> search(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int pageSize, @RequestParam(required = false) String name) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.select(User::getUserId, User::getName, User::getPhone, User::getUsername, User::getSex)
+        wrapper.select(User::getUserId, User::getName, User::getPhone, User::getUsername, User::getSex, User::getIdCard)
                 .like(name != null, User::getName, name);
         Page<User> result = userService.page(new Page<>(page, pageSize), wrapper);
         List<UserVo> collect = result.getRecords().stream().map((item) -> {
@@ -103,5 +104,44 @@ public class UserController {
                 .eq(User::getUserId, user.getUserId());
         userService.update(wrapper);
         return CommonResult.success("修改成功");
+    }
+
+    /*
+   根据username获取用户
+    */
+    @GetMapping("/{username}/{isEdit}")
+    @PreAuthorize("hasAuthority('sys:user:list')")
+    public CommonResult<Boolean> checkUsername(@PathVariable String username, @PathVariable boolean isEdit) {
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(username != null, User::getUsername, username);
+        User result = userService.getOne(wrapper);
+        return CommonResult.success(Objects.isNull(result));
+    }
+
+    /**
+     * 添加用户
+     */
+    @PostMapping("/add")
+    @PreAuthorize("hasAuthority('sys:user:add')")
+    @Transactional
+    public CommonResult<String> add(@RequestBody UserVo user) {
+        System.out.println(user);
+        // 修改时间
+        user.setCreateTime(new Date());
+        user.setUpdateTime(new Date());
+        // 创建密码
+        Map<String, String> map = DigestsUtils.getPassword();
+        String salt = map.get(DigestsUtils.SALT);
+        String pwd = map.get(DigestsUtils.PASSWORD);
+        user.setSalt(salt);
+        user.setPassword(pwd);
+        userService.save(user);
+
+        // 添加角色信息
+        UserRole userRole = new UserRole();
+        userRole.setRoleId(user.getRoleId());
+        userRole.setUserId(user.getUserId());
+        userRoleMapper.insert(userRole);
+        return CommonResult.success("添加成功");
     }
 }
