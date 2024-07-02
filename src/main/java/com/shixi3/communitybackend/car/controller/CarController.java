@@ -17,9 +17,20 @@ public class CarController {
     @Resource
     private CarService carService;
 
-    @GetMapping("/list/{id}")
-    public CommonResult<Car> getCarById(@PathVariable("id") Long id) {
-        Car car = carService.getCarByOwner(id);
+    /**
+     * 查看个人车辆信息
+     * @param owner 个人ID
+     * @return
+     */
+    @GetMapping("/list/{owner}")
+    public CommonResult<Car> getCarById(@PathVariable("owner") Long owner) {
+        Car car = carService.getCarByOwner(owner);
+        return CommonResult.success(car);
+    }
+
+    @GetMapping("/all")
+    public CommonResult<Car> getAllCar(){
+        Car car=carService.getAllCar();
         return CommonResult.success(car);
     }
 }

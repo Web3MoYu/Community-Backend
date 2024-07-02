@@ -5,4 +5,5 @@ import com.shixi3.communitybackend.car.entity.Car;
 public interface CarService {
 
     Car getCarByOwner(Long owner);
+    Car getAllCar();
 }
