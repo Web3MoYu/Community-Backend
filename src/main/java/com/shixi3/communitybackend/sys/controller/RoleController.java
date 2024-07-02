@@ -1,7 +1,9 @@
 package com.shixi3.communitybackend.sys.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.shixi3.communitybackend.common.exception.BizException;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import com.shixi3.communitybackend.sys.entity.Role;
 import com.shixi3.communitybackend.sys.mapper.RoleMapper;
@@ -55,5 +57,20 @@ public class RoleController {
         wrapper.like(roleName != null, Role::getRoleName, roleName);
         Page<Role> result = roleService.page(new Page<>(page, pageSize), wrapper);
         return CommonResult.success(result);
+    }
+
+    /**
+     * 编辑角色信息
+     */
+    @PutMapping("/update/{id}")
+    @PreAuthorize("hasAuthority('sys:role:update')")
+    public CommonResult<String> updateRole(@RequestBody Role role, @PathVariable String id) {
+        LambdaUpdateWrapper<Role> wrapper = new LambdaUpdateWrapper<>();
+        wrapper.eq(id != null, Role::getRoleId, id);
+        boolean update = roleService.update(role, wrapper);
+        if (!update) {
+            throw new BizException("修改失败");
+        }
+        return CommonResult.success("修改成功");
     }
 }
