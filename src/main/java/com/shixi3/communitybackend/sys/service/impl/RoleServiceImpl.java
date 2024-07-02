@@ -50,14 +50,32 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role>
                 .in(Menu::getMenuId, permissions);
         List<Long> collect = menuMapper.selectList(queryWrapper).stream().map(Menu::getParentId).toList();
 
+
         // 将父id放到permissions中
         Set<Long> per = new HashSet<>(permissions);
         Set<Long> parent = new HashSet<>(collect);
+        parent.remove(0L); //删除0
+        per.remove(0L);
         for (Long item : parent) {
             if (!per.contains(item)) {
                 permissions.add(item);
             }
         }
+        queryWrapper.clear();
+        queryWrapper.select(Menu::getParentId)
+                .in(Menu::getMenuId, parent);
+        List<Long> collect2 = menuMapper.selectList(queryWrapper).stream().map(Menu::getParentId).toList();
+
+        per = new HashSet<>(permissions);
+        parent = new HashSet<>(collect2);
+        parent.remove(0L); //删除0
+        per.remove(0L);
+        for (Long item : parent) {
+            if (!per.contains(item)) {
+                permissions.add(item);
+            }
+        }
+
         // 添加权限
         List<MenuRole> menuRoles = new ArrayList<>();
         for (Long menId : permissions) {
