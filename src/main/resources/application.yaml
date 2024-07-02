@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: community
+  datasource:
+    url: jdbc:mysql://203.189.215.50/community_manager
+    username: root
+    password: Zxmklkwe1223@
+  data:
+    redis:
+      host: 203.189.215.50
+      port: 6379
+      password: Zmskwneds@%1
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
