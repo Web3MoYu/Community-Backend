@@ -6,10 +6,8 @@ import com.shixi3.communitybackend.common.entity.User;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,12 +21,12 @@ public class UserHouseController {
 
     /**
      * 获取房屋户主
-     * @param houseId
+     * @param id
      * @return
      */
-    @GetMapping("/HouseHold")
-    public CommonResult<User> getHouseHoldByHouseId(Long houseId) {
-        User household=userHouseService.getHouseholdByHouseId(houseId);
+    @GetMapping("/HouseHold/{id}")
+    public CommonResult<User> getHouseHoldByHouseId(@PathVariable Long id) {
+        User household=userHouseService.getHouseholdByHouseId(id);
         if (household!=null) {
             return CommonResult.success(household);
         }else {
@@ -37,17 +35,48 @@ public class UserHouseController {
     }
 
     /**
-     * 获取房屋所有成员（除开户主)
-     * @param HouseId
+     *
+     * 为空房添加户主
+     * @param houseId
+     * @param userId
      * @return
      */
-    @GetMapping("/HouseMembers")
-    public CommonResult<List> getHouseMembersByHouseId(Long HouseId) {
-        List<User> members=userHouseService.getHouseMembersByHouseId(HouseId);
+    @PostMapping("/addHouseHold")
+    public CommonResult addHouseHold(Long houseId, Long userId) {
+        return null;
+    }
+
+    /**
+     * 获取房屋所有成员（除开户主)
+     * @param houseId
+     * @return
+     */
+    @GetMapping("/HouseMembers/{houseId}")
+    public CommonResult<List> getHouseMembersByHouseId(@PathVariable Long houseId) {
+        List<User> members=userHouseService.getHouseMembersByHouseId(houseId);
         if (members!=null) {
             return CommonResult.success(members);
         }else {
             return CommonResult.error(0,"获取房屋所有成员失败!");
+        }
+    }
+
+    /**
+     * 添加家庭成员
+     * @param houseId
+     * @param userId
+     * @return
+     */
+    @PostMapping("/addHouseMember")
+    public CommonResult addHouseMember(Long houseId,Long userId) {
+        UserHouse userHouse=new UserHouse();
+        userHouse.setHouseId(houseId);
+        userHouse.setUserId(userId);
+        long count=userHouseService.addHouseMember(userHouse);
+        if(count!=0){
+            return CommonResult.success(count);
+        }else {
+            return CommonResult.error(0,"添加失败");
         }
     }
 

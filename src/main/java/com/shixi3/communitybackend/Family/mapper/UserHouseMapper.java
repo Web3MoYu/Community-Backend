@@ -15,14 +15,14 @@ public interface UserHouseMapper extends BaseMapper<UserHouse> {
      * @param houseId
      * @return
      */
-    @Select("select user_id from user_house where belong_flag=0 and house_id=#{houseId})")
-    User getHouseHoldByHouseId(Long houseId);
+    @Select("select user_id from user_house where belong_flag=0 and house_id=#{houseId}")
+    Long getHouseHoldIdByHouseId(Long houseId);
 
     /**
      * 获取房屋的所有成员（除开户主）
      * @param houseId
      * @return
      */
-    @Select("select user_id from user_house where belong_flag=1 and house_id=#{houseId}")
+    @Select("select * from sys_user join user_house on sys_user.user_id=user_house.user_id where user_house.belong_flag=1 and user_house.house_id=#{houseId}")
     List<User> getHouseMembersByHouseId(Long houseId);
 }

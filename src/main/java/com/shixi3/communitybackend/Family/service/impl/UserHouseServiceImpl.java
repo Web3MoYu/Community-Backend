@@ -1,9 +1,9 @@
 package com.shixi3.communitybackend.Family.service.impl;
-
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.shixi3.communitybackend.Family.mapper.UserHouseMapper;
 import com.shixi3.communitybackend.Family.service.UserHouseService;
 import com.shixi3.communitybackend.Family.entity.UserHouse;
+import com.shixi3.communitybackend.auth.mapper.UserMapper;
 import com.shixi3.communitybackend.common.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,8 @@ import java.util.List;
 public class UserHouseServiceImpl implements UserHouseService {
     @Autowired
     private UserHouseMapper userHouseMapper;
-
+    @Autowired
+    private UserMapper userMapper;
     /**
      * 获取全部用户房屋关系
      * @param userId
@@ -56,7 +57,7 @@ public class UserHouseServiceImpl implements UserHouseService {
      */
     @Override
     public User getHouseholdByHouseId(Long houseId) {
-        return userHouseMapper.getHouseHoldByHouseId(houseId);
+        return userMapper.selectById(userHouseMapper.getHouseHoldIdByHouseId(houseId));
     }
 
     /**
@@ -67,5 +68,34 @@ public class UserHouseServiceImpl implements UserHouseService {
     @Override
     public List<User> getHouseMembersByHouseId(Long houseId) {
         return userHouseMapper.getHouseMembersByHouseId(houseId);
+    }
+
+    /**
+     * 添加户主
+     * 一个房屋只有一个户主
+     * 一个用户可以是多个房屋户主
+     *
+     * @param userHouse
+     * @return
+     */
+    @Override
+    public Long addHouseHold(UserHouse userHouse) {
+        userHouse.setBelongFlag(0);
+        userHouseMapper.insert(userHouse);
+        return userHouse.getId();
+    }
+
+    /**
+     * 添加家庭成员
+     * 一个房屋会有多个成员，一个成员可以住多个房屋
+     *
+     * @param userHouse
+     * @return
+     */
+    @Override
+    public Long addHouseMember(UserHouse userHouse) {
+        userHouse.setBelongFlag(1);
+        userHouseMapper.insert(userHouse);
+        return userHouse.getId();
     }
 }
