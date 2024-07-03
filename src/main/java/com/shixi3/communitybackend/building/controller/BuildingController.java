@@ -113,4 +113,13 @@ public class BuildingController {
         }
         return CommonResult.error(500,"批量删除失败！");
     }
+
+    /**
+     * 获取所有楼栋列表
+     * @return 楼栋列表
+     */
+    @GetMapping("/getAll")
+    public CommonResult<List<Building>> getAll() {
+        return CommonResult.success(buildingService.list());
+    }
 }
