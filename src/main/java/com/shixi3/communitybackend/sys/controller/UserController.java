@@ -45,7 +45,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('sys:user:list')")
     public CommonResult<Page<UserVo>> search(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int pageSize, @RequestParam(required = false) String name) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.select(User::getUserId, User::getName, User::getPhone, User::getUsername, User::getSex, User::getIdCard)
+        wrapper.select(User::getUserId, User::getName, User::getPhone, User::getUsername, User::getSex)
                 .like(name != null, User::getName, name);
         Page<User> result = userService.page(new Page<>(page, pageSize), wrapper);
         List<UserVo> collect = result.getRecords().stream().map((item) -> {
