@@ -1,5 +1,6 @@
 package com.shixi3.communitybackend.house.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import com.shixi3.communitybackend.house.entity.House;
@@ -8,6 +9,7 @@ import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/house")
@@ -97,5 +99,18 @@ public class HouseController {
             return CommonResult.success("批量删除房屋信息成功！");
         }
         return CommonResult.error(500,"批量删除房屋信息失败！");
+    }
+
+    /**
+     * 检查房间编号是否重复
+     * @param number 房间编号
+     * @return  校验信息
+     */
+    @GetMapping("/check/{number}")
+    public CommonResult<Boolean> checkHouseNumber(@PathVariable String number) {
+        LambdaQueryWrapper<House> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(number != null,House::getHouseNumber,number);
+        House house = houseService.getOne(wrapper);
+        return CommonResult.success(Objects.isNull(house));
     }
 }
