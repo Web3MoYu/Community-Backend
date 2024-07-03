@@ -8,6 +8,4 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface CarMapper extends BaseMapper<Car> {
 
-    Car getCarByOwner(Long owner);
-    Car getAllCar();
 }

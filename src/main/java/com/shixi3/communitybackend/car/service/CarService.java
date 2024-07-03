@@ -1,9 +1,9 @@
 package com.shixi3.communitybackend.car.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.shixi3.communitybackend.building.entity.Building;
 import com.shixi3.communitybackend.car.entity.Car;
 
-public interface CarService {
+public interface CarService extends IService<Car> {
 
-    Car getCarByOwner(Long owner);
-    Car getAllCar();
 }
