@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("Parking")
+@TableName("parking")
 public class Parking {
     /**
      * 车位id

@@ -3,7 +3,6 @@ package com.shixi3.communitybackend.car.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.shixi3.communitybackend.car.entity.Car;
 import com.shixi3.communitybackend.car.service.CarService;
-import com.shixi3.communitybackend.common.entity.Menu;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +44,8 @@ public class CarController {
     @GetMapping("/all")
     public CommonResult<List<Car>> getAllCar(){
         List<Car> cars=carService.list();
+        System.out.println("测试中");
+        System.out.println(cars);
         if (cars!=null) {
             return CommonResult.success(cars);
         }else {

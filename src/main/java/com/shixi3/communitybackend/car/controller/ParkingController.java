@@ -1,7 +1,6 @@
 package com.shixi3.communitybackend.car.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.shixi3.communitybackend.car.entity.Car;
 import com.shixi3.communitybackend.car.entity.Parking;
 import com.shixi3.communitybackend.car.service.ParkingService;
 import com.shixi3.communitybackend.common.model.CommonResult;
@@ -35,6 +34,7 @@ public class ParkingController {
 
     @GetMapping("/all")
     public CommonResult<List<Parking>> getAllParking(){
+        System.out.println("**************tset1**************");
         List<Parking> parkings=parkingService.list();
         if (!parkings.isEmpty()) {
             return CommonResult.success(parkings);
