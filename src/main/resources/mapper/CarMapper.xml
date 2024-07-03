@@ -3,35 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.shixi3.communitybackend.car.mapper.CarMapper">
-    <select id="getCarByOwner" resultType="com.shixi3.communitybackend.car.entity.Car">
-        select
-            car_id,
-            owner,
-            licence,
-            type,
-            status
-        from car
-        where owner=#{owner};
-    </select>
 
-    <select id="getAllCar" resultType="com.shixi3.communitybackend.car.entity.Car">
-        select
-            car_id,
-            owner,
-            licence,
-            type,
-            status
-        from car;
-    </select>
-    
-    <select id="getVetCar" resultType="com.shixi3.communitybackend.car.entity.Car">
-        select
-            car_id,
-            owner,
-            licence,
-            type,
-            status
-        from car
-        where status=0;
-    </select>
+
+
 </mapper>
