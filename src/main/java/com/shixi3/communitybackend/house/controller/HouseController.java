@@ -43,4 +43,29 @@ public class HouseController {
         }
         return CommonResult.error(500,"添加房屋信息失败！");
     }
+
+    /**
+     * 修改房屋信息
+     * @param house 房屋信息
+     * @return 提示信息
+     */
+    @PutMapping("/edit")
+    public CommonResult<String> updateHouse(@RequestBody House house) {
+        boolean update = houseService.updateById(house);
+        if(update) {
+            return CommonResult.success("修改房屋信息成功！");
+        }
+        return CommonResult.error(500,"修改房屋信息失败！");
+    }
+
+    /**
+     * 根据id获取房屋信息
+     * @param id 房屋id
+     * @return 房屋信息
+     */
+    @GetMapping("/getOne/{id}")
+    public CommonResult<House> getHouse(@PathVariable Long id) {
+        House house = houseService.getById(id);
+        return CommonResult.success(house);
+    }
 }
