@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace= "com.shixi3.communitybackend.house.mapper.HouseMapper">
+    <select id="page" resultType="com.shixi3.communitybackend.house.entity.House">
+        select house_id,owner,building,house_number,state,create_time,update_time,user from house
+        <where>
+            <if test="number != null and number !='' ">
+                house.house_number like concat('%',#{number},'%');
+            </if>
+        </where>
+    </select>
+
+</mapper >

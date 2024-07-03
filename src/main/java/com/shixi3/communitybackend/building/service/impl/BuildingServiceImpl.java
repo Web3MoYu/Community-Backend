@@ -18,13 +18,13 @@ public class BuildingServiceImpl extends ServiceImpl<BuildingMapper, Building> i
      * 楼栋分页查询
      * @param page 当前页
      * @param pageSize 页面大小
-     * @param buildingName 楼栋名称
+     * @param buildingNumber 楼栋名称
      * @return 分页信息
      */
     @Override
-    public Page<Building> page(Integer page, Integer pageSize, String buildingName) {
+    public Page<Building> page(Integer page, Integer pageSize, Integer buildingNumber) {
         Page<Building> result = new Page<>(page,pageSize);
-        result = buildingMapper.page(result,buildingName);
+        result = buildingMapper.page(result,buildingNumber);
         return result;
     }
 }

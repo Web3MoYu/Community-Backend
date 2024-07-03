@@ -22,14 +22,14 @@ public class BuildingController {
      * 楼栋分页查询
      * @param page 当前页
      * @param pageSize 页面大小
-     * @param buildingName 楼栋名称
+     * @param buildingNumber 楼栋名称
      * @return 分页信息
      */
     @GetMapping("/list")
     public CommonResult<Page<Building>> page(@RequestParam(defaultValue = "1") Integer page,
                                              @RequestParam(defaultValue = "5") Integer pageSize,
-                                             @RequestParam(required = false) String buildingName) {
-        Page<Building> result = buildingService.page(page,pageSize,buildingName);
+                                             @RequestParam(required = false) Integer buildingNumber) {
+        Page<Building> result = buildingService.page(page,pageSize,buildingNumber);
         return CommonResult.success(result);
     }
 
@@ -100,6 +100,11 @@ public class BuildingController {
         return CommonResult.error(500,"修改楼栋信息失败！");
     }
 
+    /**
+     * 批量删除楼栋信息
+     * @param ids 楼栋id列表
+     * @return 提示信息
+     */
     @DeleteMapping("/delBatch")
     public CommonResult<String> delBatchById(@RequestBody List<Long> ids) {
         boolean delBatch = buildingService.removeBatchByIds(ids);

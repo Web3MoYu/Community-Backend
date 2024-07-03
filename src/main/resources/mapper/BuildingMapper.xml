@@ -6,8 +6,8 @@
     <select id="page" resultType="com.shixi3.communitybackend.building.entity.Building">
         select building_id,building_number,floor_num,house_num,create_time,update_time from building
         <where>
-            <if test="name != null and name !='' ">
-                buiding.building_number like concat('%',#{name},'%')
+            <if test="number != null and number !='' ">
+                building.building_number = #{number}
             </if>
         </where>
     </select>

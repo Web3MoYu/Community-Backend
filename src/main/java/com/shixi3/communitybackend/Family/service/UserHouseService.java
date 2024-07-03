@@ -41,5 +41,23 @@ public interface UserHouseService {
      * @return
      */
     List<User> getHouseMembersByHouseId(Long houseId);
-    //还需要获取用户的所有的房屋，用户所住的房屋
+
+    /**
+     * 添加户主
+     * 一个房屋只有一个户主
+     * 一个用户可以是多个房屋户主
+     *
+     * @param userHouse
+     * @return
+     */
+    Long addHouseHold(UserHouse userHouse);
+
+    /**
+     * 添加家庭成员
+     * 一个房屋会有多个成员，一个成员可以住多个房屋
+     *
+     * @param userHouse
+     * @return
+     */
+    Long addHouseMember(UserHouse userHouse);
 }
