@@ -16,7 +16,6 @@ public class ImgUtils {
 
     private final String basePath = "c:/img/";
 
-
     public void upload(MultipartFile file) {
         // 原始文件名字
         String originalFilename = file.getOriginalFilename();
@@ -42,6 +41,7 @@ public class ImgUtils {
             throw new RuntimeException(e);
         }
     }
+
 
     public void download(String name, HttpServletResponse response) {
         try {
