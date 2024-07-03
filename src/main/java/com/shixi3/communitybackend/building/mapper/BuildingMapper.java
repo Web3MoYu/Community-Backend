@@ -8,5 +8,5 @@ import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface BuildingMapper extends BaseMapper<Building> {
-    Page<Building> page(@Param("page") Page<Building> page, @Param("name") String buildingName);
+    Page<Building> page(@Param("page") Page<Building> page, @Param("number") Integer buildingNumber);
 }
