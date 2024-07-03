@@ -6,6 +6,7 @@ import com.shixi3.communitybackend.building.entity.Building;
 import com.shixi3.communitybackend.building.service.BuildingService;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import jakarta.annotation.Resource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class BuildingController {
      * @return 分页信息
      */
     @GetMapping("/list")
+    @PreAuthorize("hasAuthority('house:building:list')")
     public CommonResult<Page<Building>> page(@RequestParam(defaultValue = "1") Integer page,
                                              @RequestParam(defaultValue = "5") Integer pageSize,
                                              @RequestParam(required = false) Integer buildingNumber) {
@@ -39,6 +41,7 @@ public class BuildingController {
      * @return 提示信息
      */
     @PostMapping("/add")
+    @PreAuthorize("hasAuthority('house:building:add')")
     public CommonResult<String> addBuilding(@RequestBody Building building) {
         boolean save = buildingService.save(building);
         if(save) {
@@ -54,6 +57,7 @@ public class BuildingController {
      * @return 提示信息
      */
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('house:building:delete')")
     public CommonResult<String> deleteBuilding(@PathVariable Long id) {
         boolean delete = buildingService.removeById(id);
         if(delete) {
@@ -68,6 +72,7 @@ public class BuildingController {
      * @return 楼栋查询信息
      */
     @GetMapping("/check/{number}")
+    @PreAuthorize("hasAuthority('house:building:edit')")
     public CommonResult<Boolean> checkBuildingNumber(@PathVariable Long number) {
         LambdaQueryWrapper<Building> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(number != null,Building::getBuildingNumber,number);
@@ -81,6 +86,7 @@ public class BuildingController {
      * @return 楼栋信息
      */
     @GetMapping("/getOne/{id}")
+    @PreAuthorize("hasAuthority('house:building:edit')")
     public CommonResult<Building> getBuildingById(@PathVariable Long id) {
         Building building = buildingService.getById(id);
         return CommonResult.success(building);
@@ -92,6 +98,7 @@ public class BuildingController {
      * @return 提示信息
      */
     @PutMapping("/edit")
+    @PreAuthorize("hasAuthority('house:building:edit')")
     public CommonResult<String> updateBuilding(@RequestBody Building building) {
         boolean update = buildingService.updateById(building);
         if(update) {
@@ -106,6 +113,7 @@ public class BuildingController {
      * @return 提示信息
      */
     @DeleteMapping("/delBatch")
+    @PreAuthorize("hasAuthority('house:building:delete')")
     public CommonResult<String> delBatchById(@RequestBody List<Long> ids) {
         boolean delBatch = buildingService.removeBatchByIds(ids);
         if(delBatch) {
