@@ -37,6 +37,11 @@ public class SecurityConfiguration {
                 .sessionManagement(it -> it.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .headers(it -> it.frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+                .authorizeHttpRequests(auth ->
+                        auth
+                                .requestMatchers("/login").permitAll()
+                                .requestMatchers("/logout").authenticated()
+                                .anyRequest().authenticated())
                 .logout(AbstractHttpConfigurer::disable)
         ;
         httpSecurity.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
