@@ -1,6 +1,7 @@
 package com.shixi3.communitybackend.house.entity;
 
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -15,6 +16,7 @@ public class House implements Serializable {
     /**
     * 房屋id
     */
+    @TableId
     private Long houseId;
     /**
     * 户主id
