@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.shixi3.communitybackend.auth.mapper.UserMapper;
 import com.shixi3.communitybackend.auth.service.AuthService;
 import com.shixi3.communitybackend.auth.util.SecurityUtil;
+import com.shixi3.communitybackend.auth.vo.ChangeInfoVo;
 import com.shixi3.communitybackend.auth.vo.TokenRepVo;
+import com.shixi3.communitybackend.common.util.ImgUtils;
 import com.shixi3.communitybackend.sys.service.MenuService;
 import com.shixi3.communitybackend.auth.vo.LoginRepVo;
 import com.shixi3.communitybackend.auth.vo.LoginReqVo;
@@ -21,6 +23,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -29,10 +32,13 @@ public class AuthServiceImpl implements AuthService {
     UserMapper userMapper;
 
     @Resource
+    ImgUtils imgUtils;
+
+    @Resource
     MenuService menuService;
 
     @Resource
-    RedisTemplate<String, String> redisTemplate;
+    RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public CommonResult<LoginRepVo> login(LoginReqVo query) {
@@ -81,5 +87,27 @@ public class AuthServiceImpl implements AuthService {
         redisTemplate.delete(RedisUtils.PERMISSIONS_KEY + userID);
         return CommonResult.success("");
     }
+
+    @Override
+    public CommonResult<String> changeInfo(String phone) {
+        Long userID = SecurityUtil.getUserID();
+
+        String redisSuffix = RedisUtils.PERSONAL_IMG_UPLOAD_SUFFIX + userID;
+        String redisByte = RedisUtils.PERSONAL_IMG_UPLOAD_BYTE + userID;
+        // 获取字节数组和后缀
+        String suffix = (String) redisTemplate.opsForValue().get(redisSuffix);
+        byte[] bytes = (byte[]) redisTemplate.opsForValue().get(redisByte);
+        String avatar = UUID.randomUUID() + suffix;
+        // 上传
+        imgUtils.upload(bytes, avatar);
+        // 修改数据库
+        userMapper.updatePhoneAndAvatar(phone, userID, avatar);
+
+        // 删除redis图片数据
+        redisTemplate.delete(redisSuffix);
+        redisTemplate.delete(redisByte);
+        return CommonResult.success("更新成功");
+    }
+
 
 }

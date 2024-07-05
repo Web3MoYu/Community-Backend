@@ -12,4 +12,6 @@ public interface AuthService {
     CommonResult<TokenRepVo> token();
 
     CommonResult<?> logout();
+
+    CommonResult<String> changeInfo(String phone);
 }

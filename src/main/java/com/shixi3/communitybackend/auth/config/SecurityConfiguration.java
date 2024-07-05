@@ -40,8 +40,8 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth ->
                         auth
                                 .requestMatchers("/login").permitAll()
-                                .requestMatchers("/common/img/**").anonymous()
                                 .requestMatchers("/logout").authenticated()
+                                .requestMatchers("/common/img/download/**").anonymous()
                                 .anyRequest().authenticated())
                 .logout(AbstractHttpConfigurer::disable)
         ;

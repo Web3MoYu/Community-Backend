@@ -3,32 +3,17 @@ package com.shixi3.communitybackend.common.util;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.util.FileCopyUtils;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.UUID;
+import java.io.*;
 
 @Component
 public class ImgUtils {
 
+
     private final String basePath = "c:/img/";
 
-    public void upload(MultipartFile file) {
-        // 原始文件名字
-        String originalFilename = file.getOriginalFilename();
-
-        // 获取文件后缀
-        String suffix = null;
-        if (originalFilename != null) {
-            suffix = originalFilename.substring(originalFilename.lastIndexOf("."));
-        }
-
-        // 使用UUID来生成文件名，防止文件名重复
-        String fileName = UUID.randomUUID() + suffix;
-
+    public void upload(byte[] bytes, String fileName) {
         // 判断当前目录是否存在，如果不存在就创建
         File dir = new File(basePath);
         if (!dir.exists()) {
@@ -36,7 +21,7 @@ public class ImgUtils {
         }
         try {
             // 将临时文件转存到指定位置
-            file.transferTo(new File(basePath + fileName));
+            FileCopyUtils.copy(bytes, new File(basePath + fileName));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

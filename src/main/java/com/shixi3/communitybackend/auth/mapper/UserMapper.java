@@ -3,7 +3,9 @@ package com.shixi3.communitybackend.auth.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.shixi3.communitybackend.common.entity.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -19,6 +21,9 @@ public interface UserMapper extends BaseMapper<User> {
 
     @Select("select * from sys_user where username = #{username}")
     User getUserByUsername(String username);
+
+    @Update("update sys_user set phone = #{phone}, avatar = #{avatar} where user_id = #{userId}")
+    void updatePhoneAndAvatar(@Param("phone") String phone, @Param("userId") Long userId, @Param("avatar") String avatar);
 }
 
 

@@ -34,4 +34,10 @@ public class AuthController {
     public CommonResult<?> logout() {
         return authService.logout();
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/info/{phone}")
+    public CommonResult<String> changeInfo(@PathVariable String phone) {
+        return authService.changeInfo(phone);
+    }
 }
