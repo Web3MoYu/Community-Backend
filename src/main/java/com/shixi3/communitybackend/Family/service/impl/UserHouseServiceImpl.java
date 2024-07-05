@@ -1,15 +1,18 @@
 package com.shixi3.communitybackend.Family.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.shixi3.communitybackend.Family.vo.WxUserVo;
 import com.shixi3.communitybackend.Family.entity.WxUser;
+import com.shixi3.communitybackend.Family.entity.WxUserTree;
 import com.shixi3.communitybackend.Family.mapper.UserHouseMapper;
 import com.shixi3.communitybackend.Family.mapper.WxUserMapper;
 import com.shixi3.communitybackend.Family.service.UserHouseService;
 import com.shixi3.communitybackend.Family.entity.UserHouse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+
 @Service
 public class UserHouseServiceImpl implements UserHouseService {
     @Autowired
@@ -25,6 +28,46 @@ public class UserHouseServiceImpl implements UserHouseService {
     @Override
     public List<UserHouse> getAllUserHouseRelationships(Long userId, Long houseId) {
         return userHouseMapper.selectList(null);
+    }
+
+    /**
+     * 拿到树形结构
+     * @param page
+     * @param pageSize
+     * @param name
+     * @return
+     */
+    @Override
+    public List<WxUserTree> selectWxUser(Integer page, Integer pageSize, String name) {
+
+        //拿到分组id（house_id）
+        List<Long> groupId = wxUserMapper.getGroupId();
+        List<List<WxUserVo>> userVos = new ArrayList<>();
+        List<WxUserTree> wxUserTrees = new ArrayList<>();
+        //以house_id分组 以及 查询
+        for (Long group : groupId){
+            List<WxUserVo> groups = wxUserMapper.getGroups(group, name);
+            if(groups.size()>0){
+               userVos.add(groups);
+            }
+        }
+        //遍历操作使其为树形结构
+        for(List<WxUserVo> list : userVos){
+            for(WxUserVo wxUserVo : list){
+                if(wxUserVo.getBelongFlag() != 1){
+                    WxUserTree wxUserTree = new WxUserTree();
+                    wxUserTree.setWxUserVo(wxUserVo);
+                    list.remove(wxUserVo);
+                    //将剩下的改组内的用户添加的他的children中
+                    wxUserTree.setChildren(list);
+                    //添加到树形结构中
+                    wxUserTrees.add(wxUserTree);
+                    break;
+                }
+
+            }
+        }
+        return wxUserTrees;
     }
 
     /**
@@ -63,24 +106,6 @@ public class UserHouseServiceImpl implements UserHouseService {
         queryWrapper.eq(UserHouse::getWxUserId, userId);
         UserHouse userHouse = userHouseMapper.selectOne(queryWrapper);
         if(userHouse.getBelongFlag()==0){
-            return true;
-        }else {
-            return false;
-        }
-    }
-
-    /**
-     * 判断是否为家庭成员
-     * @param houseId
-     * @param userId
-     * @return
-     */
-    public boolean isHouseMember(Long houseId, Long userId){
-        LambdaQueryWrapper<UserHouse> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(UserHouse::getHouseId, houseId);
-        queryWrapper.eq(UserHouse::getWxUserId, userId);
-        UserHouse userHouse = userHouseMapper.selectOne(queryWrapper);
-        if(userHouse.getBelongFlag()==1){
             return true;
         }else {
             return false;
@@ -138,16 +163,7 @@ public class UserHouseServiceImpl implements UserHouseService {
         return userHouse.getId();
     }
 
-    /**
-     * 删除用户房屋关系
-     * 后台管理员可删除户主，成员，租户
-     * 前台户主可删除家庭成员
-     * @param id
-     * @return
-     */
-    @Override
-    public Integer deleteHouseMember(Long id) {
-        return  userHouseMapper.deleteById(id);
-    }
+
+
 
 }

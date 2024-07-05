@@ -1,7 +1,10 @@
 package com.shixi3.communitybackend.Family.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.shixi3.communitybackend.Family.entity.UserHouse;
 import com.shixi3.communitybackend.Family.entity.WxUser;
+import com.shixi3.communitybackend.Family.entity.WxUserTree;
+import com.shixi3.communitybackend.common.entity.MenuTree;
 
 import java.util.List;
 
@@ -14,6 +17,14 @@ public interface UserHouseService {
      */
     List<UserHouse> getAllUserHouseRelationships(Long userId, Long houseId);
 
+    /**
+     * 树形查询所有微信用户
+     * @param page
+     * @param pageSize
+     * @param name
+     * @return
+     */
+    List<WxUserTree> selectWxUser(Integer page, Integer pageSize, String name);
     /**
      * 获取一个用户与其所有的房屋关系（包括户主关系，成员关系）
      * @param userId
@@ -35,14 +46,6 @@ public interface UserHouseService {
      * @return
      */
     boolean isHouseHold(Long houseId, Long userId);
-
-    /**
-     * 判断是否为该房屋家庭成员
-     * @param houseId
-     * @param userId
-     * @return
-     */
-    boolean isHouseMember(Long houseId, Long userId);
 
     /**
      * 获取房屋户主
@@ -79,13 +82,6 @@ public interface UserHouseService {
      */
     Long addHouseMember(UserHouse userHouse);
 
-    /**
-     * 删除家庭成员
-     *
-     * @param id
-     * @return
-     */
-    Integer deleteHouseMember(Long id);
 
 
 
