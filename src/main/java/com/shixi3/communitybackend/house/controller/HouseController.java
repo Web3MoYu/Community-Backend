@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import com.shixi3.communitybackend.house.entity.House;
 import com.shixi3.communitybackend.house.service.HouseService;
+import com.shixi3.communitybackend.house.vo.HouseVo;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,11 +27,10 @@ public class HouseController {
      * @return 分页信息
      */
     @GetMapping("/list")
-    public CommonResult<Page<House>> page(@RequestParam(defaultValue = "1") Integer page,
-                                          @RequestParam(defaultValue = "5") Integer pageSize,
-                                          @RequestParam(required = false) String houseNumber) {
-        System.out.println("jflds");
-        Page<House> result = houseService.page(page,pageSize,houseNumber);
+    public CommonResult<Page<HouseVo>> page(@RequestParam(defaultValue = "1") Integer page,
+                                            @RequestParam(defaultValue = "5") Integer pageSize,
+                                            @RequestParam(required = false) String houseNumber) {
+        Page<HouseVo> result = houseService.page(page,pageSize,houseNumber);
         return CommonResult.success(result);
     }
 

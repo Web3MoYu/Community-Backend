@@ -21,11 +21,11 @@ public class House implements Serializable {
     /**
     * 户主id
     */
-    private Long owner;
+    private Long ownerId;
     /**
     * 楼栋
     */
-    private Long building;
+    private Long buildingId;
     /**
     * 房号
     */
@@ -36,10 +36,10 @@ public class House implements Serializable {
 
     private Integer state;
     /**
-    * 使用人id
+    * 租户id
     */
 
-    private Long user;
+    private Long tenantId;
 
     private Date createTime;
     private Date updateTime;
