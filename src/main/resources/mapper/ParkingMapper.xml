@@ -3,7 +3,12 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.shixi3.communitybackend.car.mapper.ParkingMapper">
-
+    <select id="getAllParking" resultType="com.shixi3.communitybackend.car.entity.Parking">
+        SELECT p.parking_id,p.number,p.status,p.owner,u.name
+        FROM parking p
+                 JOIN wx_user u ON p.owner = u.id
+        order by parking_id;
+    </select>
 
 
 </mapper>

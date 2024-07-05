@@ -16,6 +16,7 @@ public class Parking {
      * 车位编号
      */
     private String number;
+
     /**
      * 车位状态
      */
@@ -24,4 +25,8 @@ public class Parking {
      * 车位拥有者
      */
     private Long owner;
+    /**
+     * 车位拥有者姓名
+     */
+    private String name;
 }

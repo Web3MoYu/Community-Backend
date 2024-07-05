@@ -44,7 +44,7 @@ public class ParkingController {
     @GetMapping("/all")
     @PreAuthorize("hasAnyAuthority('car:parking:list')")
     public CommonResult<List<Parking>> getAllParking(){
-        List<Parking> parkings=parkingService.list();
+        List<Parking> parkings=parkingService.getAllParking();
         if (!parkings.isEmpty()) {
             return CommonResult.success(parkings);
         } else {
