@@ -19,4 +19,9 @@ public class CarServiceImpl extends ServiceImpl<CarMapper,Car> implements CarSer
     public List<Car> getAllCar() {
         return carMapper.getAllCar();
     }
+
+    @Override
+    public void deleteByOwner(Long owner) {
+        carMapper.deleteByOwner(owner);
+    }
 }

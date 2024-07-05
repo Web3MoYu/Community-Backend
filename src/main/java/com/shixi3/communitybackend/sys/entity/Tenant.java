@@ -1,11 +1,13 @@
 package com.shixi3.communitybackend.sys.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
+@TableName("wx_user")
 public class Tenant {
 
     @TableId
@@ -17,7 +19,7 @@ public class Tenant {
 
     private String name;
 
-    private String sex;  //性别0-男  1-女
+    private Integer sex;  //性别0-男  1-女
 
     private String idCard;
 
@@ -27,5 +29,5 @@ public class Tenant {
 
     private Date updateTime;
 
-    private int userType;   //0-业主  1-租户  2-游客
+    private Integer userType;   //0-业主  1-租户  2-游客
 }

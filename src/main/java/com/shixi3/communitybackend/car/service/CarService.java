@@ -8,4 +8,5 @@ import java.util.List;
 public interface CarService extends IService<Car> {
 
     List<Car> getAllCar();
+    void deleteByOwner(Long owner);
 }
