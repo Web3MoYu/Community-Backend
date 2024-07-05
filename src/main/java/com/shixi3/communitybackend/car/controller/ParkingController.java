@@ -2,6 +2,7 @@ package com.shixi3.communitybackend.car.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.shixi3.communitybackend.building.entity.Building;
+import com.shixi3.communitybackend.car.entity.Car;
 import com.shixi3.communitybackend.car.entity.Parking;
 import com.shixi3.communitybackend.car.service.ParkingService;
 import com.shixi3.communitybackend.common.model.CommonResult;
@@ -95,5 +96,20 @@ public class ParkingController {
             return CommonResult.success("修改车位信息成功！");
         }
         return CommonResult.error(500,"修改车位信息失败！");
+    }
+
+    /**
+     * 根据车位编号获取审核的车位信息
+     * @param number 车位编号
+     * @return
+     */
+    @GetMapping("/exist/{number}")
+    public CommonResult<Boolean> parkingExists(@PathVariable String number){
+        LambdaQueryWrapper<Parking> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(Parking::getNumber)
+                .eq(Parking::getNumber, number)
+                .and(i -> i.eq(Parking::getStatus, 0).or().eq(Parking::getStatus, 1));;
+        boolean exists = parkingService.getOne(wrapper) != null;
+        return CommonResult.success(exists);
     }
 }
