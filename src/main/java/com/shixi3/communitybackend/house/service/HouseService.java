@@ -7,4 +7,5 @@ import com.shixi3.communitybackend.house.vo.HouseVo;
 
 public interface HouseService extends IService<House> {
     Page<HouseVo> page(Integer page, Integer pageSize, String houseNumber);
+    HouseVo getHouseVoById(Long houseId);
 }
