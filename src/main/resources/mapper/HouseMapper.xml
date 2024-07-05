@@ -3,8 +3,12 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace= "com.shixi3.communitybackend.house.mapper.HouseMapper">
-    <select id="page" resultType="com.shixi3.communitybackend.house.entity.House">
-        select house_id,owner,building,house_number,state,create_time,update_time,user from house
+    <select id="page" resultType="com.shixi3.communitybackend.house.vo.HouseVo">
+        select house_id,owner_id,building_id,house_number,state,create_time,update_time,tenant_id,
+               (select name from wx_user where wx_user.id = owner_id) owner_name,
+               (select name from wx_user where wx_user.id = tenant_id) tenant_name,
+               (select building_number from building where building.building_id = house.building_id) building_number
+        from house
         <where>
             <if test="number != null and number !='' ">
                 house.house_number like concat('%',#{number},'%');
