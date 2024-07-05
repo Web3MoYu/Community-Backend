@@ -7,6 +7,7 @@ import com.shixi3.communitybackend.Family.service.UserHouseService;
 import com.shixi3.communitybackend.Family.entity.UserHouse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 @Service
@@ -69,6 +70,24 @@ public class UserHouseServiceImpl implements UserHouseService {
     }
 
     /**
+     * 判断是否为家庭成员
+     * @param houseId
+     * @param userId
+     * @return
+     */
+    public boolean isHouseMember(Long houseId, Long userId){
+        LambdaQueryWrapper<UserHouse> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(UserHouse::getHouseId, houseId);
+        queryWrapper.eq(UserHouse::getWxUserId, userId);
+        UserHouse userHouse = userHouseMapper.selectOne(queryWrapper);
+        if(userHouse.getBelongFlag()==1){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    /**
      * 获取房屋户主
      *
      * @param houseId
@@ -117,5 +136,33 @@ public class UserHouseServiceImpl implements UserHouseService {
         userHouse.setBelongFlag(1);
         userHouseMapper.insert(userHouse);
         return userHouse.getId();
+    }
+
+    /**
+     * 删除用户房屋关系
+     * 后台管理员可删除户主，成员，租户
+     * 前台户主可删除家庭成员
+     * @param id
+     * @return
+     */
+    @Override
+    public Integer deleteHouseMember(Long id) {
+        return  userHouseMapper.deleteById(id);
+    }
+
+    /**
+     * 批量删除用户房屋关系
+     * 后台管理员可删除户主，成员，租户
+     * 前台户主可删除家庭成员
+     * @param ids
+     * @return
+     */
+    @Override
+    @Transactional
+    public boolean batchDeleteHouseMember(Long[] ids) {
+        for (long id : ids) {
+            userHouseMapper.deleteById(id);
+        }
+        return true;
     }
 }
