@@ -1,6 +1,7 @@
 package com.shixi3.communitybackend.auth.controller;
 
 import com.shixi3.communitybackend.auth.service.AuthService;
+import com.shixi3.communitybackend.auth.vo.ChangePasswordVo;
 import com.shixi3.communitybackend.auth.vo.LoginRepVo;
 import com.shixi3.communitybackend.auth.vo.LoginReqVo;
 import com.shixi3.communitybackend.auth.vo.TokenRepVo;
@@ -39,5 +40,11 @@ public class AuthController {
     @PutMapping("/info/{phone}")
     public CommonResult<String> changeInfo(@PathVariable String phone) {
         return authService.changeInfo(phone);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/password")
+    public CommonResult<?> changePassword(@RequestBody ChangePasswordVo body) {
+        return authService.changePassword(body);
     }
 }
