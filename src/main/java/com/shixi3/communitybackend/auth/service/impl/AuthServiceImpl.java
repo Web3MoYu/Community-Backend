@@ -4,12 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.shixi3.communitybackend.auth.mapper.UserMapper;
 import com.shixi3.communitybackend.auth.service.AuthService;
 import com.shixi3.communitybackend.auth.util.SecurityUtil;
-import com.shixi3.communitybackend.auth.vo.ChangeInfoVo;
-import com.shixi3.communitybackend.auth.vo.TokenRepVo;
+import com.shixi3.communitybackend.auth.vo.*;
 import com.shixi3.communitybackend.common.util.ImgUtils;
 import com.shixi3.communitybackend.sys.service.MenuService;
-import com.shixi3.communitybackend.auth.vo.LoginRepVo;
-import com.shixi3.communitybackend.auth.vo.LoginReqVo;
 import com.shixi3.communitybackend.common.entity.MenuTree;
 import com.shixi3.communitybackend.common.entity.User;
 import com.shixi3.communitybackend.common.exception.BizException;
@@ -23,6 +20,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -107,6 +105,25 @@ public class AuthServiceImpl implements AuthService {
         redisTemplate.delete(redisSuffix);
         redisTemplate.delete(redisByte);
         return CommonResult.success("更新成功");
+    }
+
+    @Override
+    public CommonResult<?> changePassword(ChangePasswordVo body) {
+        Long userID = SecurityUtil.getUserID();
+        User user = userMapper.selectById(userID);
+        if (!DigestsUtils.matches(body.getOldPassword(), user.getSalt(), user.getPassword())) {
+            throw new BizException("旧密码错误");
+        }
+        String newPassword = body.getNewPassword();
+        Map<String, String> encrypt = DigestsUtils.encrypt(newPassword);
+        int count = userMapper.updatePassword(userID,
+                encrypt.get(DigestsUtils.PASSWORD), encrypt.get(DigestsUtils.SALT));
+        if (count != 1) {
+            throw new BizException("修改失败");
+        }
+        redisTemplate.delete(RedisUtils.TOKEN_KEY + userID);
+        redisTemplate.delete(RedisUtils.PERMISSIONS_KEY + userID);
+        return CommonResult.success("修改成功");
     }
 
 

@@ -1,6 +1,7 @@
 package com.shixi3.communitybackend.auth.service;
 
 
+import com.shixi3.communitybackend.auth.vo.ChangePasswordVo;
 import com.shixi3.communitybackend.auth.vo.LoginRepVo;
 import com.shixi3.communitybackend.auth.vo.LoginReqVo;
 import com.shixi3.communitybackend.auth.vo.TokenRepVo;
@@ -12,6 +13,8 @@ public interface AuthService {
     CommonResult<TokenRepVo> token();
 
     CommonResult<?> logout();
+
+    CommonResult<?> changePassword(ChangePasswordVo body);
 
     CommonResult<String> changeInfo(String phone);
 }
