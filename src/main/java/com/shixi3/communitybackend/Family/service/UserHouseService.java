@@ -1,7 +1,7 @@
 package com.shixi3.communitybackend.Family.service;
 
 import com.shixi3.communitybackend.Family.entity.UserHouse;
-import com.shixi3.communitybackend.common.entity.User;
+import com.shixi3.communitybackend.Family.entity.WxUser;
 
 import java.util.List;
 
@@ -38,17 +38,19 @@ public interface UserHouseService {
 
     /**
      * 获取房屋户主
+     *
      * @param houseId
      * @return
      */
-    User getHouseholdByHouseId(Long houseId);
+    WxUser getHouseholdByHouseId(Long houseId);
 
     /**
      * 获取房屋成员
+     *
      * @param houseId
      * @return
      */
-    List<User> getHouseMembersByHouseId(Long houseId);
+    List<WxUser> getHouseMembersByHouseId(Long houseId);
 
     /**
      * 添加户主

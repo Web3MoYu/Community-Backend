@@ -1,10 +1,10 @@
 package com.shixi3.communitybackend.Family.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.shixi3.communitybackend.Family.entity.WxUser;
 import com.shixi3.communitybackend.Family.mapper.UserHouseMapper;
+import com.shixi3.communitybackend.Family.mapper.WxUserMapper;
 import com.shixi3.communitybackend.Family.service.UserHouseService;
 import com.shixi3.communitybackend.Family.entity.UserHouse;
-import com.shixi3.communitybackend.auth.mapper.UserMapper;
-import com.shixi3.communitybackend.common.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ public class UserHouseServiceImpl implements UserHouseService {
     @Autowired
     private UserHouseMapper userHouseMapper;
     @Autowired
-    private UserMapper userMapper;
+    private WxUserMapper wxUserMapper;
     /**
      * 获取全部用户房屋关系
      * @param userId
@@ -70,21 +70,23 @@ public class UserHouseServiceImpl implements UserHouseService {
 
     /**
      * 获取房屋户主
+     *
      * @param houseId
      * @return
      */
     @Override
-    public User getHouseholdByHouseId(Long houseId) {
-        return userMapper.selectById(userHouseMapper.getHouseHoldIdByHouseId(houseId));
+    public WxUser getHouseholdByHouseId(Long houseId) {
+        return wxUserMapper.selectById(userHouseMapper.getHouseHoldIdByHouseId(houseId));
     }
 
     /**
      * 获取房屋成员（除开户主）
+     *
      * @param houseId
      * @return
      */
     @Override
-    public List<User> getHouseMembersByHouseId(Long houseId) {
+    public List<WxUser> getHouseMembersByHouseId(Long houseId) {
         return userHouseMapper.getHouseMembersByHouseId(houseId);
     }
 

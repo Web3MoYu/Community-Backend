@@ -1,13 +1,11 @@
 package com.shixi3.communitybackend.Family.controller;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.shixi3.communitybackend.Family.entity.UserHouse;
+import com.shixi3.communitybackend.Family.entity.WxUser;
 import com.shixi3.communitybackend.Family.service.UserHouseService;
-import com.shixi3.communitybackend.common.entity.User;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,8 +24,8 @@ public class UserHouseController {
      * @return
      */
     @GetMapping("/HouseHold/{id}")
-    public CommonResult<User> getHouseHoldByHouseId(@PathVariable Long id) {
-        User household=userHouseService.getHouseholdByHouseId(id);
+    public CommonResult<WxUser> getHouseHoldByHouseId(@PathVariable Long id) {
+        WxUser household=userHouseService.getHouseholdByHouseId(id);
         if (household!=null) {
             return CommonResult.success(household);
         }else {
@@ -44,7 +42,6 @@ public class UserHouseController {
      */
     @PostMapping("/addHouseHold")
     public CommonResult addHouseHold(Long houseId, Long userId) {
-
         return null;
     }
 
@@ -54,8 +51,8 @@ public class UserHouseController {
      * @return
      */
     @GetMapping("/HouseMembers/{houseId}")
-    public CommonResult<List> getHouseMembersByHouseId(@PathVariable Long houseId) {
-        List<User> members=userHouseService.getHouseMembersByHouseId(houseId);
+    public CommonResult<List<WxUser>> getHouseMembersByHouseId(@PathVariable Long houseId) {
+        List<WxUser> members=userHouseService.getHouseMembersByHouseId(houseId);
         if (members!=null) {
             return CommonResult.success(members);
         }else {
@@ -66,14 +63,14 @@ public class UserHouseController {
     /**
      * 添加家庭成员
      * @param houseId
-     * @param userId
+     * @param wxUserId
      * @return
      */
     @PostMapping("/addHouseMember")
-    public CommonResult addHouseMember(Long houseId,Long userId) {
+    public CommonResult addHouseMember(Long houseId,Long wxUserId) {
         UserHouse userHouse=new UserHouse();
         userHouse.setHouseId(houseId);
-        userHouse.setWxUserId(userId);
+        userHouse.setWxUserId(wxUserId);
         long count=userHouseService.addHouseMember(userHouse);
         if(count!=0){
             return CommonResult.success(count);
