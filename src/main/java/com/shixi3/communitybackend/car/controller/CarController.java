@@ -1,6 +1,7 @@
 package com.shixi3.communitybackend.car.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.shixi3.communitybackend.building.entity.Building;
 import com.shixi3.communitybackend.car.entity.Car;
 import com.shixi3.communitybackend.car.entity.Parking;
 import com.shixi3.communitybackend.car.service.CarService;
@@ -11,6 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -66,6 +68,18 @@ public class CarController {
     }
 
     /**
+     * 查询车牌号对应车辆
+     * @param licence 车牌号
+     * @return
+     */
+    @GetMapping("/exist/{licence}")
+    public CommonResult<Boolean> carExists(@PathVariable String licence) {
+        LambdaQueryWrapper<Car> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(Car::getLicence).eq(Car::getLicence, licence);
+        boolean exists = carService.getOne(wrapper) != null;
+        return CommonResult.success(exists);
+    }
+    /**
      * 根据id删除车辆信息
      * @param id 车辆id
      * @return
@@ -94,4 +108,6 @@ public class CarController {
         }
         return CommonResult.error(500,"修改车辆信息失败！");
     }
+
+
 }
