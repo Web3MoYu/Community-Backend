@@ -49,6 +49,9 @@ public class TenantController {
         return CommonResult.success("删除成功");
     }
 
+    //编辑
+
+
     /**
      * 获取所有人的姓名（去重后）
      * @return
@@ -64,14 +67,18 @@ public class TenantController {
      * @param name
      * @return
      */
-    @GetMapping("/getIdCardByName/#{name}")
+    @GetMapping("/getIdCardByName/{name}")
     public CommonResult<List<Tenant>> getIdCardByName(@PathVariable String name) {
         List<Tenant> idCardByName = tenantService.getIdCardByName(name);
         return CommonResult.success(idCardByName);
     }
 
-    //通过身份证号查用户信息
-    @GetMapping("/getUserByIdCard/#{idCard}")
+    /**
+     * 通过身份证号查用户信息
+     * @param idCard
+     * @return
+     */
+    @GetMapping("/getUserByIdCard/{idCard}")
     public CommonResult<Tenant> getUserByIdCard(@PathVariable String idCard) {
         Tenant tenant = tenantService.getUserByIdCard(idCard);
         return CommonResult.success(tenant);
