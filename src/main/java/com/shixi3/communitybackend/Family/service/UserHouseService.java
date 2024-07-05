@@ -37,6 +37,14 @@ public interface UserHouseService {
     boolean isHouseHold(Long houseId, Long userId);
 
     /**
+     * 判断是否为该房屋家庭成员
+     * @param houseId
+     * @param userId
+     * @return
+     */
+    boolean isHouseMember(Long houseId, Long userId);
+
+    /**
      * 获取房屋户主
      *
      * @param houseId
@@ -70,4 +78,20 @@ public interface UserHouseService {
      * @return
      */
     Long addHouseMember(UserHouse userHouse);
+
+    /**
+     * 删除家庭成员
+     *
+     * @param id
+     * @return
+     */
+    Integer deleteHouseMember(Long id);
+
+    /**
+     * 批量删除家庭成员
+     * @param ids
+     * @return
+     */
+    boolean batchDeleteHouseMember(Long[] ids);
+
 }
