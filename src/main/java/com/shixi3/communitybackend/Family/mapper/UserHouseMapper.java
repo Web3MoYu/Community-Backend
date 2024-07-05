@@ -23,6 +23,6 @@ public interface UserHouseMapper extends BaseMapper<UserHouse> {
      * @param houseId
      * @return
      */
-    @Select("select * from sys_user join user_house on sys_user.user_id=user_house.user_id where user_house.belong_flag=1 and user_house.house_id=#{houseId}")
+    @Select("select * from wx_user join user_house on wx_user.id=user_house.user_id where user_house.belong_flag=1 and user_house.house_id=#{houseId}")
     List<User> getHouseMembersByHouseId(Long houseId);
 }

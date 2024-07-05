@@ -29,6 +29,14 @@ public interface UserHouseService {
     List<UserHouse> getUserHouseRelationshipsByHouseId(Long houseId);
 
     /**
+     * 判断是否是该房屋户主
+     * @param houseId
+     * @param userId
+     * @return
+     */
+    boolean isHouseHold(Long houseId, Long userId);
+
+    /**
      * 获取房屋户主
      * @param houseId
      * @return

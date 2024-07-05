@@ -1,5 +1,6 @@
 package com.shixi3.communitybackend.Family.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.shixi3.communitybackend.Family.entity.UserHouse;
 import com.shixi3.communitybackend.Family.service.UserHouseService;
 import com.shixi3.communitybackend.common.entity.User;
@@ -43,6 +44,7 @@ public class UserHouseController {
      */
     @PostMapping("/addHouseHold")
     public CommonResult addHouseHold(Long houseId, Long userId) {
+
         return null;
     }
 
@@ -71,7 +73,7 @@ public class UserHouseController {
     public CommonResult addHouseMember(Long houseId,Long userId) {
         UserHouse userHouse=new UserHouse();
         userHouse.setHouseId(houseId);
-        userHouse.setUserId(userId);
+        userHouse.setWxUserId(userId);
         long count=userHouseService.addHouseMember(userHouse);
         if(count!=0){
             return CommonResult.success(count);

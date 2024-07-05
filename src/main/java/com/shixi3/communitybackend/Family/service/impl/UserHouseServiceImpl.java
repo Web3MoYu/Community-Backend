@@ -34,7 +34,7 @@ public class UserHouseServiceImpl implements UserHouseService {
     @Override
     public List<UserHouse> getUserHouseRelationshipsByUserId(Long userId) {
         LambdaQueryWrapper<UserHouse> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(UserHouse::getUserId, userId);
+        queryWrapper.eq(UserHouse::getWxUserId, userId);
         return userHouseMapper.selectList(queryWrapper);
     }
 
@@ -48,6 +48,24 @@ public class UserHouseServiceImpl implements UserHouseService {
         LambdaQueryWrapper<UserHouse> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(UserHouse::getHouseId, houseId);
         return userHouseMapper.selectList(queryWrapper);
+    }
+
+    /**
+     * 判断用户是否为该房屋户主
+     * @param houseId
+     * @param userId
+     * @return
+     */
+    public boolean isHouseHold(Long houseId, Long userId){
+        LambdaQueryWrapper<UserHouse> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(UserHouse::getHouseId, houseId);
+        queryWrapper.eq(UserHouse::getWxUserId, userId);
+        UserHouse userHouse = userHouseMapper.selectOne(queryWrapper);
+        if(userHouse.getBelongFlag()==0){
+            return true;
+        }else {
+            return false;
+        }
     }
 
     /**
