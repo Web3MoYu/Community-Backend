@@ -14,7 +14,7 @@ public class TokenRepVo {
 
     private String phone;
 
-    private String nickName;
+    private String name;
 
     private Integer sex;
 

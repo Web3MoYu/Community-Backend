@@ -29,5 +29,4 @@ public class CommonResult<T> {
         return error(errorCode.getCode(), errorCode.getMsg());
     }
 
-
 }
