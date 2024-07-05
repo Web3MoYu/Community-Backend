@@ -87,11 +87,6 @@ public interface UserHouseService {
      */
     Integer deleteHouseMember(Long id);
 
-    /**
-     * 批量删除家庭成员
-     * @param ids
-     * @return
-     */
-    boolean batchDeleteHouseMember(Long[] ids);
+
 
 }

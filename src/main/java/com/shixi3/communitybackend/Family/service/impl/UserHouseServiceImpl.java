@@ -150,19 +150,4 @@ public class UserHouseServiceImpl implements UserHouseService {
         return  userHouseMapper.deleteById(id);
     }
 
-    /**
-     * 批量删除用户房屋关系
-     * 后台管理员可删除户主，成员，租户
-     * 前台户主可删除家庭成员
-     * @param ids
-     * @return
-     */
-    @Override
-    @Transactional
-    public boolean batchDeleteHouseMember(Long[] ids) {
-        for (long id : ids) {
-            userHouseMapper.deleteById(id);
-        }
-        return true;
-    }
 }
