@@ -17,6 +17,10 @@ public class Car {
      */
     private Long owner;
     /**
+     * 拥有者姓名
+     */
+    private String name;
+    /**
      * 车牌号
      */
     private String licence;

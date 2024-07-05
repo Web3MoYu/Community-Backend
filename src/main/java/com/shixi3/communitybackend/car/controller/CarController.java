@@ -43,9 +43,7 @@ public class CarController {
     @GetMapping("/all")
     @PreAuthorize("hasAnyAuthority('car:cars:list')")
     public CommonResult<List<Car>> getAllCar(){
-        List<Car> cars=carService.list();
-        System.out.println("测试中");
-        System.out.println(cars);
+        List<Car> cars=carService.getAllCar();
         if (cars!=null) {
             return CommonResult.success(cars);
         }else {
