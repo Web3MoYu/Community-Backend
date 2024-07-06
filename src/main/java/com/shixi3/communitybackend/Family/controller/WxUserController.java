@@ -6,10 +6,7 @@ import com.shixi3.communitybackend.common.exception.BizException;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
@@ -39,8 +36,8 @@ public class WxUserController {
      * @param id
      * @return
      */
-    @GetMapping("/getWxUserId")
-    public CommonResult<WxUser> getWxUserById(Long id) {
+    @GetMapping("/getWxUserId/{id}")
+    public CommonResult<WxUser> getWxUserById(@PathVariable Long id) {
         WxUser wxUser = wxUserService.getWxUserById(id);
         if (wxUser != null) {
             return CommonResult.success(wxUser);
