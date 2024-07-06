@@ -53,12 +53,28 @@ public interface UserHouseService {
     WxUser getHouseholdByHouseId(Long houseId);
 
     /**
+     * 获取房屋的户主关系
+     * @param houseId
+     * @return
+     */
+    UserHouse getHouseholdRelationship(Long houseId);
+
+    /**
      * 获取房屋成员
      *
      * @param houseId
      * @return
      */
     List<WxUser> getHouseMembersByHouseId(Long houseId);
+
+    /**
+     *
+     * 根据房号和微信用户号（微信用户表主键）获取成员
+     * @param houseId
+     * @param wxUserId
+     * @return
+     */
+    UserHouse getOneHouseMember(Long houseId, Long wxUserId);
 
     /**
      * 添加户主
@@ -69,6 +85,14 @@ public interface UserHouseService {
      * @return
      */
     Long addHouseHold(UserHouse userHouse);
+
+    /**
+     * 过户（可过户非家庭成员）
+     * @param houseId
+     * @param wxUserId
+     * @return
+     */
+    boolean updateHouseHold(Long houseId, Long wxUserId);
 
     /**
      * 添加家庭成员
@@ -86,7 +110,6 @@ public interface UserHouseService {
      * @return
      */
     Integer deleteHouseMember(Long id);
-
 
 
 }

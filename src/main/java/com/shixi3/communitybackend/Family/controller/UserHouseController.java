@@ -63,6 +63,24 @@ public class UserHouseController {
     }
 
     /**
+     * 过户
+     * @param houseId
+     * @param wxUserId
+     * @return
+     */
+    @PutMapping("/updateHouseHold")
+    public CommonResult<String> updateHouseHold(Long houseId, Long wxUserId) {
+        UserHouse userHouse=new UserHouse();
+        userHouse.setHouseId(houseId);
+        userHouse.setWxUserId(wxUserId);
+        if (userHouseService.updateHouseHold(houseId,wxUserId)) {
+            return CommonResult.success("过户成功!");
+        }else {
+            throw new BizException("过户失败!");
+        }
+    }
+
+    /**
      * 获取房屋所有成员（除开户主)
      *
      * @param houseId
