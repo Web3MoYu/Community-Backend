@@ -27,7 +27,7 @@ public class ParkingController {
      * @return
      */
     @GetMapping("/list/{owner}")
-    public CommonResult<List<Parking>> getParkingById(@PathVariable Long owner) {
+    public CommonResult<List<Parking>> getParkingByOwner(@PathVariable Long owner) {
         LambdaQueryWrapper<Parking> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Parking::getOwner,owner);
         List<Parking> parkings = parkingService.list(wrapper);
@@ -112,4 +112,12 @@ public class ParkingController {
         boolean exists = parkingService.getOne(wrapper) != null;
         return CommonResult.success(exists);
     }
+
+    @GetMapping("/getOne/{id}")
+    @PreAuthorize("hasAuthority('car:parking:edit')")
+    public CommonResult<Parking> getParkingById(@PathVariable Long id){
+        Parking parking = parkingService.getById(id);
+        return CommonResult.success(parking);
+    }
+
 }

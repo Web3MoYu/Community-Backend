@@ -27,7 +27,7 @@ public class CarController {
      * @return
      */
     @GetMapping("/list/{owner}")
-    public CommonResult<List<Car>> getCarById(@PathVariable Long owner) {
+    public CommonResult<List<Car>> getCarByOwner(@PathVariable Long owner) {
         LambdaQueryWrapper<Car> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Car::getOwner,owner);
         List<Car> cars = carService.list(wrapper);
@@ -107,6 +107,19 @@ public class CarController {
             return CommonResult.success("修改车辆信息成功！");
         }
         return CommonResult.error(500,"修改车辆信息失败！");
+    }
+
+
+    /**
+     * 根据id查看车辆信息
+     * @param id 车辆id
+     * @return 车辆信息
+     */
+    @GetMapping("/getOne/{id}")
+    @PreAuthorize("hasAuthority('car:cars:edit')")
+    public CommonResult<Car> getCarById(@PathVariable Long id) {
+        Car car = carService.getById(id);
+        return CommonResult.success(car);
     }
 
 
