@@ -106,6 +106,13 @@ public interface UserHouseService {
      */
     Long addHouseMember(UserHouse userHouse);
 
-
+    /**
+     * 删除用户房屋关系
+     * 后台管理员可删除户主，成员，租户
+     * 前台户主可删除家庭成员
+     * @param id
+     * @return
+     */
+    Integer deleteHouseMember(Long id);
 
 }

@@ -5,6 +5,7 @@ import com.shixi3.communitybackend.Family.entity.WxUser;
 import com.shixi3.communitybackend.Family.entity.WxUserTree;
 import com.shixi3.communitybackend.Family.service.UserHouseService;
 import com.shixi3.communitybackend.common.entity.Page;
+import com.shixi3.communitybackend.common.exception.BizException;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
