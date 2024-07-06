@@ -2,6 +2,7 @@ package com.shixi3.communitybackend.Family.controller;
 
 import com.shixi3.communitybackend.Family.entity.WxUser;
 import com.shixi3.communitybackend.Family.service.WxUserService;
+import com.shixi3.communitybackend.common.exception.BizException;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,21 @@ public class WxUserController {
             return CommonResult.success(wxUser);
         }else {
             return CommonResult.error(0,"获取用户失败");
+        }
+    }
+
+    /**
+     * 根据微信用户表主键获取微信用户
+     * @param id
+     * @return
+     */
+    @GetMapping("/getWxUserId")
+    public CommonResult<WxUser> getWxUserById(Long id) {
+        WxUser wxUser = wxUserService.getWxUserById(id);
+        if (wxUser != null) {
+            return CommonResult.success(wxUser);
+        }else {
+            throw new BizException("获取用户失败!");
         }
     }
 }

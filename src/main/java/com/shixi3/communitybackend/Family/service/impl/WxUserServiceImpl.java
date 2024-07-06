@@ -17,4 +17,11 @@ public class WxUserServiceImpl implements WxUserService {
         queryWrapper.eq(WxUser::getIdCard, IdCard);
         return wxUserMapper.selectOne(queryWrapper);
     }
+
+    @Override
+    public WxUser getWxUserById(Long id) {
+        LambdaQueryWrapper<WxUser> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(WxUser::getId, id);
+        return wxUserMapper.selectOne(queryWrapper);
+    }
 }

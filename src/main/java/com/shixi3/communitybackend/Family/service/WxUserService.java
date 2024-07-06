@@ -9,4 +9,11 @@ public interface WxUserService {
      * @return
      */
     WxUser getWxUserByIdCard(String IdCard);
+
+    /**
+     * 根据微信用户表主键获取
+     * @param id
+     * @return
+     */
+    WxUser getWxUserById(Long id);
 }

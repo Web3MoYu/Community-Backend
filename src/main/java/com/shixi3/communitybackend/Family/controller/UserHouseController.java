@@ -6,7 +6,6 @@ import com.shixi3.communitybackend.Family.entity.WxUserTree;
 import com.shixi3.communitybackend.Family.mapper.UserHouseMapper;
 import com.shixi3.communitybackend.Family.service.UserHouseService;
 import com.shixi3.communitybackend.Family.vo.DeleteVo;
-import com.shixi3.communitybackend.auth.mapper.UserMapper;
 import com.shixi3.communitybackend.common.entity.Page;
 import com.shixi3.communitybackend.common.exception.BizException;
 import com.shixi3.communitybackend.common.model.CommonResult;
