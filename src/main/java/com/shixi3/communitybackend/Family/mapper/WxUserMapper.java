@@ -11,8 +11,8 @@ import java.util.List;
 @Mapper
 public interface WxUserMapper extends BaseMapper<WxUser> {
 
-    @Select("select distinct * from wx_user where user_type = 0 and name like concat('%',#{name}, '%');")
-     List<WxUserVo> getParentId(String name);
+    @Select("select distinct * from wx_user where user_type = 0;")
+     List<WxUserVo> getParentId();
 
     @Select("select * from wx_user where (user_type = 1 or user_type = 2) and parent_id = #{parentId} and name like concat('%',#{name}, '%');")
     List<WxUserVo> getGroups(Long parentId, String name);
