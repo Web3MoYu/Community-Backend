@@ -40,33 +40,35 @@ public class UserHouseServiceImpl implements UserHouseService {
     @Override
     public List<WxUserTree> selectWxUser(Integer page, Integer pageSize, String name) {
 
-        //拿到分组id（house_id）
-        List<Long> groupId = wxUserMapper.getGroupId();
+        //拿到所有户主id
+        List<WxUserVo> parentIds = wxUserMapper.getParentId(name);
         List<List<WxUserVo>> userVos = new ArrayList<>();
         List<WxUserTree> wxUserTrees = new ArrayList<>();
-        //以house_id分组 以及 查询
-        for (Long group : groupId){
-            List<WxUserVo> groups = wxUserMapper.getGroups(group, name);
-            if(groups.size()>0){
-               userVos.add(groups);
-            }
+        //以parent_id分组 以及 查询
+        for (WxUserVo parent : parentIds){
+            List<WxUserVo> groups = wxUserMapper.getGroups(parent.getId(), name);
+            WxUserTree wxUserTree = new WxUserTree();
+            wxUserTree.setWxUserVo(parent);
+            //将剩下的改组内的用户添加的他的children中
+            wxUserTree.setChildren(groups);
+            //添加到树形结构中
+            wxUserTrees.add(wxUserTree);
         }
+        //标识是否已经存在
         //遍历操作使其为树形结构
-        for(List<WxUserVo> list : userVos){
-            for(WxUserVo wxUserVo : list){
-                if(wxUserVo.getBelongFlag() != 1){
-                    WxUserTree wxUserTree = new WxUserTree();
-                    wxUserTree.setWxUserVo(wxUserVo);
-                    list.remove(wxUserVo);
-                    //将剩下的改组内的用户添加的他的children中
-                    wxUserTree.setChildren(list);
-                    //添加到树形结构中
-                    wxUserTrees.add(wxUserTree);
-                    break;
-                }
-
-            }
-        }
+//        for(List<WxUserVo> list : userVos){
+//            for(WxUserVo wxUserVo : list){
+//                if(wxUserVo.getBelongFlag() != 1){
+//                    WxUserTree wxUserTree = new WxUserTree();
+//                    wxUserTree.setWxUserVo(wxUserVo);
+//                    list.remove(wxUserVo);
+//                    //将剩下的改组内的用户添加的他的children中
+//                    wxUserTree.setChildren(list);
+//
+//                    break;
+//                }
+//            }
+//        }
         return wxUserTrees;
     }
 

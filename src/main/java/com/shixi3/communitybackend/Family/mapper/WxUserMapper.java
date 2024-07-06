@@ -11,10 +11,9 @@ import java.util.List;
 @Mapper
 public interface WxUserMapper extends BaseMapper<WxUser> {
 
-    @Select("select distinct house_id from user_house;")
-     List<Long> getGroupId();
+    @Select("select distinct * from wx_user where user_type = 0 and name like concat('%',#{name}, '%');")
+     List<WxUserVo> getParentId(String name);
 
-    @Select("select  house_id, belong_flag, wx_user.* from user_house, " +
-            "wx_user where wx_user_id = wx_user.id and user_house.house_id = #{groupId} and name like concat('%',#{name}, '%');")
-    List<WxUserVo> getGroups(Long groupId, String name);
+    @Select("select * from wx_user where (user_type = 1 or user_type = 2) and parent_id = #{parentId} and name like concat('%',#{name}, '%');")
+    List<WxUserVo> getGroups(Long parentId, String name);
 }

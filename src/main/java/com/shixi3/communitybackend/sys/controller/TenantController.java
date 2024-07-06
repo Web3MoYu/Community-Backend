@@ -3,13 +3,20 @@ package com.shixi3.communitybackend.sys.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.shixi3.communitybackend.Family.entity.WxUser;
+import com.shixi3.communitybackend.Family.mapper.WxUserMapper;
+import com.shixi3.communitybackend.Family.vo.WxUserVo;
 import com.shixi3.communitybackend.car.service.CarService;
 import com.shixi3.communitybackend.common.model.CommonResult;
+import com.shixi3.communitybackend.house.entity.House;
+import com.shixi3.communitybackend.house.service.HouseService;
 import com.shixi3.communitybackend.sys.entity.Tenant;
 import com.shixi3.communitybackend.sys.service.TenantService;
 import jakarta.annotation.Resource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -21,6 +28,10 @@ public class TenantController {
 
     @Resource
     private CarService carService;
+
+    @Resource
+    private WxUserMapper wxUserMapper;
+
     /**
      * 分页查询以及根据名字模糊查询
      * @param page
@@ -39,17 +50,82 @@ public class TenantController {
     }
 
 
-    @DeleteMapping("/delete/{id}")
-    public CommonResult<String> deleteById(@PathVariable Long id){
+    /**
+     * 删除用户
+     * @param id
+     * @param parentId
+     * @param userType
+     * @return
+     */
+    @DeleteMapping("/delete")
+    @PreAuthorize("hasAuthority('sys:wxuser:delete')")
+    public CommonResult<String> deleteWxUser(@RequestParam Long id,@RequestParam Long parentId,@RequestParam Integer userType){
+        if(userType == 0){        //是户主
+            List<Long> list = new ArrayList<>();
+            //拿到与当前parentId有关的所有人id
+            List<WxUserVo> wxUserVo = wxUserMapper.getGroups(parentId, "");
+            WxUserVo wxUserVo2 = new WxUserVo();
+            wxUserVo2.setId(id);
+            wxUserVo.add(wxUserVo2);
 
-        //先删除表中他的车辆信息
-        carService.deleteByOwner(id);
+            for(WxUserVo wxUserVo1 : wxUserVo){
+                //删除car
+                carService.deleteByOwner(id);
 
-        //删除或修改对应房屋信息
+                //改变house
+                tenantService.deleteWxUser(wxUserVo1.getId(), parentId, userType);
+
+                //删除user_house表中对应数据
+                tenantService.deleteUserHouse(wxUserVo1.getId());
+                //将用户改为游客
+                tenantService.changeUser(id);
+            }
+        }else if(userType == 1){  //业主（户主家人）
+            //删除car
+            carService.deleteByOwner(id);
+            //删除user_house表中对应数据
+            tenantService.deleteUserHouse(id);
+
+            //将用户改为游客
+            tenantService.changeUser(id);
+        }else if(userType == 2){  //租户
+            //删除car
+            carService.deleteByOwner(id);
+            //删除user_house表中对应数据
+            tenantService.deleteUserHouse(id);
+
+            //将用户改为游客
+            tenantService.changeUser(id);
+        }
+
         return CommonResult.success("删除成功");
     }
 
-    //编辑
+    /**
+     * 修改微信用户的电话号码
+     * @param tenant
+     * @return
+     */
+    @PutMapping("/edit")
+    @PreAuthorize("hasAuthority('sys:wxUser:edit')")
+    public CommonResult<String> updateHouse(@RequestBody Tenant tenant) {
+        boolean update = tenantService.updateById(tenant);
+        if(update) {
+            return CommonResult.success("修改用户信息成功！");
+        }
+        return CommonResult.error(500,"修改用户信息失败！");
+    }
+
+    /**
+     * 查找单个用户数据用于回显信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/getOne/{id}")
+    public CommonResult<Tenant> getOneById(@PathVariable Long id){
+        Tenant tenant = tenantService.getOneById(id);
+        return CommonResult.success(tenant);
+    }
 
 
     /**
