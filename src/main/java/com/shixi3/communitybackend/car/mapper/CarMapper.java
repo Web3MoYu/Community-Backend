@@ -15,4 +15,6 @@ public interface CarMapper extends BaseMapper<Car> {
 
     @Delete("delete from car where owner = #{owner}")
     void deleteByOwner(Long owner);
+
+    Car getCarById(Long carId);
 }

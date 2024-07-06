@@ -68,8 +68,8 @@ public class HouseController {
      * @return 房屋信息
      */
     @GetMapping("/getOne/{id}")
-    public CommonResult<House> getHouse(@PathVariable Long id) {
-        House house = houseService.getById(id);
+    public CommonResult<HouseVo> getHouse(@PathVariable Long id) {
+        HouseVo house = houseService.getHouseVoById(id);
         return CommonResult.success(house);
     }
 

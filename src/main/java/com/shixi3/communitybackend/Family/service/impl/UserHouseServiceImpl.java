@@ -1,15 +1,18 @@
 package com.shixi3.communitybackend.Family.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.shixi3.communitybackend.Family.vo.WxUserVo;
 import com.shixi3.communitybackend.Family.entity.WxUser;
+import com.shixi3.communitybackend.Family.entity.WxUserTree;
 import com.shixi3.communitybackend.Family.mapper.UserHouseMapper;
 import com.shixi3.communitybackend.Family.mapper.WxUserMapper;
 import com.shixi3.communitybackend.Family.service.UserHouseService;
 import com.shixi3.communitybackend.Family.entity.UserHouse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+
 @Service
 public class UserHouseServiceImpl implements UserHouseService {
     @Autowired
@@ -25,6 +28,46 @@ public class UserHouseServiceImpl implements UserHouseService {
     @Override
     public List<UserHouse> getAllUserHouseRelationships(Long userId, Long houseId) {
         return userHouseMapper.selectList(null);
+    }
+
+    /**
+     * 拿到树形结构
+     * @param page
+     * @param pageSize
+     * @param name
+     * @return
+     */
+    @Override
+    public List<WxUserTree> selectWxUser(Integer page, Integer pageSize, String name) {
+
+        //拿到分组id（house_id）
+        List<Long> groupId = wxUserMapper.getGroupId();
+        List<List<WxUserVo>> userVos = new ArrayList<>();
+        List<WxUserTree> wxUserTrees = new ArrayList<>();
+        //以house_id分组 以及 查询
+        for (Long group : groupId){
+            List<WxUserVo> groups = wxUserMapper.getGroups(group, name);
+            if(groups.size()>0){
+               userVos.add(groups);
+            }
+        }
+        //遍历操作使其为树形结构
+        for(List<WxUserVo> list : userVos){
+            for(WxUserVo wxUserVo : list){
+                if(wxUserVo.getBelongFlag() != 1){
+                    WxUserTree wxUserTree = new WxUserTree();
+                    wxUserTree.setWxUserVo(wxUserVo);
+                    list.remove(wxUserVo);
+                    //将剩下的改组内的用户添加的他的children中
+                    wxUserTree.setChildren(list);
+                    //添加到树形结构中
+                    wxUserTrees.add(wxUserTree);
+                    break;
+                }
+
+            }
+        }
+        return wxUserTrees;
     }
 
     /**

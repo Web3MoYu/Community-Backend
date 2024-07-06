@@ -2,6 +2,7 @@ package com.shixi3.communitybackend.car.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.shixi3.communitybackend.building.entity.Building;
+import com.shixi3.communitybackend.car.entity.Car;
 import com.shixi3.communitybackend.car.entity.Parking;
 import com.shixi3.communitybackend.car.service.ParkingService;
 import com.shixi3.communitybackend.common.model.CommonResult;
@@ -23,10 +24,10 @@ public class ParkingController {
     /**
      * 查询个人车位
      * @param owner 用户id
-     * @return
+     * @return 车位列表
      */
     @GetMapping("/list/{owner}")
-    public CommonResult<List<Parking>> getParkingById(@PathVariable Long owner) {
+    public CommonResult<List<Parking>> getParkingByOwner(@PathVariable Long owner) {
         LambdaQueryWrapper<Parking> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Parking::getOwner,owner);
         List<Parking> parkings = parkingService.list(wrapper);
@@ -39,7 +40,7 @@ public class ParkingController {
 
     /**
      * 查询所有车位
-     * @return
+     * @return 车位列表
      */
     @GetMapping("/all")
     @PreAuthorize("hasAnyAuthority('car:parking:list')")
@@ -55,7 +56,7 @@ public class ParkingController {
     /**
      * 新增车位信息
      * @param parking 提交车位信息
-     * @return
+     * @return 提示信息
      */
     @PostMapping("/add")
     @PreAuthorize("hasAnyAuthority('car:parking:add')")
@@ -70,7 +71,7 @@ public class ParkingController {
     /**
      * 根据id删除车位信息
      * @param id 车位id
-     * @return
+     * @return 提示信息
      */
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasAnyAuthority('car:parking:delete')")
@@ -85,7 +86,7 @@ public class ParkingController {
     /**
      * 编辑车位信息
      * @param parking 编辑的车位信息
-     * @return
+     * @return 提示信息
      */
     @PutMapping("/edit")
     @PreAuthorize("hasAuthority('car:parking:edit')")
@@ -96,4 +97,32 @@ public class ParkingController {
         }
         return CommonResult.error(500,"修改车位信息失败！");
     }
+
+    /**
+     * 根据车位编号获取审核的车位信息
+     * @param number 车位编号
+     * @return 提示信息
+     */
+    @GetMapping("/exist/{number}")
+    public CommonResult<Boolean> parkingExists(@PathVariable String number){
+        LambdaQueryWrapper<Parking> wrapper = new LambdaQueryWrapper<>();
+        wrapper.select(Parking::getNumber)
+                .eq(Parking::getNumber, number)
+                .and(i -> i.eq(Parking::getStatus, 0).or().eq(Parking::getStatus, 1));;
+        boolean exists = parkingService.getOne(wrapper) != null;
+        return CommonResult.success(exists);
+    }
+
+    /**
+     * 根据id查看车辆信息
+     * @param id 车辆id
+     * @return 车辆信息
+     */
+    @GetMapping("/getOne/{id}")
+    @PreAuthorize("hasAuthority('car:parking:edit')")
+    public CommonResult<Parking> getParkingById(@PathVariable Long id){
+        Parking parking = parkingService.getParkingById(id);
+        return CommonResult.success(parking);
+    }
+
 }

@@ -17,4 +17,7 @@ public class HouseVo extends House {
      * 楼栋编号
      */
     private Long buildingNumber;
+
+    private String ownerCard;
+    private String tenantCard;
 }

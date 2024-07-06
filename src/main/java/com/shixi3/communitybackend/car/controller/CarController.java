@@ -24,10 +24,10 @@ public class CarController {
     /**
      * 查看个人车辆信息
      * @param owner 个人ID
-     * @return
+     * @return 车辆列表
      */
     @GetMapping("/list/{owner}")
-    public CommonResult<List<Car>> getCarById(@PathVariable Long owner) {
+    public CommonResult<List<Car>> getCarByOwner(@PathVariable Long owner) {
         LambdaQueryWrapper<Car> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Car::getOwner,owner);
         List<Car> cars = carService.list(wrapper);
@@ -40,7 +40,7 @@ public class CarController {
 
     /**
      * 查看所有车辆信息
-     * @return
+     * @return 车辆列表
      */
     @GetMapping("/all")
     @PreAuthorize("hasAnyAuthority('car:cars:list')")
@@ -55,7 +55,7 @@ public class CarController {
     /**
      * 新增车辆信息
      * @param car 提交车辆信息
-     * @return
+     * @return 提示信息
      */
     @PostMapping("/add")
     @PreAuthorize("hasAnyAuthority('car:cars:add')")
@@ -70,7 +70,7 @@ public class CarController {
     /**
      * 查询车牌号对应车辆
      * @param licence 车牌号
-     * @return
+     * @return 提示信息
      */
     @GetMapping("/exist/{licence}")
     public CommonResult<Boolean> carExists(@PathVariable String licence) {
@@ -82,7 +82,7 @@ public class CarController {
     /**
      * 根据id删除车辆信息
      * @param id 车辆id
-     * @return
+     * @return 提示信息
      */
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasAnyAuthority('car:cars:delete')")
@@ -97,7 +97,7 @@ public class CarController {
     /**
      * 编辑车辆信息
      * @param car 编辑的车辆信息
-     * @return
+     * @return 提示信息
      */
     @PutMapping("/edit")
     @PreAuthorize("hasAuthority('car:cars:edit')")
@@ -107,6 +107,19 @@ public class CarController {
             return CommonResult.success("修改车辆信息成功！");
         }
         return CommonResult.error(500,"修改车辆信息失败！");
+    }
+
+
+    /**
+     * 根据id查看车辆信息
+     * @param id 车辆id
+     * @return 车辆信息
+     */
+    @GetMapping("/getOne/{id}")
+    @PreAuthorize("hasAuthority('car:cars:edit')")
+    public CommonResult<Car> getCarById(@PathVariable Long id) {
+        Car car = carService.getCarById(id);
+        return CommonResult.success(car);
     }
 
 

@@ -19,4 +19,9 @@ public class HouseServiceImpl extends ServiceImpl<HouseMapper, House> implements
         result = houseMapper.page(result,houseNumber);
         return result;
     }
+
+    @Override
+    public HouseVo getHouseVoById(Long houseId) {
+        return houseMapper.getHouseVoById(houseId);
+    }
 }

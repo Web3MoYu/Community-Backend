@@ -9,4 +9,6 @@ public interface CarService extends IService<Car> {
 
     List<Car> getAllCar();
     void deleteByOwner(Long owner);
+
+    Car getCarById(Long carId);
 }
