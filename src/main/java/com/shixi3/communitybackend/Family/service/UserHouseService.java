@@ -1,6 +1,7 @@
 package com.shixi3.communitybackend.Family.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.shixi3.communitybackend.Family.entity.UserHouse;
 import com.shixi3.communitybackend.Family.entity.WxUser;
 import com.shixi3.communitybackend.Family.entity.WxUserTree;
@@ -8,7 +9,7 @@ import com.shixi3.communitybackend.common.entity.MenuTree;
 
 import java.util.List;
 
-public interface UserHouseService {
+public interface UserHouseService extends IService<UserHouse> {
     /**
      * 查看所有用户与房屋关系
      * @param userId

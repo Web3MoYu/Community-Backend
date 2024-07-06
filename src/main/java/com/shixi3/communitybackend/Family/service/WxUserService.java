@@ -1,8 +1,9 @@
 package com.shixi3.communitybackend.Family.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.shixi3.communitybackend.Family.entity.WxUser;
 
-public interface WxUserService {
+public interface WxUserService extends IService<WxUser> {
     /**
      * 根据身份证获取微信用户
      * @param IdCard

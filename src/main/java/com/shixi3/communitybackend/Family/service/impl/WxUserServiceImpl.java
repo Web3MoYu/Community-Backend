@@ -1,6 +1,7 @@
 package com.shixi3.communitybackend.Family.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.shixi3.communitybackend.Family.entity.WxUser;
 import com.shixi3.communitybackend.Family.mapper.WxUserMapper;
 import com.shixi3.communitybackend.Family.service.WxUserService;
@@ -8,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class WxUserServiceImpl implements WxUserService {
+public class WxUserServiceImpl extends ServiceImpl<WxUserMapper,WxUser> implements WxUserService {
     @Autowired
     private WxUserMapper wxUserMapper;
     @Override

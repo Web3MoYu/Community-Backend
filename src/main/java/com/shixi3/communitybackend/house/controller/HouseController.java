@@ -42,6 +42,7 @@ public class HouseController {
     @PostMapping("/add")
     public CommonResult<String> addHouse(@RequestBody House house) {
         boolean save = houseService.save(house);
+        houseService.saveHouseWithUser(house);
         if(save) {
             return CommonResult.success("添加房屋信息成功！");
         }
@@ -56,6 +57,7 @@ public class HouseController {
     @PutMapping("/edit")
     public CommonResult<String> updateHouse(@RequestBody House house) {
         boolean update = houseService.updateById(house);
+
         if(update) {
             return CommonResult.success("修改房屋信息成功！");
         }

@@ -1,5 +1,6 @@
 package com.shixi3.communitybackend.Family.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.shixi3.communitybackend.Family.vo.WxUserVo;
 import com.shixi3.communitybackend.Family.entity.WxUser;
 import com.shixi3.communitybackend.Family.entity.WxUserTree;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class UserHouseServiceImpl implements UserHouseService {
+public class UserHouseServiceImpl extends ServiceImpl<UserHouseMapper,UserHouse> implements UserHouseService {
     @Autowired
     private UserHouseMapper userHouseMapper;
     @Autowired
