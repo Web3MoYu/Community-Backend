@@ -9,6 +9,12 @@
         JOIN wx_user u ON c.owner = u.id
         order by car_id;
     </select>
-
+    <select id="getCarById" resultType="com.shixi3.communitybackend.car.entity.Car">
+        SELECT c.car_id, c.owner, u.name, c.licence, c.type
+        FROM car c
+                 JOIN wx_user u ON c.owner = u.id
+        where c.car_id=#{carId}
+        order by car_id;
+    </select>
 
 </mapper>

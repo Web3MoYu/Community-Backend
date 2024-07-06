@@ -9,6 +9,12 @@
                  JOIN wx_user u ON p.owner = u.id
         order by parking_id;
     </select>
-
+    <select id="getParkingById" resultType="com.shixi3.communitybackend.car.entity.Parking">
+        SELECT p.parking_id, p.number, p.status, p.owner, u.name
+        FROM parking p
+                 LEFT JOIN wx_user u ON p.owner = u.id
+        WHERE p.parking_id = #{parkingId}
+        ORDER BY p.parking_id;
+    </select>
 
 </mapper>

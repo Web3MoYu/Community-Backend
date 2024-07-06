@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ParkingService extends IService<Parking> {
     List<Parking> getAllParking();
+
+    Parking getParkingById(Long parkingId);
 }

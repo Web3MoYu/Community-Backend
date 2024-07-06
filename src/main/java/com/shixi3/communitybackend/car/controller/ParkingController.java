@@ -24,7 +24,7 @@ public class ParkingController {
     /**
      * 查询个人车位
      * @param owner 用户id
-     * @return
+     * @return 车位列表
      */
     @GetMapping("/list/{owner}")
     public CommonResult<List<Parking>> getParkingByOwner(@PathVariable Long owner) {
@@ -40,7 +40,7 @@ public class ParkingController {
 
     /**
      * 查询所有车位
-     * @return
+     * @return 车位列表
      */
     @GetMapping("/all")
     @PreAuthorize("hasAnyAuthority('car:parking:list')")
@@ -56,7 +56,7 @@ public class ParkingController {
     /**
      * 新增车位信息
      * @param parking 提交车位信息
-     * @return
+     * @return 提示信息
      */
     @PostMapping("/add")
     @PreAuthorize("hasAnyAuthority('car:parking:add')")
@@ -71,7 +71,7 @@ public class ParkingController {
     /**
      * 根据id删除车位信息
      * @param id 车位id
-     * @return
+     * @return 提示信息
      */
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasAnyAuthority('car:parking:delete')")
@@ -86,7 +86,7 @@ public class ParkingController {
     /**
      * 编辑车位信息
      * @param parking 编辑的车位信息
-     * @return
+     * @return 提示信息
      */
     @PutMapping("/edit")
     @PreAuthorize("hasAuthority('car:parking:edit')")
@@ -101,7 +101,7 @@ public class ParkingController {
     /**
      * 根据车位编号获取审核的车位信息
      * @param number 车位编号
-     * @return
+     * @return 提示信息
      */
     @GetMapping("/exist/{number}")
     public CommonResult<Boolean> parkingExists(@PathVariable String number){
@@ -113,10 +113,15 @@ public class ParkingController {
         return CommonResult.success(exists);
     }
 
+    /**
+     * 根据id查看车辆信息
+     * @param id 车辆id
+     * @return 车辆信息
+     */
     @GetMapping("/getOne/{id}")
     @PreAuthorize("hasAuthority('car:parking:edit')")
     public CommonResult<Parking> getParkingById(@PathVariable Long id){
-        Parking parking = parkingService.getById(id);
+        Parking parking = parkingService.getParkingById(id);
         return CommonResult.success(parking);
     }
 
