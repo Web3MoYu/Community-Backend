@@ -36,7 +36,7 @@ public class WxUserController {
      * @param id
      * @return
      */
-    @GetMapping("/getWxUserId/{id}")
+    @GetMapping("/getWxUserById/{id}")
     public CommonResult<WxUser> getWxUserById(@PathVariable Long id) {
         WxUser wxUser = wxUserService.getWxUserById(id);
         if (wxUser != null) {
