@@ -21,18 +21,11 @@ public class JWTUtils {
     public static final JWTVerifier verifier = JWT.require(Algorithm.HMAC256(SECRET_KEY)).build();
 
     public static String creatToken(Long userId) {
+        return getToken(String.valueOf(userId));
+    }
 
-        JWTCreator.Builder builder = JWT.create();
-        builder.withJWTId(UUID.randomUUID().toString())// 设置token唯一标识
-                .withSubject(String.valueOf(userId)) // 设置token的主体
-                .withIssuer("9622")// 签发者
-                .withIssuedAt(new Date()); //签发时间
-        // 设置过期时间
-        Calendar instance = Calendar.getInstance();
-        instance.add(Calendar.DATE, EXPIRE_TIME);
-        builder.withExpiresAt(instance.getTime());
-        //签发
-        return builder.sign(Algorithm.HMAC256(SECRET_KEY));
+    public static String creatToken(String str) {
+        return getToken(str);
     }
 
     public static String creatToken(Map<String, Object> map, Long userId) {
@@ -58,5 +51,19 @@ public class JWTUtils {
     public static Long getUserId(String token) {
         String userId = verify(token).getSubject();
         return Long.parseLong(userId);
+    }
+
+    public static String getToken(String str) {
+        JWTCreator.Builder builder = JWT.create();
+        builder.withJWTId(UUID.randomUUID().toString())// 设置token唯一标识
+                .withSubject(str) // 设置token的主体
+                .withIssuer("9622")// 签发者
+                .withIssuedAt(new Date()); //签发时间
+        // 设置过期时间
+        Calendar instance = Calendar.getInstance();
+        instance.add(Calendar.DATE, EXPIRE_TIME);
+        builder.withExpiresAt(instance.getTime());
+        //签发
+        return builder.sign(Algorithm.HMAC256(SECRET_KEY));
     }
 }

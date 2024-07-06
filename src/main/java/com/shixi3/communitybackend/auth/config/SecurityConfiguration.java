@@ -42,6 +42,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/login").permitAll()
                                 .requestMatchers("/logout").authenticated()
                                 .requestMatchers("/common/img/download/**").anonymous()
+                                .requestMatchers("/wx/wxlogin").anonymous()
                                 .anyRequest().authenticated())
                 .logout(AbstractHttpConfigurer::disable)
         ;
