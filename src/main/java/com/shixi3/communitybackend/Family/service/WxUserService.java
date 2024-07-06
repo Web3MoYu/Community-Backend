@@ -1,6 +1,7 @@
 package com.shixi3.communitybackend.Family.service;
 
 import com.shixi3.communitybackend.Family.entity.WxUser;
+import com.shixi3.communitybackend.common.model.CommonResult;
 
 public interface WxUserService {
     /**
@@ -16,4 +17,6 @@ public interface WxUserService {
      * @return
      */
     WxUser getWxUserById(Long id);
+
+    CommonResult getSessionId(String code);
 }

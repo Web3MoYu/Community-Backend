@@ -17,6 +17,15 @@ public class WxUserController {
     private WxUserService wxUserService;
 
     /**
+     * 获取SessionId
+     * @param code
+     * @return
+     */
+    public CommonResult getSessionId(String code){
+        return wxUserService.getSessionId(code);
+    }
+
+    /**
      * 通过身份证获取微信用户
      * @param idCard
      * @return
@@ -45,4 +54,5 @@ public class WxUserController {
             throw new BizException("获取用户失败!");
         }
     }
+
 }
