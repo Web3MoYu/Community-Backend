@@ -18,10 +18,6 @@ public class Parking {
     private String number;
 
     /**
-     * 车位状态
-     */
-    private Integer status;
-    /**
      * 车位拥有者
      */
     private Long owner;

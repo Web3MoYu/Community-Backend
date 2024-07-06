@@ -35,4 +35,27 @@ public class TenantServiceImpl extends ServiceImpl<TenantMapper, Tenant> impleme
         Tenant tenant = tenantMapper.getUserByIdCard(idCard);
         return tenant;
     }
+
+    @Override
+    public Tenant getOneById(Long id) {
+        Tenant tenant = tenantMapper.getOneById(id);
+        return tenant;
+    }
+
+    @Override
+    public void deleteWxUser(Long id, Long houseId, Integer userType) {
+
+    }
+
+    @Override
+    public void deleteUserHouse(Long wxUserId) {
+        tenantMapper.deleteOne(wxUserId);
+    }
+
+    @Override
+    public void changeUser(Long id) {
+        tenantMapper.changeUser(id);
+    }
+
+
 }

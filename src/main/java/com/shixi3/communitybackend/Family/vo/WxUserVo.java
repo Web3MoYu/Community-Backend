@@ -10,5 +10,7 @@ public class WxUserVo extends WxUser {
 
     private Long houseId;
 
+    private Long wxUserId;
+
     private Integer belongFlag;
 }
