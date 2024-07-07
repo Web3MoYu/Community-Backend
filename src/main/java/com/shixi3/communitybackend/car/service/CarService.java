@@ -11,4 +11,6 @@ public interface CarService extends IService<Car> {
     void deleteByOwner(Long owner);
 
     Car getCarById(Long carId);
+
+    Car getCarByLicence(String licence);
 }

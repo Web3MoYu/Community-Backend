@@ -115,12 +115,22 @@ public class CarController {
      * @param id 车辆id
      * @return 车辆信息
      */
-    @GetMapping("/getOne/{id}")
+    @GetMapping("/getOneById/{id}")
     @PreAuthorize("hasAuthority('car:cars:edit')")
     public CommonResult<Car> getCarById(@PathVariable Long id) {
         Car car = carService.getCarById(id);
         return CommonResult.success(car);
     }
 
-
+    /**
+     * 根据车牌号查询车辆信息
+     * @param licence 车牌号
+     * @return 车辆信息
+     */
+    @GetMapping("/search/{licence}")
+    @PreAuthorize("hasAuthority('car:cars:list')")
+    public CommonResult<Car> getCarByLicence(@PathVariable String licence) {
+        Car car = carService.getCarByLicence(licence);
+        return CommonResult.success(car);
+    }
 }

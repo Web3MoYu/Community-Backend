@@ -11,4 +11,6 @@ public interface ParkingMapper extends BaseMapper<Parking> {
     List<Parking> getAllParking();
 
     Parking getParkingById(Long parkingId);
+
+    Parking getParkingByNumber(String number);
 }
