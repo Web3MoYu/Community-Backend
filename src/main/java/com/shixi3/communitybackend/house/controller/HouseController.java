@@ -82,11 +82,8 @@ public class HouseController {
      */
     @DeleteMapping("/delete/{id}")
     public CommonResult<String> deleteHouse(@PathVariable Long id) {
-        boolean delete = houseService.removeById(id);
-        if(delete) {
-            return CommonResult.success("删除房屋信息成功！");
-        }
-        return CommonResult.error(500,"删除房屋信息失败！");
+        houseService.deleteWithUser(id);
+        return CommonResult.success("删除房屋信息成功！");
     }
 
     /**

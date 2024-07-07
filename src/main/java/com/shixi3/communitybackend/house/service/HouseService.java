@@ -12,4 +12,6 @@ public interface HouseService extends IService<House> {
     HouseVo getHouseVoById(Long houseId);
     void saveHouseWithUser(List<String> tenantCards,HouseVo house);
 
+    void deleteWithUser(Long houseId);
+
 }

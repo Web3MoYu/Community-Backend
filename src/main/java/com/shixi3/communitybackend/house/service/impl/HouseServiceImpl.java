@@ -69,14 +69,11 @@ public class HouseServiceImpl extends ServiceImpl<HouseMapper, House> implements
         long ownerId = 0;
         Integer state = house.getState();
 
-
         if(state == 1 || state == 2) {
-
             LambdaQueryWrapper<UserHouse> wrapper = new LambdaQueryWrapper<>();
             wrapper.eq(UserHouse::getHouseId,house.getHouseId());
             wrapper.eq(UserHouse::getHouseId,house.getOwnerId());
             wrapper.eq(UserHouse::getBelongFlag,0);
-
             UserHouse userHouse = userHouseService.getOne(wrapper);
             // 如果没有户主关系
             if(userHouse == null) {
@@ -116,8 +113,6 @@ public class HouseServiceImpl extends ServiceImpl<HouseMapper, House> implements
 
                 // 如果不存在租户关系
                 if(userHouse == null) {
-
-
                     UserHouse userHouseAdd = new UserHouse();
                     userHouseAdd.setHouseId(house.getHouseId());
                     userHouseAdd.setWxUserId(wxUser.getId());
@@ -134,5 +129,18 @@ public class HouseServiceImpl extends ServiceImpl<HouseMapper, House> implements
             wrapper.eq(house.getHouseId() != null,UserHouse::getHouseId,house.getHouseId());
             userHouseService.remove(wrapper);
         }
+    }
+
+    @Override
+    public void deleteWithUser(Long houseId) {
+        //删除用户房屋关系
+        LambdaQueryWrapper<UserHouse> userHouseWrapper = new LambdaQueryWrapper<>();
+        userHouseWrapper.eq(houseId != null,UserHouse::getHouseId,houseId);
+        userHouseService.remove(userHouseWrapper);
+
+        // 删除房屋信息
+        LambdaQueryWrapper<House> houseWrapper = new LambdaQueryWrapper<>();
+        houseWrapper.eq(houseId!=null,House::getHouseId,houseId);
+        this.remove(houseWrapper);
     }
 }
