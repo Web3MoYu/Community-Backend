@@ -1,5 +1,6 @@
 package com.shixi3.communitybackend.examine.controller;
 
+import com.shixi3.communitybackend.car.entity.Car;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import com.shixi3.communitybackend.examine.entity.CarVet;
 import com.shixi3.communitybackend.examine.service.CarVetService;
@@ -41,5 +42,19 @@ public class CarVetController {
             return CommonResult.success("删除车辆成功!");
         }
         return CommonResult.error(500,"删除车辆失败!");
+    }
+
+    /**
+     * 根据id修改车辆信息
+     * @param carVet 车辆信息
+     * @return 提示信息
+     */
+    @PutMapping("/edit")
+    public CommonResult<String> updateCar(@RequestBody CarVet carVet){
+        boolean update=carVetService.updateById(carVet);
+        if(update) {
+            return CommonResult.success("修改车辆信息成功！");
+        }
+        return CommonResult.error(500,"修改车辆信息失败！");
     }
 }

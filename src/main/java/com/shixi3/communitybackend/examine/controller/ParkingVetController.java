@@ -41,4 +41,13 @@ public class ParkingVetController {
         }
         return CommonResult.error(500,"删除车位失败!");
     }
+
+    @PutMapping("/edit")
+    public CommonResult<String> updateParking(@RequestBody ParkingVet parkingVet){
+        boolean update=parkingVetService.updateById(parkingVet);
+        if(update) {
+            return CommonResult.success("修改车位信息成功！");
+        }
+        return CommonResult.error(500,"修改车位信息失败！");
+    }
 }
