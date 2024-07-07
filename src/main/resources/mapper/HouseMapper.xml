@@ -12,8 +12,8 @@
                (select building_number from building where building.building_id = house.building_id) building_number
         from house
         <where>
-            <if test="number != null and number !='' ">
-                house.house_number like concat('%',#{number},'%');
+            <if test="buildingId != null and buildingId !='' ">
+                house.building_id = #{buildingId}
             </if>
         </where>
     </select>

@@ -12,5 +12,5 @@ public interface CarService extends IService<Car> {
 
     Car getCarById(Long carId);
 
-    Car getCarByLicence(String licence);
+    List<Car> getCarByLicence(String licence);
 }

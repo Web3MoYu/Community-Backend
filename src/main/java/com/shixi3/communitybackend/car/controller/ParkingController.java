@@ -1,14 +1,11 @@
 package com.shixi3.communitybackend.car.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.shixi3.communitybackend.building.entity.Building;
-import com.shixi3.communitybackend.car.entity.Car;
 import com.shixi3.communitybackend.car.entity.Parking;
 import com.shixi3.communitybackend.car.service.ParkingService;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -101,12 +98,12 @@ public class ParkingController {
     /**
      * 根据车位编号获取审核的车位信息
      * @param number 车位编号
-     * @return 提示信息
+     * @return 车位列表
      */
     @GetMapping("/getParkingByNumber/{number}")
-    public CommonResult<Parking> getParkingByNumber(@PathVariable String number){
-        Parking parking=parkingService.getParkingByNumber(number);
-        return CommonResult.success(parking);
+    public CommonResult<List<Parking>> getParkingByNumber(@PathVariable String number){
+        List<Parking> parkings=parkingService.getParkingByNumber(number);
+        return CommonResult.success(parkings);
     }
 
     /**
