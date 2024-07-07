@@ -59,13 +59,13 @@ public class HouseServiceImpl extends ServiceImpl<HouseMapper, House> implements
     }
 
     @Override
-    public void saveHouseWithUser(House house) {
+    public void saveHouseWithUser(List<String> tenantCards,House house) {
         long ownerId = 0;
-        long tenantId = 0;
         Integer state = house.getState();
-        UserHouse userHouse = new UserHouse();
-        userHouse.setHouseId(house.getHouseId());
+
         if(state == 1 || state == 2) {
+            UserHouse userHouse = new UserHouse();
+            userHouse.setHouseId(house.getHouseId());
             // 户主
             ownerId = house.getOwnerId();
             userHouse.setWxUserId(ownerId);
@@ -74,10 +74,18 @@ public class HouseServiceImpl extends ServiceImpl<HouseMapper, House> implements
         }
         if(state == 2) {
             // 租户
-            tenantId = house.getTenantId();
-            userHouse.setWxUserId(tenantId);
-            userHouse.setBelongFlag(2);
-            userHouseService.save(userHouse);
+            for(String idCard:tenantCards) {
+                UserHouse userHouse = new UserHouse();
+                userHouse.setHouseId(house.getHouseId());
+                LambdaQueryWrapper<WxUser> wrapper = new LambdaQueryWrapper<>();
+                wrapper.eq(idCard != null,WxUser::getIdCard,idCard);
+                WxUser wxUser = wxUserService.getOne(wrapper);
+                if(wxUser != null) {
+                    userHouse.setWxUserId(wxUser.getId());
+                    userHouse.setBelongFlag(2);
+                    userHouseService.save(userHouse);
+                }
+            }
         }
         if(state == 0) {
             // 未出售 删除所有与该房屋有关系的记录

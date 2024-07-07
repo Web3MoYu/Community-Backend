@@ -20,4 +20,6 @@ public class HouseVo extends House {
     private String ownerCard;
 
     private List<WxUser> tenants;
+
+    private List<String> tenantCards;
 }

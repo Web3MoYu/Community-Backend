@@ -39,4 +39,5 @@ public class House implements Serializable {
     private Date createTime;
     private Date updateTime;
 
+    private Long tenantId;
 }

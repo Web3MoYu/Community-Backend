@@ -40,9 +40,9 @@ public class HouseController {
      * @return 提示信息
      */
     @PostMapping("/add")
-    public CommonResult<String> addHouse(@RequestBody House house) {
+    public CommonResult<String> addHouse(@RequestBody HouseVo house) {
         boolean save = houseService.save(house);
-        houseService.saveHouseWithUser(house);
+        houseService.saveHouseWithUser(house.getTenantCards(),house);
         if(save) {
             return CommonResult.success("添加房屋信息成功！");
         }
