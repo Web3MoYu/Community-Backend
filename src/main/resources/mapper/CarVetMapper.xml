@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shixi3.communitybackend.examine.mapper.CarVetMapper">
+    <select id="getCarVetByStatus" resultType="com.shixi3.communitybackend.examine.entity.CarVet">
+        SELECT cv.vet_id, cv.user_id, wx.name, cv.car_licence, cv.car_type, cv.vet_status, cv.vet_reason, cv.create_time, cv.update_time
+        FROM car_vet cv
+                 JOIN wx_user wx ON cv.user_id = wx.id
+        WHERE cv.vet_status = #{vetStatus}
+    </select>
+</mapper>
