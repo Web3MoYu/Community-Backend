@@ -45,21 +45,6 @@ public class WechatServiceImpl implements WechatService {
         return token;
     }
 
-    @Override
-    public void checkToken(String token) {
-        String redisToken = (String) redisTemplate.opsForValue().get(RedisUtils.WX_TOKEN);
-
-        if (redisToken == null || !redisToken.equals(token)) {
-            throw new BizException("用户令牌有误");
-        } else {
-            try {
-                JWTUtils.verify(token);
-            } catch (Exception e) {
-                throw new BizException("用户令牌有误");
-            }
-        }
-    }
-
     //调用微信接口服务获取openId && sessionKey
     private JSONObject getSessionKeyOrOpenId(String code) throws Exception {
         Map<String, String> requestUrlParam = new HashMap<>();

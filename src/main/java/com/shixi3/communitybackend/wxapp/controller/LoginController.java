@@ -27,13 +27,7 @@ public class LoginController {
     }
 
     @GetMapping("/checkwxlogin")
-    public CommonResult<String> checkLogin(@NotNull @RequestParam String token) {
-        System.out.println("收到待校验token：" + token);
-        try {
-            wechatService.checkToken(token);
-        } catch (Exception e) {
-            throw new BizException(401, "校验失败");
-        }
+    public CommonResult<String> checkLogin() {
         return CommonResult.success("校验成功");
     }
 }

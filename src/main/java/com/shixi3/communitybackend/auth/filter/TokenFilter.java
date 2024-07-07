@@ -5,8 +5,9 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.shixi3.communitybackend.auth.util.SecurityUtil;
 import com.shixi3.communitybackend.auth.util.ServletUtil;
 import com.shixi3.communitybackend.common.enums.ErrorCodes;
+import com.shixi3.communitybackend.common.exception.BizException;
 import com.shixi3.communitybackend.common.model.CommonResult;
-import com.shixi3.communitybackend.common.model.DMSUserDetail;
+import com.shixi3.communitybackend.common.model.SCMUserDetail;
 import com.shixi3.communitybackend.auth.util.JWTUtils;
 import com.shixi3.communitybackend.auth.util.RedisUtils;
 import jakarta.annotation.Resource;
@@ -36,7 +37,21 @@ public class TokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException, ServletException {
         String token = request.getHeader("token");
-        if (StringUtils.hasLength(token)) {
+        if (request.getRequestURI().startsWith("/wx") && StringUtils.hasLength(token)) {
+            // 微信的其余请求走这
+            String wxId = JWTUtils.getWxId(token);
+            String cacheToken = redisTemplate
+                    .opsForValue().get(RedisUtils.WX_TOKEN + wxId);
+            // 验证token是否被修改
+            if (cacheToken == null || !cacheToken.equals(token)) {
+                throw new BizException("用户令牌有误");
+            }
+            //将验证过后的用户信息放入context
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                    wxId, null, null);
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        } else if (StringUtils.hasLength(token)) {
             try {
                 Long userId = JWTUtils.getUserId(token);
                 String cacheToken = redisTemplate
@@ -45,7 +60,7 @@ public class TokenFilter extends OncePerRequestFilter {
                 if (cacheToken == null || !cacheToken.equals(token)) {
                     throw new BadCredentialsException("Token error");
                 }
-                DMSUserDetail userDetails = new DMSUserDetail();
+                SCMUserDetail userDetails = new SCMUserDetail();
                 userDetails.setID(userId);
                 String rawStr = redisTemplate
                         .opsForValue().get(RedisUtils.PERMISSIONS_KEY + userId);
