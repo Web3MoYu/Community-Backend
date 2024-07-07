@@ -8,12 +8,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @TableName("wx_user")
 public class WxUser {
-    @TableId(value = "id",type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
     private String wxId;
     private String phone;
@@ -25,4 +26,5 @@ public class WxUser {
     private LocalDateTime updateTime;
     private Integer userType;
     private Long parentId;
+    private String nickname;
 }
