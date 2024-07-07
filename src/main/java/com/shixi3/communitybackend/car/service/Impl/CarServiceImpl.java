@@ -31,7 +31,7 @@ public class CarServiceImpl extends ServiceImpl<CarMapper,Car> implements CarSer
     }
 
     @Override
-    public Car getCarByLicence(String licence){
+    public List<Car> getCarByLicence(String licence){
         return carMapper.getCarByLicence(licence);
     }
 }

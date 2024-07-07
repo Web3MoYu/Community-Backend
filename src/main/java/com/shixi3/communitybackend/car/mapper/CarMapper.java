@@ -18,5 +18,5 @@ public interface CarMapper extends BaseMapper<Car> {
 
     Car getCarById(Long carId);
 
-    Car getCarByLicence(String licence);
+    List<Car> getCarByLicence(String licence);
 }

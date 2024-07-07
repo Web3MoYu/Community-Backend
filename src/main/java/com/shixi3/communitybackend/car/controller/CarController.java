@@ -129,8 +129,8 @@ public class CarController {
      */
     @GetMapping("/search/{licence}")
     @PreAuthorize("hasAuthority('car:cars:list')")
-    public CommonResult<Car> getCarByLicence(@PathVariable String licence) {
-        Car car = carService.getCarByLicence(licence);
-        return CommonResult.success(car);
+    public CommonResult<List<Car>> getCarByLicence(@PathVariable String licence) {
+        List<Car> cars = carService.getCarByLicence(licence);
+        return CommonResult.success(cars);
     }
 }

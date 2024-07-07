@@ -101,12 +101,12 @@ public class ParkingController {
     /**
      * 根据车位编号获取审核的车位信息
      * @param number 车位编号
-     * @return 提示信息
+     * @return 车位列表
      */
     @GetMapping("/getParkingByNumber/{number}")
-    public CommonResult<Parking> getParkingByNumber(@PathVariable String number){
-        Parking parking=parkingService.getParkingByNumber(number);
-        return CommonResult.success(parking);
+    public CommonResult<List<Parking>> getParkingByNumber(@PathVariable String number){
+        List<Parking> parkings=parkingService.getParkingByNumber(number);
+        return CommonResult.success(parkings);
     }
 
     /**
