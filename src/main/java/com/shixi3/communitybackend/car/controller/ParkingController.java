@@ -98,25 +98,21 @@ public class ParkingController {
         return CommonResult.error(500,"修改车位信息失败！");
     }
 
-//    /**
-//     * 根据车位编号获取审核的车位信息
-//     * @param number 车位编号
-//     * @return 提示信息
-//     */
-//    @GetMapping("/exist/{number}")
-//    public CommonResult<Boolean> parkingExists(@PathVariable String number){
-//        LambdaQueryWrapper<Parking> wrapper = new LambdaQueryWrapper<>();
-//        wrapper.select(Parking::getNumber)
-//                .eq(Parking::getNumber, number)
-//                .and(i -> i.eq(Parking::getStatus, 0).or().eq(Parking::getStatus, 1));;
-//        boolean exists = parkingService.getOne(wrapper) != null;
-//        return CommonResult.success(exists);
-//    }
+    /**
+     * 根据车位编号获取审核的车位信息
+     * @param number 车位编号
+     * @return 提示信息
+     */
+    @GetMapping("/getParkingByNumber/{number}")
+    public CommonResult<Parking> getParkingByNumber(@PathVariable String number){
+        Parking parking=parkingService.getParkingByNumber(number);
+        return CommonResult.success(parking);
+    }
 
     /**
-     * 根据id查看车辆信息
-     * @param id 车辆id
-     * @return 车辆信息
+     * 根据id查看车位信息
+     * @param id 车位id
+     * @return 车位信息
      */
     @GetMapping("/getOne/{id}")
     @PreAuthorize("hasAuthority('car:parking:edit')")

@@ -29,4 +29,9 @@ public class CarServiceImpl extends ServiceImpl<CarMapper,Car> implements CarSer
     public Car getCarById(Long carId) {
         return carMapper.getCarById(carId);
     }
+
+    @Override
+    public Car getCarByLicence(String licence){
+        return carMapper.getCarByLicence(licence);
+    }
 }
