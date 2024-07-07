@@ -23,14 +23,14 @@ public class HouseController {
      *
      * @param page 当前页数
      * @param pageSize 页面大小
-     * @param houseNumber 房号
+     * @param buildingId 房号
      * @return 分页信息
      */
     @GetMapping("/list")
     public CommonResult<Page<HouseVo>> page(@RequestParam(defaultValue = "1") Integer page,
                                             @RequestParam(defaultValue = "5") Integer pageSize,
-                                            @RequestParam(required = false) String houseNumber) {
-        Page<HouseVo> result = houseService.page(page,pageSize,houseNumber);
+                                            @RequestParam(required = false) Long buildingId) {
+        Page<HouseVo> result = houseService.page(page,pageSize,buildingId);
         return CommonResult.success(result);
     }
 

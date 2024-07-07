@@ -27,9 +27,10 @@ public class HouseServiceImpl extends ServiceImpl<HouseMapper, House> implements
     private WxUserService wxUserService;
 
     @Override
-    public Page<HouseVo> page(Integer page, Integer pageSize, String houseNumber) {
+    public Page<HouseVo> page(Integer page, Integer pageSize, Long buildingId) {
         Page<HouseVo> result = new Page<>(page,pageSize);
-        result = houseMapper.page(result,houseNumber);
+        result = houseMapper.page(result,buildingId);
+        // 获取租户列表
         List<HouseVo> records = result.getRecords();
         for(int i = 0; i<records.size();i++) {
             HouseVo houseVo = records.get(i);
@@ -118,9 +119,7 @@ public class HouseServiceImpl extends ServiceImpl<HouseMapper, House> implements
                     userHouseAdd.setWxUserId(wxUser.getId());
                     userHouseAdd.setBelongFlag(2);
                     userHouseService.save(userHouseAdd);
-
                 }
-
             }
         }
         if(state == 0) {

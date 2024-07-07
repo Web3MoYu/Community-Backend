@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface HouseMapper extends BaseMapper<House> {
-    Page<HouseVo> page(@Param("page") Page<HouseVo> page, @Param("number") String houseNumber);
+    Page<HouseVo> page(@Param("page") Page<HouseVo> page, @Param("buildingId") Long buildingId);
 
     HouseVo getHouseVoById(Long houseId);
 }
