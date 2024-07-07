@@ -14,4 +14,6 @@ public interface HouseService extends IService<House> {
 
     void deleteWithUser(Long houseId);
 
+    void delBatchWithUser(List<Long> houseIds);
+
 }

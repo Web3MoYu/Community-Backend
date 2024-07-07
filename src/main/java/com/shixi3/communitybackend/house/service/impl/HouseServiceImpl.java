@@ -143,4 +143,11 @@ public class HouseServiceImpl extends ServiceImpl<HouseMapper, House> implements
         houseWrapper.eq(houseId!=null,House::getHouseId,houseId);
         this.remove(houseWrapper);
     }
+
+    @Override
+    public void delBatchWithUser(List<Long> houseIds) {
+        for(Long houseId:houseIds) {
+            deleteWithUser(houseId);
+        }
+    }
 }

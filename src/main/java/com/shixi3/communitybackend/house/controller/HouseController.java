@@ -93,11 +93,8 @@ public class HouseController {
      */
     @DeleteMapping("/delBatch")
     public CommonResult<String> delBatch(@RequestBody List<Long> ids) {
-        boolean delete = houseService.removeBatchByIds(ids);
-        if(delete) {
-            return CommonResult.success("批量删除房屋信息成功！");
-        }
-        return CommonResult.error(500,"批量删除房屋信息失败！");
+        houseService.delBatchWithUser(ids);
+        return CommonResult.success("批量删除房屋信息成功！");
     }
 
     /**
