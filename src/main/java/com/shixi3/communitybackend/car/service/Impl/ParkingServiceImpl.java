@@ -23,4 +23,9 @@ public class ParkingServiceImpl extends ServiceImpl<ParkingMapper,Parking> imple
 
     @Override
     public Parking getParkingById(Long parkingId){ return parkingMapper.getParkingById(parkingId); }
+
+    @Override
+    public List<Parking> getParkingByNumber(String number){
+        return parkingMapper.getParkingByNumber(number);
+    }
 }

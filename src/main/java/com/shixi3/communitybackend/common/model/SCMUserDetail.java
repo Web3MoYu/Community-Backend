@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Set;
 
 @Data
-public class DMSUserDetail {
+public class SCMUserDetail {
     private Long ID;
     private Set<String> authorities;
 }

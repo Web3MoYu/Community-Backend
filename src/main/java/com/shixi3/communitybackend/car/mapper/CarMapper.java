@@ -17,4 +17,6 @@ public interface CarMapper extends BaseMapper<Car> {
     void deleteByOwner(Long owner);
 
     Car getCarById(Long carId);
+
+    List<Car> getCarByLicence(String licence);
 }

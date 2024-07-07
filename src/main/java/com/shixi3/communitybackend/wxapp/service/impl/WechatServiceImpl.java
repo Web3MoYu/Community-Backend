@@ -12,7 +12,6 @@ import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -31,6 +30,10 @@ public class WechatServiceImpl implements WechatService {
     public String getToken(WechatLoginRequestDTO loginRequest) throws Exception {
         JSONObject sessionKeyOpenId = getSessionKeyOrOpenId(loginRequest.getCode());
         System.out.println("微信返还的openid" + sessionKeyOpenId);
+        // 判断是否成功
+        if (sessionKeyOpenId.get("errcode") != null) {
+            throw new BizException(401, "登陆失败");
+        }
         // 获取openId && sessionKey
         String openId = sessionKeyOpenId.getString("openid");
         //String sessionKey = sessionKeyOpenId.getString("session_key");
@@ -40,21 +43,6 @@ public class WechatServiceImpl implements WechatService {
         redisTemplate.opsForValue().set(RedisUtils.WX_TOKEN + openId, token, JWTUtils.EXPIRE_TIME, TimeUnit.DAYS);
 
         return token;
-    }
-
-    @Override
-    public void checkToken(String token) {
-        String redisToken = (String) redisTemplate.opsForValue().get(RedisUtils.WX_TOKEN);
-
-        if (redisToken == null || !redisToken.equals(token)) {
-            throw new BizException("用户令牌有误");
-        } else {
-            try {
-                JWTUtils.verify(token);
-            } catch (Exception e) {
-                throw new BizException("用户令牌有误");
-            }
-        }
     }
 
     //调用微信接口服务获取openId && sessionKey

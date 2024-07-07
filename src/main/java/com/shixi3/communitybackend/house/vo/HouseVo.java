@@ -1,7 +1,10 @@
 package com.shixi3.communitybackend.house.vo;
 
+import com.shixi3.communitybackend.Family.entity.WxUser;
 import com.shixi3.communitybackend.house.entity.House;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class HouseVo extends House {
@@ -10,14 +13,13 @@ public class HouseVo extends House {
      */
     private String ownerName;
     /**
-     * 使用人姓名
-     */
-    private String tenantName;
-    /**
      * 楼栋编号
      */
     private Long buildingNumber;
 
     private String ownerCard;
-    private String tenantCard;
+
+    private List<WxUser> tenants;
+
+    private List<String> tenantCards;
 }

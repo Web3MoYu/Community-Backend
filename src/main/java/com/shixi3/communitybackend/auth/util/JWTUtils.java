@@ -53,6 +53,10 @@ public class JWTUtils {
         return Long.parseLong(userId);
     }
 
+    public static String getWxId(String token) {
+        return verify(token).getSubject();
+    }
+
     public static String getToken(String str) {
         JWTCreator.Builder builder = JWT.create();
         builder.withJWTId(UUID.randomUUID().toString())// 设置token唯一标识

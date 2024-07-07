@@ -1,5 +1,6 @@
 package com.shixi3.communitybackend.car.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -10,7 +11,7 @@ public class Car {
     /**
      * 车辆id
      */
-    @TableId
+    @TableId(value = "car_id",type = IdType.AUTO)
     private Long carId;
     /**
      * 拥有者id

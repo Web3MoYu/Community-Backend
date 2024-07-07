@@ -2,6 +2,7 @@ package com.shixi3.communitybackend.Family.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName("user_house")
 public class UserHouse {
     @TableId(value = "id",type = IdType.AUTO)
     private Long id;//所属关系id

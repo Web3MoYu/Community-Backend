@@ -30,4 +30,6 @@ public class Tenant {
     private Date updateTime;
 
     private Integer userType;   //0-业主  1-租户  2-游客
+
+    private Long parentId;
 }

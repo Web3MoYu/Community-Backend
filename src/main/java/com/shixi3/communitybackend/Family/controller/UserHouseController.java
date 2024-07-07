@@ -12,6 +12,7 @@ import com.shixi3.communitybackend.common.model.CommonResult;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class UserHouseController {
     }
 
     @GetMapping("/page")
+    @PreAuthorize("hasAuthority('sys:wxUser:list')")
     public CommonResult<Page<WxUserTree>> getList(@RequestParam(value = "page", defaultValue = "1") Integer page, @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize, @RequestParam(value = "name", required = false) String name){
 
         List<WxUserTree> info = userHouseService.selectWxUser(page, pageSize, (name == null ? "" : name));

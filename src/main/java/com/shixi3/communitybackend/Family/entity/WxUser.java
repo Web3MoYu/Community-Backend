@@ -24,4 +24,5 @@ public class WxUser {
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
     private Integer userType;
+    private Long parentId;
 }

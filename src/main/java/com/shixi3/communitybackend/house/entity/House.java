@@ -35,13 +35,9 @@ public class House implements Serializable {
     */
 
     private Integer state;
-    /**
-    * 租户id
-    */
-
-    private Long tenantId;
 
     private Date createTime;
     private Date updateTime;
 
+    private Long tenantId;
 }
