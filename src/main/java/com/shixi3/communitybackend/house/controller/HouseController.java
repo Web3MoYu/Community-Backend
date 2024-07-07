@@ -55,9 +55,9 @@ public class HouseController {
      * @return 提示信息
      */
     @PutMapping("/edit")
-    public CommonResult<String> updateHouse(@RequestBody House house) {
+    public CommonResult<String> updateHouse(@RequestBody HouseVo house) {
         boolean update = houseService.updateById(house);
-
+        houseService.saveHouseWithUser(house.getTenantCards(),house);
         if(update) {
             return CommonResult.success("修改房屋信息成功！");
         }

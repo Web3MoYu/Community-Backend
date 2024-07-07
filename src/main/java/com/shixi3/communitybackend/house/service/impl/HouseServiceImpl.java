@@ -33,21 +33,7 @@ public class HouseServiceImpl extends ServiceImpl<HouseMapper, House> implements
         List<HouseVo> records = result.getRecords();
         for(int i = 0; i<records.size();i++) {
             HouseVo houseVo = records.get(i);
-            LambdaQueryWrapper<UserHouse> wrapper = new LambdaQueryWrapper<>();
-            wrapper.eq(UserHouse::getHouseId,houseVo.getHouseId());
-            wrapper.eq(UserHouse::getBelongFlag,2);
-            List<UserHouse> userHouses = userHouseService.list(wrapper);
-            List<WxUser> wxUsers = new ArrayList<>();
-            for(int j = 0; j < userHouses.size();j++) {
-                Long id = userHouses.get(j).getWxUserId();
-                LambdaQueryWrapper<WxUser> wrapper1 = new LambdaQueryWrapper<>();
-                wrapper1.eq(WxUser::getId,id);
-                WxUser wxUser = wxUserService.getOne(wrapper1);
-                if(wxUser != null) {
-                    wxUsers.add(wxUser);
-                }
-            }
-            houseVo.setTenants(wxUsers);
+            getTenants(houseVo);
         }
         result.setRecords(records);
         return result;
@@ -55,36 +41,91 @@ public class HouseServiceImpl extends ServiceImpl<HouseMapper, House> implements
 
     @Override
     public HouseVo getHouseVoById(Long houseId) {
-        return houseMapper.getHouseVoById(houseId);
+        HouseVo houseVo = houseMapper.getHouseVoById(houseId);
+        getTenants(houseVo);
+        return houseVo;
+    }
+
+    private void getTenants(HouseVo houseVo) {
+        LambdaQueryWrapper<UserHouse> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(UserHouse::getHouseId,houseVo.getHouseId());
+        wrapper.eq(UserHouse::getBelongFlag,2);
+        List<UserHouse> userHouses = userHouseService.list(wrapper);
+        List<WxUser> wxUsers = new ArrayList<>();
+        for(int i = 0; i < userHouses.size();i++) {
+            Long id = userHouses.get(i).getWxUserId();
+            LambdaQueryWrapper<WxUser> wrapper1 = new LambdaQueryWrapper<>();
+            wrapper1.eq(WxUser::getId,id);
+            WxUser wxUser = wxUserService.getOne(wrapper1);
+            if(wxUser != null) {
+                wxUsers.add(wxUser);
+            }
+        }
+        houseVo.setTenants(wxUsers);
     }
 
     @Override
-    public void saveHouseWithUser(List<String> tenantCards,House house) {
+    public void saveHouseWithUser(List<String> tenantCards,HouseVo house) {
         long ownerId = 0;
         Integer state = house.getState();
 
+
         if(state == 1 || state == 2) {
-            UserHouse userHouse = new UserHouse();
-            userHouse.setHouseId(house.getHouseId());
-            // 户主
-            ownerId = house.getOwnerId();
-            userHouse.setWxUserId(ownerId);
-            userHouse.setBelongFlag(0);
-            userHouseService.save(userHouse);
+
+            LambdaQueryWrapper<UserHouse> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(UserHouse::getHouseId,house.getHouseId());
+            wrapper.eq(UserHouse::getHouseId,house.getOwnerId());
+            wrapper.eq(UserHouse::getBelongFlag,0);
+
+            UserHouse userHouse = userHouseService.getOne(wrapper);
+            // 如果没有户主关系
+            if(userHouse == null) {
+                //删除原有户主关系
+                LambdaQueryWrapper<UserHouse> wrapper1 = new LambdaQueryWrapper<>();
+                wrapper1.eq(UserHouse::getHouseId,house.getHouseId());
+                wrapper1.eq(UserHouse::getBelongFlag,0);
+                userHouseService.remove(wrapper1);
+
+                UserHouse userHouseAdd = new UserHouse();
+                userHouseAdd.setHouseId(house.getHouseId());
+
+                // 户主
+                ownerId = house.getOwnerId();
+                userHouseAdd.setWxUserId(ownerId);
+                userHouseAdd.setBelongFlag(0);
+                userHouseService.save(userHouseAdd);
+            }
         }
         if(state == 2) {
+            LambdaQueryWrapper<UserHouse> wrapper2 = new LambdaQueryWrapper<>();
+            wrapper2.eq(UserHouse::getHouseId,house.getHouseId());
+            wrapper2.eq(UserHouse::getBelongFlag,2);
+            userHouseService.remove(wrapper2);
             // 租户
             for(String idCard:tenantCards) {
-                UserHouse userHouse = new UserHouse();
-                userHouse.setHouseId(house.getHouseId());
-                LambdaQueryWrapper<WxUser> wrapper = new LambdaQueryWrapper<>();
-                wrapper.eq(idCard != null,WxUser::getIdCard,idCard);
-                WxUser wxUser = wxUserService.getOne(wrapper);
-                if(wxUser != null) {
-                    userHouse.setWxUserId(wxUser.getId());
-                    userHouse.setBelongFlag(2);
-                    userHouseService.save(userHouse);
+                LambdaQueryWrapper<UserHouse> wrapper = new LambdaQueryWrapper<>();
+                wrapper.eq(UserHouse::getHouseId,house.getHouseId());
+                wrapper.eq(UserHouse::getBelongFlag,2);
+
+                // 租户信息
+                LambdaQueryWrapper<WxUser> wrapper1 = new LambdaQueryWrapper<>();
+                wrapper1.eq(idCard != null,WxUser::getIdCard,idCard);
+                WxUser wxUser = wxUserService.getOne(wrapper1);
+                wrapper.eq(UserHouse::getWxUserId,wxUser.getId());
+                UserHouse userHouse = userHouseService.getOne(wrapper);
+
+                // 如果不存在租户关系
+                if(userHouse == null) {
+
+
+                    UserHouse userHouseAdd = new UserHouse();
+                    userHouseAdd.setHouseId(house.getHouseId());
+                    userHouseAdd.setWxUserId(wxUser.getId());
+                    userHouseAdd.setBelongFlag(2);
+                    userHouseService.save(userHouseAdd);
+
                 }
+
             }
         }
         if(state == 0) {
