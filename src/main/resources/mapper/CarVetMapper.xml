@@ -8,5 +8,6 @@
         FROM car_vet cv
                  JOIN wx_user wx ON cv.user_id = wx.id
         WHERE cv.vet_status = #{vetStatus}
+        order by vet_id;
     </select>
 </mapper>

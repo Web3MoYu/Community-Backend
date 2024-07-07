@@ -8,5 +8,6 @@
         FROM parking_vet pv
                  JOIN wx_user wx ON pv.user_id = wx.id
         WHERE pv.vet_status = #{vetStatus}
+        order by vet_id;
     </select>
 </mapper>
