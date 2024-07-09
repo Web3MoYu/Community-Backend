@@ -45,4 +45,5 @@ public class WxUserController {
             throw new BizException("获取用户失败!");
         }
     }
+
 }

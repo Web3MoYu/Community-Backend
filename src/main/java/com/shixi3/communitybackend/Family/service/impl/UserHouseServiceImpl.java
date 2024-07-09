@@ -107,15 +107,13 @@ public class UserHouseServiceImpl extends ServiceImpl<UserHouseMapper,UserHouse>
     }
 
     /**
-     * 获取一个房屋与其所有的用户关系（包括户主关系，成员关系）
+     * 获取一个房屋与其所有的用户（包括户主，成员，租户）
      * @param houseId
      * @return
      */
     @Override
-    public List<UserHouse> getUserHouseRelationshipsByHouseId(Long houseId) {
-        LambdaQueryWrapper<UserHouse> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(UserHouse::getHouseId, houseId);
-        return userHouseMapper.selectList(queryWrapper);
+    public List<WxUser> getUsersByHouseId(Long houseId) {
+        return userHouseMapper.getUsersByHouseId(houseId);
     }
 
     /**
@@ -191,6 +189,16 @@ public class UserHouseServiceImpl extends ServiceImpl<UserHouseMapper,UserHouse>
     @Override
     public List<WxUser> getHouseMembersByHouseId(Long houseId) {
         return userHouseMapper.getHouseMembersByHouseId(houseId);
+    }
+
+    /**
+     * 获取房屋所有租户
+     * @param houseId
+     * @return
+     */
+    @Override
+    public List<WxUser> getTenantsByHouseId(Long houseId) {
+        return userHouseMapper.getTenantsByHouseId(houseId);
     }
 
     /**

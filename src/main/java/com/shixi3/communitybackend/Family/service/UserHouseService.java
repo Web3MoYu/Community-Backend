@@ -34,11 +34,11 @@ public interface UserHouseService extends IService<UserHouse> {
     List<UserHouse> getUserHouseRelationshipsByUserId(Long userId);
 
     /**
-     * 获取一个房屋与其所有的用户关系（包括户主关系，成员关系）
+     * 获取一个房屋与其所有的住户（户主，成员，租客）
      * @param houseId
      * @return
      */
-    List<UserHouse> getUserHouseRelationshipsByHouseId(Long houseId);
+    List<WxUser> getUsersByHouseId(Long houseId);
 
     /**
      * 判断是否是该房屋户主
@@ -71,6 +71,13 @@ public interface UserHouseService extends IService<UserHouse> {
      */
     List<WxUser> getHouseMembersByHouseId(Long houseId);
 
+    /**
+     *
+     * 获取房屋所有租客
+     * @param houseId
+     * @return
+     */
+    List<WxUser> getTenantsByHouseId(Long houseId);
     /**
      *
      * 根据房号和微信用户号（微信用户表主键）获取成员

@@ -2,6 +2,7 @@ package com.shixi3.communitybackend.Family.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.shixi3.communitybackend.Family.entity.WxUser;
+import com.shixi3.communitybackend.common.model.CommonResult;
 
 public interface WxUserService extends IService<WxUser> {
     /**
@@ -17,4 +18,5 @@ public interface WxUserService extends IService<WxUser> {
      * @return
      */
     WxUser getWxUserById(Long id);
+
 }
