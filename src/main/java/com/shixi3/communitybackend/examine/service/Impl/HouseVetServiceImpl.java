@@ -1,20 +1,28 @@
 package com.shixi3.communitybackend.examine.service.Impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.shixi3.communitybackend.examine.entity.TenantExamineRecord;
 import com.shixi3.communitybackend.examine.mapper.HouseVetMapper;
 import com.shixi3.communitybackend.examine.service.HouseVetService;
+import com.shixi3.communitybackend.examine.vo.HouseVetVo;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HouseVetServiceImpl extends ServiceImpl<HouseVetMapper, TenantExamineRecord> implements HouseVetService {
+public class HouseVetServiceImpl extends ServiceImpl<HouseVetMapper, HouseVetVo> implements HouseVetService {
+    @Resource
+    private HouseVetMapper houseVetMapper;
     @Override
-    public Page<TenantExamineRecord> page(Integer page, Integer pageSize, Integer type) {
-        LambdaQueryWrapper<TenantExamineRecord> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(type != null,TenantExamineRecord::getUserType,type);
-        Page<TenantExamineRecord> result = this.page(new Page<>(page,pageSize),wrapper);
+    public Page<HouseVetVo> page(Integer page, Integer pageSize, Integer status) {
+
+
+        Page<HouseVetVo> result = new Page<>(page,pageSize);
+        result = houseVetMapper.page(result,status);
         return result;
+    }
+
+    @Override
+    public HouseVetVo getHouseVetVoById(Long id) {
+        return houseVetMapper.getHouseVetVoById(id);
     }
 }
