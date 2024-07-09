@@ -3,14 +3,21 @@ package com.shixi3.communitybackend.wxapp.controller;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.shixi3.communitybackend.Family.entity.WxUser;
 import com.shixi3.communitybackend.Family.mapper.WxUserMapper;
+import com.shixi3.communitybackend.auth.util.RedisUtils;
 import com.shixi3.communitybackend.common.exception.BizException;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import com.shixi3.communitybackend.wxapp.DTO.WechatLoginRequestDTO;
 import com.shixi3.communitybackend.wxapp.service.WechatService;
 import com.shixi3.communitybackend.wxapp.vo.WxUserLoginVo;
 import jakarta.annotation.Resource;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/wx")
@@ -21,6 +28,8 @@ public class LoginController {
 
     @Resource
     WxUserMapper wxUserMapper;
+
+
 
     @PostMapping("/wxlogin")
     public CommonResult<WxUserLoginVo> login(@RequestBody WechatLoginRequestDTO loginRequest) {
@@ -41,4 +50,6 @@ public class LoginController {
         WxUser wxUser = wxUserMapper.selectOne(wrapper);
         return CommonResult.success(wxUser);
     }
+
+
 }
