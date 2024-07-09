@@ -9,6 +9,7 @@ import com.shixi3.communitybackend.Family.vo.DeleteVo;
 import com.shixi3.communitybackend.common.entity.Page;
 import com.shixi3.communitybackend.common.exception.BizException;
 import com.shixi3.communitybackend.common.model.CommonResult;
+import com.shixi3.communitybackend.house.entity.House;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,6 +99,21 @@ public class UserHouseController {
     }
 
     /**
+     * 获取房屋所有成员
+     * @param houseId
+     * @return
+     */
+    @GetMapping("/getUsersByHouseId/{houseId}")
+    public CommonResult<List<WxUser>> getUsersByHouseId(@PathVariable Long houseId) {
+        List<WxUser> users = userHouseService.getUsersByHouseId(houseId);
+        if (users!=null) {
+            return CommonResult.success(users);
+        }else {
+            throw new BizException("获取房屋所有用户失败!");
+        }
+    }
+
+    /**
      * 获取房屋所有成员（除开户主)
      * @param houseId
      * @return
@@ -109,6 +125,21 @@ public class UserHouseController {
             return CommonResult.success(members);
         }else {
             return CommonResult.error(0,"获取房屋所有成员失败!");
+        }
+    }
+
+    /**
+     * 或取房屋租户
+     * @param houseId
+     * @return
+     */
+    @GetMapping("/getTenantsByHouseId/{houseId}")
+    public CommonResult<List<WxUser>> getTenantsByHouseId(@PathVariable Long houseId) {
+        List<WxUser> tenants=userHouseService.getTenantsByHouseId(houseId);
+        if (tenants!=null) {
+            return CommonResult.success(tenants);
+        }else {
+            throw new BizException("获取租户失败!");
         }
     }
 
@@ -162,6 +193,36 @@ public class UserHouseController {
             return CommonResult.success("删除成功");
         }else {
             throw new BizException("删除失败");
+        }
+    }
+
+    /**
+     * 获取用户作为户主的房
+     * @param wxUserId
+     * @return
+     */
+    @GetMapping("/getMyHousesById/{wxUserId}")
+    public CommonResult<List<House>> getMyHousesById(@PathVariable Long wxUserId) {
+        List<House> myHouses=userHouseMapper.getMyHouses(wxUserId);
+        if (myHouses!=null) {
+            return CommonResult.success(myHouses);
+        }else {
+            throw new BizException("获取失败");
+        }
+    }
+
+    /**
+     * 获取用户所住的房
+     * @param wxUserId
+     * @return
+     */
+    @GetMapping("/getLiveHousesByUserId/{wxUserId}")
+    public CommonResult<List<House>> getLiveHousesByUserId(@PathVariable Long wxUserId) {
+        List<House> liveHouses=userHouseMapper.getLiveHouses(wxUserId);
+        if (liveHouses!=null) {
+            return CommonResult.success(liveHouses);
+        }else {
+            throw new BizException("获取失败!");
         }
     }
 

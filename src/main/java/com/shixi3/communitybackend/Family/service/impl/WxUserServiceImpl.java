@@ -38,14 +38,4 @@ public class WxUserServiceImpl extends ServiceImpl<WxUserMapper,WxUser> implemen
         return wxUserMapper.selectOne(queryWrapper);
     }
 
-    /**
-     *
-     * @param code
-     * @return
-     */
-    @Override
-    public CommonResult getSessionId(String code) {
-
-        return null;
-    }
 }

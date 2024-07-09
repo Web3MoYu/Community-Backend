@@ -19,5 +19,4 @@ public interface WxUserService extends IService<WxUser> {
      */
     WxUser getWxUserById(Long id);
 
-    CommonResult getSessionId(String code);
 }
