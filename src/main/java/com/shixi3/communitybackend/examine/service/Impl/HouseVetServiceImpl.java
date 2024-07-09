@@ -7,6 +7,7 @@ import com.shixi3.communitybackend.Family.entity.UserHouse;
 import com.shixi3.communitybackend.Family.entity.WxUser;
 import com.shixi3.communitybackend.Family.service.UserHouseService;
 import com.shixi3.communitybackend.Family.service.WxUserService;
+import com.shixi3.communitybackend.examine.entity.TenantExamineRecord;
 import com.shixi3.communitybackend.examine.mapper.HouseVetMapper;
 import com.shixi3.communitybackend.examine.service.HouseVetService;
 import com.shixi3.communitybackend.examine.vo.HouseVetVo;
@@ -14,7 +15,7 @@ import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 @Service
-public class HouseVetServiceImpl extends ServiceImpl<HouseVetMapper, HouseVetVo> implements HouseVetService {
+public class HouseVetServiceImpl extends ServiceImpl<HouseVetMapper, TenantExamineRecord> implements HouseVetService {
     @Resource
     private HouseVetMapper houseVetMapper;
     @Resource
