@@ -43,8 +43,10 @@ public class TenantServiceImpl extends ServiceImpl<TenantMapper, Tenant> impleme
     }
 
     @Override
-    public void deleteWxUser(Long id, Long houseId, Integer userType) {
-
+    public void deleteWxUser(Long id, Integer userType) {
+        if(userType == 0){
+            tenantMapper.changeHouse(id);
+        }
     }
 
     @Override

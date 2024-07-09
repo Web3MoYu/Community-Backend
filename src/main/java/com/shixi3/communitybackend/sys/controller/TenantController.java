@@ -63,46 +63,45 @@ public class TenantController {
         if(userType == 0){        //是户主
             List<Long> list = new ArrayList<>();
             //拿到与当前parentId有关的所有人id
-            List<WxUserVo> wxUserVo = wxUserMapper.getGroups(parentId, "");
+            List<WxUserVo> wxUserVo = wxUserMapper.getGroupsByParent(parentId, "");
             WxUserVo wxUserVo2 = new WxUserVo();
             wxUserVo2.setId(id);
             wxUserVo.add(wxUserVo2);
 
             for(WxUserVo wxUserVo1 : wxUserVo){
                 //删除car
-                carService.deleteByOwner(id);
-
-                //改变house
-                tenantService.deleteWxUser(wxUserVo1.getId(), parentId, userType);
+                carService.deleteByOwner(wxUserVo1.getId());
 
                 //删除user_house表中对应数据
                 tenantService.deleteUserHouse(wxUserVo1.getId());
                 //将用户改为游客
-                tenantService.changeUser(id);
+                tenantService.changeUser(wxUserVo1.getId());
             }
-        }else if(userType == 1){  //业主（户主家人）
+        }else {  //业主（户主家人）或 租户
             //删除car
             carService.deleteByOwner(id);
             //删除user_house表中对应数据
             tenantService.deleteUserHouse(id);
-
-            //将用户改为游客
-            tenantService.changeUser(id);
-        }else if(userType == 2){  //租户
-            //删除car
-            carService.deleteByOwner(id);
-            //删除user_house表中对应数据
-            tenantService.deleteUserHouse(id);
-
             //将用户改为游客
             tenantService.changeUser(id);
         }
+//        else if(userType == 2){  //租户
+//            //删除car
+//            carService.deleteByOwner(id);
+//            //删除user_house表中对应数据
+//            tenantService.deleteUserHouse(id);
+//
+//            //将用户改为游客
+//            tenantService.changeUser(id);
+//        }
+        //改变house
+        tenantService.deleteWxUser( id, userType);
 
         return CommonResult.success("删除成功");
     }
 
     /**
-     * 修改微信用户的电话号码
+     * 修改微信用户的电话号码、身份证号、性别、昵称
      * @param tenant
      * @return
      */

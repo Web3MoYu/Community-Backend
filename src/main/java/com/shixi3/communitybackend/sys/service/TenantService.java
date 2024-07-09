@@ -38,10 +38,9 @@ public interface TenantService extends IService<Tenant> {
     /**
      * 在删除用户时对house表操作
      * @param id
-     * @param houseId
      * @param userType
      */
-    void deleteWxUser(Long id,Long houseId,Integer userType);
+    void deleteWxUser(Long id, Integer userType);
 
     /**
      * 在删除用户时对user_house表进行操作

@@ -92,12 +92,8 @@ public class AuthServiceImpl implements AuthService {
 
         String redisSuffix = RedisUtils.PERSONAL_IMG_UPLOAD_SUFFIX + userID;
         String redisByte = RedisUtils.PERSONAL_IMG_UPLOAD_BYTE + userID;
-        // 获取字节数组和后缀
-        String suffix = (String) redisTemplate.opsForValue().get(redisSuffix);
-        byte[] bytes = (byte[]) redisTemplate.opsForValue().get(redisByte);
-        String avatar = UUID.randomUUID() + suffix;
         // 上传
-        imgUtils.upload(bytes, avatar);
+        String avatar = imgUtils.redisUploadImg(redisSuffix, redisByte);
         // 修改数据库
         userMapper.updatePhoneAndAvatar(phone, userID, avatar);
 
