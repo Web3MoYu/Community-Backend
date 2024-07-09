@@ -39,18 +39,29 @@ public class TokenFilter extends OncePerRequestFilter {
         String token = request.getHeader("token");
         if (request.getRequestURI().startsWith("/wx") && StringUtils.hasLength(token)) {
             // 微信的其余请求走这
-            String wxId = JWTUtils.getWxId(token);
-            String cacheToken = redisTemplate
-                    .opsForValue().get(RedisUtils.WX_TOKEN + wxId);
-            // 验证token是否被修改
-            if (cacheToken == null || !cacheToken.equals(token)) {
-                throw new BizException("用户令牌有误");
+            try {
+                String wxId = JWTUtils.getWxId(token);
+                String cacheToken = redisTemplate
+                        .opsForValue().get(RedisUtils.WX_TOKEN + wxId);
+                // 验证token是否被修改
+                if (cacheToken == null || !cacheToken.equals(token)) {
+                    throw new BizException("用户令牌有误");
+                }
+                //将验证过后的用户信息放入context
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        wxId, null, null);
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            } catch (JWTVerificationException | AuthenticationException e) {
+                CommonResult<?> commonResult = CommonResult.error(ErrorCodes.UNAUTHORIZED);
+                ServletUtil.writeJSON(response, commonResult);
+                return;
+            } catch (AccessDeniedException e) {
+                CommonResult<?> commonResult = CommonResult.error(ErrorCodes.FORBIDDEN);
+                ServletUtil.writeJSON(response, commonResult);
+                return;
             }
-            //将验证过后的用户信息放入context
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                    wxId, null, null);
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authentication);
         } else if (StringUtils.hasLength(token)) {
             try {
                 Long userId = JWTUtils.getUserId(token);
