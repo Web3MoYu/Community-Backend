@@ -12,7 +12,7 @@ public class TenantExamineRecord implements Serializable {
     @TableId
     private Long id;
 
-    private String wxUserId;
+    private Long wxUserId;
 
     private Integer userType;
 

@@ -40,4 +40,15 @@ public class HouseVetController {
         HouseVetVo houseVetVo = houseVetService.getHouseVetVoById(id);
         return CommonResult.success(houseVetVo);
     }
+
+    /**
+     * 审核房屋信息
+     * @param houseVetVo 审核信息
+     * @return 提示信息
+     */
+    @PutMapping("/audit")
+    public CommonResult<String> audit(@RequestBody HouseVetVo houseVetVo) {
+        houseVetService.auditHouseWithUser(houseVetVo);
+        return CommonResult.success("审核房屋信息完成");
+    }
 }

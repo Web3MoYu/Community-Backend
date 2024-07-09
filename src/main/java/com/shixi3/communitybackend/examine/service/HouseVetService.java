@@ -8,4 +8,6 @@ public interface HouseVetService extends IService<HouseVetVo> {
     Page<HouseVetVo> page(Integer page, Integer pageSize, Integer status);
 
     HouseVetVo getHouseVetVoById(Long id);
+
+    void auditHouseWithUser(HouseVetVo houseVetVo);
 }
