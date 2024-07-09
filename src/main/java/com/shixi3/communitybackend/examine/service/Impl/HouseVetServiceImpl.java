@@ -20,4 +20,9 @@ public class HouseVetServiceImpl extends ServiceImpl<HouseVetMapper, HouseVetVo>
         result = houseVetMapper.page(result,status);
         return result;
     }
+
+    @Override
+    public HouseVetVo getHouseVetVoById(Long id) {
+        return houseVetMapper.getHouseVetVoById(id);
+    }
 }

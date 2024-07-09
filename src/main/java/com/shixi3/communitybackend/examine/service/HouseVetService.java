@@ -6,4 +6,6 @@ import com.shixi3.communitybackend.examine.vo.HouseVetVo;
 
 public interface HouseVetService extends IService<HouseVetVo> {
     Page<HouseVetVo> page(Integer page, Integer pageSize, Integer status);
+
+    HouseVetVo getHouseVetVoById(Long id);
 }

@@ -9,4 +9,6 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface HouseVetMapper extends BaseMapper<HouseVetVo> {
     Page<HouseVetVo> page(@Param("page") Page<HouseVetVo> page,@Param("status") Integer status);
+
+    HouseVetVo getHouseVetVoById(@Param("id") Long id);
 }
