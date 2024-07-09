@@ -62,6 +62,7 @@ public class WechatServiceImpl implements WechatService {
                     null, null, "昵称");
             wxUserMapper.insert(wxUser);
         }
+        wxUser = wxUserMapper.selectOne(wrapper);
         vo.setUser(wxUser);
         return vo;
     }
