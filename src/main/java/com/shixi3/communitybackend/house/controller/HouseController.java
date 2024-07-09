@@ -23,14 +23,14 @@ public class HouseController {
      *
      * @param page 当前页数
      * @param pageSize 页面大小
-     * @param houseNumber 房号
+     * @param buildingId 房号
      * @return 分页信息
      */
     @GetMapping("/list")
     public CommonResult<Page<HouseVo>> page(@RequestParam(defaultValue = "1") Integer page,
                                             @RequestParam(defaultValue = "5") Integer pageSize,
-                                            @RequestParam(required = false) String houseNumber) {
-        Page<HouseVo> result = houseService.page(page,pageSize,houseNumber);
+                                            @RequestParam(required = false) Long buildingId) {
+        Page<HouseVo> result = houseService.page(page,pageSize,buildingId);
         return CommonResult.success(result);
     }
 
@@ -55,9 +55,9 @@ public class HouseController {
      * @return 提示信息
      */
     @PutMapping("/edit")
-    public CommonResult<String> updateHouse(@RequestBody House house) {
+    public CommonResult<String> updateHouse(@RequestBody HouseVo house) {
         boolean update = houseService.updateById(house);
-
+        houseService.saveHouseWithUser(house.getTenantCards(),house);
         if(update) {
             return CommonResult.success("修改房屋信息成功！");
         }
@@ -82,11 +82,8 @@ public class HouseController {
      */
     @DeleteMapping("/delete/{id}")
     public CommonResult<String> deleteHouse(@PathVariable Long id) {
-        boolean delete = houseService.removeById(id);
-        if(delete) {
-            return CommonResult.success("删除房屋信息成功！");
-        }
-        return CommonResult.error(500,"删除房屋信息失败！");
+        houseService.deleteWithUser(id);
+        return CommonResult.success("删除房屋信息成功！");
     }
 
     /**
@@ -96,11 +93,8 @@ public class HouseController {
      */
     @DeleteMapping("/delBatch")
     public CommonResult<String> delBatch(@RequestBody List<Long> ids) {
-        boolean delete = houseService.removeBatchByIds(ids);
-        if(delete) {
-            return CommonResult.success("批量删除房屋信息成功！");
-        }
-        return CommonResult.error(500,"批量删除房屋信息失败！");
+        houseService.delBatchWithUser(ids);
+        return CommonResult.success("批量删除房屋信息成功！");
     }
 
     /**

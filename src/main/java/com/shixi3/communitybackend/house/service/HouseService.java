@@ -8,8 +8,12 @@ import com.shixi3.communitybackend.house.vo.HouseVo;
 import java.util.List;
 
 public interface HouseService extends IService<House> {
-    Page<HouseVo> page(Integer page, Integer pageSize, String houseNumber);
+    Page<HouseVo> page(Integer page, Integer pageSize, Long buildingId);
     HouseVo getHouseVoById(Long houseId);
-    void saveHouseWithUser(List<String> tenantCards,House house);
+    void saveHouseWithUser(List<String> tenantCards,HouseVo house);
+
+    void deleteWithUser(Long houseId);
+
+    void delBatchWithUser(List<Long> houseIds);
 
 }

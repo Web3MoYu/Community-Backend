@@ -1,17 +1,33 @@
 package com.shixi3.communitybackend.common.util;
 
+import com.shixi3.communitybackend.auth.util.RedisUtils;
+import jakarta.annotation.Resource;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.*;
+import java.util.UUID;
 
 @Component
 public class ImgUtils {
 
-
+    @Resource
+    RedisTemplate<String,Object> redisTemplate;
     private final String basePath = "c:/img/";
+
+    public String redisUploadImg(String redisSuffix, String redisByte){
+        // 获取字节数组和后缀
+        String suffix = (String) redisTemplate.opsForValue().get(redisSuffix);
+        byte[] bytes = (byte[]) redisTemplate.opsForValue().get(redisByte);
+        String avatar = UUID.randomUUID() + suffix;
+        // 上传
+        upload(bytes, avatar);
+        return avatar;
+    }
+
 
     public void upload(byte[] bytes, String fileName) {
         // 判断当前目录是否存在，如果不存在就创建

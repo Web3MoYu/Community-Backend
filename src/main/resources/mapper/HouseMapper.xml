@@ -4,26 +4,22 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace= "com.shixi3.communitybackend.house.mapper.HouseMapper">
     <select id="page" resultType="com.shixi3.communitybackend.house.vo.HouseVo">
-        select house_id,owner_id,building_id,house_number,state,create_time,update_time,tenant_id,
+        select house_id,owner_id,building_id,house_number,state,create_time,update_time,
                (select name from wx_user where wx_user.id = owner_id) owner_name,
-               (select name from wx_user where wx_user.id = tenant_id) tenant_name,
                 (select id_card from wx_user where wx_user.id = owner_id) owner_card,
-                (select id_card from wx_user where wx_user.id = tenant_id) tenant_card,
                (select building_number from building where building.building_id = house.building_id) building_number
         from house
         <where>
-            <if test="number != null and number !='' ">
-                house.house_number like concat('%',#{number},'%');
+            <if test="buildingId != null and buildingId !='' ">
+                house.building_id = #{buildingId}
             </if>
         </where>
     </select>
 
     <select id="getHouseVoById" resultType="com.shixi3.communitybackend.house.vo.HouseVo">
-        select house_id,owner_id,building_id,house_number,state,create_time,update_time,tenant_id,
+        select house_id,owner_id,building_id,house_number,state,create_time,update_time,
         (select name from wx_user where wx_user.id = owner_id) owner_name,
-        (select name from wx_user where wx_user.id = tenant_id) tenant_name,
         (select id_card from wx_user where wx_user.id = owner_id) owner_card,
-        (select id_card from wx_user where wx_user.id = tenant_id) tenant_card,
         (select building_number from building where building.building_id = house.building_id) building_number
         from house
         where house.house_id = #{houseId}

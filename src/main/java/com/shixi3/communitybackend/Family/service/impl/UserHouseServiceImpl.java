@@ -42,41 +42,42 @@ public class UserHouseServiceImpl extends ServiceImpl<UserHouseMapper,UserHouse>
     public List<WxUserTree> selectWxUser(Integer page, Integer pageSize, String name) {
 
         //拿到所有户主id
-        List<WxUserVo> parentIds = wxUserMapper.getParentId();
+//        List<WxUserVo> parentIds = wxUserMapper.getParentId();
 
         //最后所需的树形数据存储
         List<WxUserTree> wxUserTrees = new ArrayList<>();
         //以parent_id分组 以及 查询
-        for (WxUserVo parent : parentIds){
-            List<WxUserVo> groups = wxUserMapper.getGroups(parent.getId(), name);
-            if(!name.isEmpty()){
-                //看户主是否满足查询要求
-                if(parent.getName().contains(name)) {
-                    WxUserTree wxUserTree = new WxUserTree();
-                    wxUserTree.setWxUserVo(parent);
-                    wxUserTree.setChildren(null);
-                    wxUserTrees.add(wxUserTree);
-                }
-                if(!groups.isEmpty()){
-                    for(WxUserVo group : groups){
-                        WxUserTree wxUserTree = new WxUserTree();
-                        wxUserTree.setWxUserVo(group);
-                        wxUserTree.setChildren(null);
-                        wxUserTrees.add(wxUserTree);
-                    }
-                }
-            }else{
+//        for (WxUserVo parent : parentIds){
+        List<WxUserVo> groups = wxUserMapper.getGroups(name);
+//            if(!name.isEmpty()){
+        //看户主是否满足查询要求
+//                if(parent.getName().contains(name)) {
+//                    WxUserTree wxUserTree = new WxUserTree();
+//                    wxUserTree.setWxUserVo(parent);
+//                    wxUserTree.setChildren(null);
+//                    wxUserTrees.add(wxUserTree);
+//                }
+        if (!groups.isEmpty()) {
+            for (WxUserVo group : groups) {
                 WxUserTree wxUserTree = new WxUserTree();
-                wxUserTree.setWxUserVo(parent);
-                //将剩下的改组内的用户添加的他的children中
-                wxUserTree.setChildren(groups);
-                //添加到树形结构中
+                wxUserTree.setWxUserVo(group);
+                wxUserTree.setChildren(null);
                 wxUserTrees.add(wxUserTree);
             }
-
         }
-        //标识是否已经存在
-        //遍历操作使其为树形结构
+//                }
+//            }else{
+//                WxUserTree wxUserTree = new WxUserTree();
+//                wxUserTree.setWxUserVo(parent);
+//                //将剩下的改组内的用户添加的他的children中
+//                wxUserTree.setChildren(groups);
+//                //添加到树形结构中
+//                wxUserTrees.add(wxUserTree);
+//            }
+//
+//        }
+            //标识是否已经存在
+            //遍历操作使其为树形结构
 //        for(List<WxUserVo> list : userVos){
 //            for(WxUserVo wxUserVo : list){
 //                if(wxUserVo.getBelongFlag() != 1){
@@ -90,7 +91,7 @@ public class UserHouseServiceImpl extends ServiceImpl<UserHouseMapper,UserHouse>
 //                }
 //            }
 //        }
-        return wxUserTrees;
+            return wxUserTrees;
     }
 
     /**

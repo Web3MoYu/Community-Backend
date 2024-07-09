@@ -1,9 +1,7 @@
 package com.shixi3.communitybackend.car.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.shixi3.communitybackend.building.entity.Building;
 import com.shixi3.communitybackend.car.entity.Car;
-import com.shixi3.communitybackend.car.entity.Parking;
 import com.shixi3.communitybackend.car.service.CarService;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import jakarta.annotation.Resource;
@@ -12,7 +10,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @RestController

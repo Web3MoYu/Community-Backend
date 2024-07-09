@@ -46,4 +46,8 @@ public interface TenantMapper extends BaseMapper<Tenant> {
      */
     @Update("update wx_user set user_type = 3 where id = #{id}")
     void changeUser(Long id);
+
+
+    @Update("update house set owner_id = 0 where  ")
+    void changeHouse(Long id);
 }
