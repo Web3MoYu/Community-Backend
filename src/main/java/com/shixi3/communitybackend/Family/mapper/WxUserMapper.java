@@ -21,10 +21,11 @@ public interface WxUserMapper extends BaseMapper<WxUser> {
 
     List<WxUserVo> getGroupsByParent(Long id, String name);
 
-    @Select("select count(*) number, b.building_number\n" +
-            "from house h\n" +
+    @Select("select count(*) number, building_number\n" +
+            "from user_house uh\n" +
+            "         left join house h on uh.house_id = h.house_id\n" +
             "         left join building b on h.building_id = b.building_id\n" +
-            "group by h.building_id\n")
+            "group by building_number\n")
     List<CountUserInBuilding> countInBuilding();
 
 }
