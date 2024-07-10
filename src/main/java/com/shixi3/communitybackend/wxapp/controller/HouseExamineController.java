@@ -1,6 +1,8 @@
 package com.shixi3.communitybackend.wxapp.controller;
 
 import com.shixi3.communitybackend.auth.util.RedisUtils;
+import com.shixi3.communitybackend.building.entity.Building;
+import com.shixi3.communitybackend.building.service.BuildingService;
 import com.shixi3.communitybackend.common.exception.BizException;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import com.shixi3.communitybackend.examine.entity.TenantExamineRecord;
@@ -9,23 +11,24 @@ import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("/wx")
-public class HouseExamine {
+public class HouseExamineController {
     @Resource
     RedisTemplate<String, Object> redisTemplate;
 
     @Resource
     HouseExamineService houseExamineService;
+
+    @Resource
+    private BuildingService buildingService;
 
     /**
      * 图片上传
@@ -60,8 +63,9 @@ public class HouseExamine {
 
     //提交房屋认证信息
     @PostMapping("/addHouseRecord")
-    public CommonResult<String> addHouseExamine(@RequestParam("HouseExamine") TenantExamineRecord record){
+    public CommonResult<String> addHouseExamine(@RequestBody TenantExamineRecord record){
 
         return houseExamineService.changeInfo(record);
     }
+
 }

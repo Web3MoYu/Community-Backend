@@ -147,6 +147,7 @@ public class BuildingController {
      * @return 楼栋列表
      */
     @GetMapping("/getAll")
+    @PreAuthorize("isAuthenticated()")
     public CommonResult<List<Building>> getAll() {
         LambdaQueryWrapper<Building> wrapper = new LambdaQueryWrapper<>();
         wrapper.orderByAsc(Building::getBuildingNumber);

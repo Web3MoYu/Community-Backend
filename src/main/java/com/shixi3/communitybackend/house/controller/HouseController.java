@@ -127,4 +127,14 @@ public class HouseController {
         House house = houseService.getOne(wrapper);
         return CommonResult.success(Objects.isNull(house));
     }
+
+    @GetMapping("/getRoom/{buildingId}")
+//    @PreAuthorize("isAuthenticated()")
+    public CommonResult<List<House>> getRoom(@PathVariable Long buildingId) {
+        LambdaQueryWrapper<House> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(buildingId != null, House::getBuildingId,buildingId);
+        List<House> house = houseService.list(wrapper);
+        System.out.println(house);
+        return CommonResult.success(house);
+    }
 }

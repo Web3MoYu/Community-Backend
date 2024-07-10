@@ -51,4 +51,5 @@ public class HouseVetController {
         houseVetService.auditHouseWithUser(houseVetVo);
         return CommonResult.success("审核房屋信息完成");
     }
+
 }
