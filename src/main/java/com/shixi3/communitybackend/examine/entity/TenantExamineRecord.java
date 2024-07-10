@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @TableName("tenant_examine_record")
 @Data
@@ -21,4 +22,8 @@ public class TenantExamineRecord implements Serializable {
     private Integer status;
 
     private Long houseId;
+
+    private Date createTime;
+
+    private Date updateTime;
 }
