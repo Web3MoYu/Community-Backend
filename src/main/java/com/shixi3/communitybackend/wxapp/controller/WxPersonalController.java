@@ -5,10 +5,10 @@ import com.shixi3.communitybackend.Family.service.WxUserService;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @Slf4j
 @RestController
@@ -21,7 +21,7 @@ public class WxPersonalController {
 
     @PostMapping("/update")
     public CommonResult<String> updateWxUser(@RequestBody WxUser wxUser) {
-        log.info(wxUser.toString());
+        wxUser.setUpdateTime(LocalDateTime.now());
         wxUserService.updateById(wxUser);
         return CommonResult.success("成功");
     }

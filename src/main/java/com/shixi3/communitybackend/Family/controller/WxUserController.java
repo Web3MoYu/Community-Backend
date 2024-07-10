@@ -4,8 +4,10 @@ import com.shixi3.communitybackend.Family.entity.WxUser;
 import com.shixi3.communitybackend.Family.service.WxUserService;
 import com.shixi3.communitybackend.common.exception.BizException;
 import com.shixi3.communitybackend.common.model.CommonResult;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/WxUser")
 @Slf4j
 public class WxUserController {
-    @Autowired
+    @Resource
     private WxUserService wxUserService;
 
     /**
@@ -45,5 +47,19 @@ public class WxUserController {
             throw new BizException("获取用户失败!");
         }
     }
+
+    /**
+     * 统计数量
+     *
+     * @return
+     */
+    @GetMapping("/count")
+    @PreAuthorize("isAuthenticated()")
+    public CommonResult<Long> count() {
+        long count = wxUserService.count();
+        return CommonResult.success(count);
+    }
+
+
 
 }
