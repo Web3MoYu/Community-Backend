@@ -1,6 +1,7 @@
 package com.shixi3.communitybackend.car.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.shixi3.communitybackend.car.Vo.ParkingVo;
 import com.shixi3.communitybackend.car.entity.Parking;
 import com.shixi3.communitybackend.car.service.ParkingService;
 import com.shixi3.communitybackend.common.model.CommonResult;
@@ -55,8 +56,8 @@ public class ParkingController {
      */
     @GetMapping("/all")
     @PreAuthorize("hasAnyAuthority('car:parking:list')")
-    public CommonResult<List<Parking>> getAllParking() {
-        List<Parking> parkings = parkingService.getAllParking();
+    public CommonResult<List<ParkingVo>> getAllParking() {
+        List<ParkingVo> parkings = parkingService.getAllParking();
         if (!parkings.isEmpty()) {
             return CommonResult.success(parkings);
         } else {
@@ -119,8 +120,8 @@ public class ParkingController {
      * @return 车位列表
      */
     @GetMapping("/getParkingByNumber/{number}")
-    public CommonResult<List<Parking>> getParkingByNumber(@PathVariable String number) {
-        List<Parking> parkings = parkingService.getParkingByNumber(number);
+    public CommonResult<List<ParkingVo>> getParkingByNumber(@PathVariable String number) {
+        List<ParkingVo> parkings = parkingService.getParkingByNumber(number);
         return CommonResult.success(parkings);
     }
 
