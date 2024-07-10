@@ -148,6 +148,8 @@ public class BuildingController {
      */
     @GetMapping("/getAll")
     public CommonResult<List<Building>> getAll() {
-        return CommonResult.success(buildingService.list());
+        LambdaQueryWrapper<Building> wrapper = new LambdaQueryWrapper<>();
+        wrapper.orderByAsc(Building::getBuildingNumber);
+        return CommonResult.success(buildingService.list(wrapper));
     }
 }
