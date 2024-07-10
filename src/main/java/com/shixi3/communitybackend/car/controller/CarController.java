@@ -1,6 +1,7 @@
 package com.shixi3.communitybackend.car.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.shixi3.communitybackend.car.Vo.CarVo;
 import com.shixi3.communitybackend.car.entity.Car;
 import com.shixi3.communitybackend.car.service.CarService;
 import com.shixi3.communitybackend.common.model.CommonResult;
@@ -55,8 +56,8 @@ public class CarController {
      */
     @GetMapping("/all")
     @PreAuthorize("hasAnyAuthority('car:cars:list')")
-    public CommonResult<List<Car>> getAllCar() {
-        List<Car> cars = carService.getAllCar();
+    public CommonResult<List<CarVo>> getAllCar() {
+        List<CarVo> cars = carService.getAllCar();
         if (cars != null) {
             return CommonResult.success(cars);
         } else {
@@ -135,8 +136,8 @@ public class CarController {
      */
     @GetMapping("/getOneById/{id}")
     @PreAuthorize("hasAuthority('car:cars:edit')")
-    public CommonResult<Car> getCarById(@PathVariable Long id) {
-        Car car = carService.getCarById(id);
+    public CommonResult<CarVo> getCarById(@PathVariable Long id) {
+        CarVo car = carService.getCarById(id);
         return CommonResult.success(car);
     }
 
@@ -148,8 +149,8 @@ public class CarController {
      */
     @GetMapping("/search/{licence}")
     @PreAuthorize("hasAuthority('car:cars:list')")
-    public CommonResult<List<Car>> getCarByLicence(@PathVariable String licence) {
-        List<Car> cars = carService.getCarByLicence(licence);
+    public CommonResult<List<CarVo>> getCarByLicence(@PathVariable String licence) {
+        List<CarVo> cars = carService.getCarByLicence(licence);
         return CommonResult.success(cars);
     }
 }

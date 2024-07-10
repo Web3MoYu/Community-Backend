@@ -1,6 +1,7 @@
 package com.shixi3.communitybackend.car.service.Impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.shixi3.communitybackend.car.Vo.CarVo;
 import com.shixi3.communitybackend.car.entity.Car;
 import com.shixi3.communitybackend.car.mapper.CarMapper;
 import com.shixi3.communitybackend.car.service.CarService;
@@ -16,7 +17,7 @@ public class CarServiceImpl extends ServiceImpl<CarMapper,Car> implements CarSer
     private CarMapper carMapper;
 
     @Override
-    public List<Car> getAllCar() {
+    public List<CarVo> getAllCar() {
         return carMapper.getAllCar();
     }
 
@@ -26,12 +27,12 @@ public class CarServiceImpl extends ServiceImpl<CarMapper,Car> implements CarSer
     }
 
     @Override
-    public Car getCarById(Long carId) {
+    public CarVo getCarById(Long carId) {
         return carMapper.getCarById(carId);
     }
 
     @Override
-    public List<Car> getCarByLicence(String licence){
+    public List<CarVo> getCarByLicence(String licence){
         return carMapper.getCarByLicence(licence);
     }
 }

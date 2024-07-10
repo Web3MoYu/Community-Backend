@@ -3,20 +3,20 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.shixi3.communitybackend.car.mapper.CarMapper">
-    <select id="getAllCar" resultType="com.shixi3.communitybackend.car.entity.Car">
+    <select id="getAllCar" resultType="com.shixi3.communitybackend.car.Vo.CarVo">
         SELECT c.car_id, c.owner, u.name, c.licence, c.type
         FROM car c
         JOIN wx_user u ON c.owner = u.id
         order by car_id;
     </select>
-    <select id="getCarById" resultType="com.shixi3.communitybackend.car.entity.Car">
+    <select id="getCarById" resultType="com.shixi3.communitybackend.car.Vo.CarVo">
         SELECT c.car_id, c.owner, u.name, c.licence, c.type
         FROM car c
                  JOIN wx_user u ON c.owner = u.id
         where c.car_id=#{carId}
         order by car_id;
     </select>
-    <select id="getCarByLicence" resultType="com.shixi3.communitybackend.car.entity.Car">
+    <select id="getCarByLicence" resultType="com.shixi3.communitybackend.car.Vo.CarVo">
         SELECT c.car_id, c.owner, u.name, c.licence, c.type
         FROM car c
                  JOIN wx_user u ON c.owner = u.id
