@@ -53,7 +53,7 @@ public class JWTUtils {
         return Long.parseLong(userId);
     }
 
-    public static String getWxId(String token) {
+    public static String getId(String token) {
         return verify(token).getSubject();
     }
 
