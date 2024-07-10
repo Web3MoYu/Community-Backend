@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shixi3.communitybackend.notice.mapper.NoticeMapper">
+    <select id="page" resultType="com.shixi3.communitybackend.notice.vo.NoticeVo">
+        select notice_id,
+        title,
+        content,
+        create_time,
+        update_time,
+        creator,
+        (select username from sys_user user where user.user_id = notice.creator) name
+        from notice
+        <where>
+            <if test="title != null and title !='' ">
+                notice.title like concat('%',#{title},'%')
+            </if>
+        </where>
+    </select>
+</mapper>
