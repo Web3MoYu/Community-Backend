@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping("/wx")
+@RequestMapping("/wx/personal")
 public class WxPersonalController {
 
     @Resource
