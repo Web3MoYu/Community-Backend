@@ -23,7 +23,7 @@ public class SecurityExceptionHandler {
                     req.getRequestURL(), e);
             return CommonResult.error(ErrorCodes.UNAUTHORIZED);
         }
-        log.warn("[accessDeniedExceptionHandler][userId({}) 无法访问 url({})]", JWTUtils.getUserId(token),
+        log.warn("[accessDeniedExceptionHandler][userId({}) 无法访问 url({})]", JWTUtils.getId(token),
                 req.getRequestURL(), e);
         return CommonResult.error(ErrorCodes.FORBIDDEN);
     }

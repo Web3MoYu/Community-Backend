@@ -48,11 +48,6 @@ public class JWTUtils {
         return verifier.verify(token);
     }
 
-    public static Long getUserId(String token) {
-        String userId = verify(token).getSubject();
-        return Long.parseLong(userId);
-    }
-
     public static String getId(String token) {
         return verify(token).getSubject();
     }
