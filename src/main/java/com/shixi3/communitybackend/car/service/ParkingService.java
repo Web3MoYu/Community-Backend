@@ -1,14 +1,15 @@
 package com.shixi3.communitybackend.car.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.shixi3.communitybackend.car.Vo.ParkingVo;
 import com.shixi3.communitybackend.car.entity.Parking;
 
 import java.util.List;
 
 public interface ParkingService extends IService<Parking> {
-    List<Parking> getAllParking();
+    List<ParkingVo> getAllParking();
 
-    Parking getParkingById(Long parkingId);
+    ParkingVo getParkingById(Long parkingId);
 
-    List<Parking> getParkingByNumber(String number);
+    List<ParkingVo> getParkingByNumber(String number);
 }
