@@ -1,6 +1,7 @@
 package com.shixi3.communitybackend.Family.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.shixi3.communitybackend.Family.vo.CountUserInBuilding;
 import com.shixi3.communitybackend.Family.vo.WxUserVo;
 import com.shixi3.communitybackend.Family.entity.WxUser;
 import org.apache.ibatis.annotations.Mapper;
@@ -20,6 +21,10 @@ public interface WxUserMapper extends BaseMapper<WxUser> {
 
     List<WxUserVo> getGroupsByParent(Long id, String name);
 
-    @Select("select `name`, id, create_time from wx_user  where user_type != 3 ORDER BY create_time ASC")
-    List<WxUser> count();
+    @Select("select count(*) number, b.building_number\n" +
+            "from house h\n" +
+            "         left join building b on h.building_id = b.building_id\n" +
+            "group by h.building_id\n")
+    List<CountUserInBuilding> countInBuilding();
+
 }

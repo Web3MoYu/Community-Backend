@@ -4,12 +4,15 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.shixi3.communitybackend.Family.entity.WxUser;
 import com.shixi3.communitybackend.Family.mapper.WxUserMapper;
 import com.shixi3.communitybackend.Family.service.WxUserService;
+import com.shixi3.communitybackend.Family.vo.CountUserInBuilding;
 import com.shixi3.communitybackend.common.exception.BizException;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin
 @RestController
@@ -66,6 +69,14 @@ public class WxUserController {
         wrapper.ne(WxUser::getUserType, 3);
         Long result = wxUserService.count(wrapper);
         return CommonResult.success(result);
+    }
+
+    @GetMapping("/countInBuilding")
+    @PreAuthorize("isAuthenticated()")
+    public CommonResult<List<CountUserInBuilding>> countInBuilding() {
+        List<CountUserInBuilding> res = wxUserMapper.countInBuilding();
+        res.sort(((o1, o2) -> Math.toIntExact(o1.getBuildingNumber() - o2.getBuildingNumber())));
+        return CommonResult.success(res);
     }
 
 
