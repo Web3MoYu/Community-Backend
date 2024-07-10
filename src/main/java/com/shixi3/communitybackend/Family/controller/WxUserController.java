@@ -1,12 +1,13 @@
 package com.shixi3.communitybackend.Family.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.shixi3.communitybackend.Family.entity.WxUser;
+import com.shixi3.communitybackend.Family.mapper.WxUserMapper;
 import com.shixi3.communitybackend.Family.service.WxUserService;
 import com.shixi3.communitybackend.common.exception.BizException;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +19,12 @@ public class WxUserController {
     @Resource
     private WxUserService wxUserService;
 
+    @Resource
+    private WxUserMapper wxUserMapper;
+
     /**
      * 通过身份证获取微信用户
+     *
      * @param idCard
      * @return
      */
@@ -28,13 +33,14 @@ public class WxUserController {
         WxUser wxUser = wxUserService.getWxUserByIdCard(idCard);
         if (wxUser != null) {
             return CommonResult.success(wxUser);
-        }else {
-            return CommonResult.error(0,"获取用户失败");
+        } else {
+            return CommonResult.error(0, "获取用户失败");
         }
     }
 
     /**
      * 根据微信用户表主键获取微信用户
+     *
      * @param id
      * @return
      */
@@ -43,7 +49,7 @@ public class WxUserController {
         WxUser wxUser = wxUserService.getWxUserById(id);
         if (wxUser != null) {
             return CommonResult.success(wxUser);
-        }else {
+        } else {
             throw new BizException("获取用户失败!");
         }
     }
@@ -56,10 +62,11 @@ public class WxUserController {
     @GetMapping("/count")
     @PreAuthorize("isAuthenticated()")
     public CommonResult<Long> count() {
-        long count = wxUserService.count();
-        return CommonResult.success(count);
+        LambdaQueryWrapper<WxUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.ne(WxUser::getUserType, 3);
+        Long result = wxUserService.count(wrapper);
+        return CommonResult.success(result);
     }
-
 
 
 }

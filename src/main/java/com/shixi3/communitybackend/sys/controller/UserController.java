@@ -39,6 +39,18 @@ public class UserController {
     UserRoleMapper userRoleMapper;
 
     /**
+     * 统计数量
+     *
+     * @return
+     */
+    @GetMapping("/count")
+    @PreAuthorize("isAuthenticated()")
+    public CommonResult<Long> count() {
+        long count = userService.count();
+        return CommonResult.success(count);
+    }
+
+    /**
      * 搜索
      */
     @GetMapping("/list")

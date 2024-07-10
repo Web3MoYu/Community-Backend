@@ -12,11 +12,14 @@ import java.util.List;
 public interface WxUserMapper extends BaseMapper<WxUser> {
 
     @Select("select distinct * from wx_user where user_type = 0;")
-     List<WxUserVo> getParentId();
+    List<WxUserVo> getParentId();
 
-//    @Select("select * from wx_user where (user_type = 1 or user_type = 2) and parent_id = #{parentId} and name like concat('%',#{name}, '%');")
+    //    @Select("select * from wx_user where (user_type = 1 or user_type = 2) and parent_id = #{parentId} and name like concat('%',#{name}, '%');")
     @Select("select * from wx_user where user_type != 3 and name like concat('%',#{name}, '%');")
-    List<WxUserVo> getGroups( String name);
+    List<WxUserVo> getGroups(String name);
 
     List<WxUserVo> getGroupsByParent(Long id, String name);
+
+    @Select("select `name`, id, create_time from wx_user  where user_type != 3 ORDER BY create_time ASC")
+    List<WxUser> count();
 }
