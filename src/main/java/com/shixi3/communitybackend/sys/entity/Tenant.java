@@ -25,6 +25,8 @@ public class Tenant {
 
     private String avatar;  //头像
 
+    private String WxUser;
+
     private Date createTime;
 
     private Date updateTime;
