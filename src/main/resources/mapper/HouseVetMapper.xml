@@ -11,8 +11,12 @@
             where  r.wx_user_id = wx_user.id
               and r.house_id = house.house_id
               and house.building_id = building.building_id
-            <if test="status != null and status !='' ">
+            <if test="status == 0">
                 and r.status = #{status}
+            </if>
+
+            <if test="status != 0">
+                and r.status != 0
             </if>
     </select>
     <select id="getHouseVetVoById" resultType="com.shixi3.communitybackend.examine.vo.HouseVetVo">

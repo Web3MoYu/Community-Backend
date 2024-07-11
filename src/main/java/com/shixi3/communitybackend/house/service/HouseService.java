@@ -10,7 +10,7 @@ import java.util.List;
 public interface HouseService extends IService<House> {
     Page<HouseVo> page(Integer page, Integer pageSize, Long buildingId);
     HouseVo getHouseVoById(Long houseId);
-    void saveHouseWithUser(List<String> tenantCards,HouseVo house);
+    void saveWithUserHouseAndTopType(HouseVo house);
 
     void deleteWithUser(Long houseId);
 

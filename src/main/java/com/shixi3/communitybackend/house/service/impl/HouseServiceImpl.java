@@ -34,7 +34,7 @@ public class HouseServiceImpl extends ServiceImpl<HouseMapper, House> implements
         List<HouseVo> records = result.getRecords();
         for(int i = 0; i<records.size();i++) {
             HouseVo houseVo = records.get(i);
-            getTenants(houseVo);
+            houseVo.setTenants(getTenants(houseVo.getHouseId()));
         }
         result.setRecords(records);
         return result;
@@ -43,13 +43,13 @@ public class HouseServiceImpl extends ServiceImpl<HouseMapper, House> implements
     @Override
     public HouseVo getHouseVoById(Long houseId) {
         HouseVo houseVo = houseMapper.getHouseVoById(houseId);
-        getTenants(houseVo);
+        houseVo.setTenants(getTenants(houseId));
         return houseVo;
     }
 
-    private void getTenants(HouseVo houseVo) {
+    private List<WxUser> getTenants(Long houseId) {
         LambdaQueryWrapper<UserHouse> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(UserHouse::getHouseId,houseVo.getHouseId());
+        wrapper.eq(UserHouse::getHouseId,houseId);
         wrapper.eq(UserHouse::getBelongFlag,2);
         List<UserHouse> userHouses = userHouseService.list(wrapper);
         List<WxUser> wxUsers = new ArrayList<>();
@@ -62,85 +62,94 @@ public class HouseServiceImpl extends ServiceImpl<HouseMapper, House> implements
                 wxUsers.add(wxUser);
             }
         }
-        houseVo.setTenants(wxUsers);
+        return  wxUsers;
     }
 
-    @Override
-    public void saveHouseWithUser(List<String> tenantCards,HouseVo house) {
-        long ownerId = 0;
-        Integer state = house.getState();
+    // 通过身份证获取租户
+    public WxUser getTenantByIdCard(String idCard) {
+        LambdaQueryWrapper<WxUser> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(WxUser::getIdCard,idCard);
+        return wxUserService.getOne(wrapper);
+    }
 
-        if(state == 1 || state == 2) {
-            LambdaQueryWrapper<UserHouse> wrapper = new LambdaQueryWrapper<>();
-            wrapper.eq(UserHouse::getHouseId,house.getHouseId());
-            wrapper.eq(UserHouse::getHouseId,house.getOwnerId());
-            wrapper.eq(UserHouse::getBelongFlag,0);
-            UserHouse userHouse = userHouseService.getOne(wrapper);
-            // 如果没有户主关系
-            if(userHouse == null) {
-                //删除原有户主关系
-                LambdaQueryWrapper<UserHouse> wrapper1 = new LambdaQueryWrapper<>();
-                wrapper1.eq(UserHouse::getHouseId,house.getHouseId());
-                wrapper1.eq(UserHouse::getBelongFlag,0);
-                userHouseService.remove(wrapper1);
-
-                UserHouse userHouseAdd = new UserHouse();
-                userHouseAdd.setHouseId(house.getHouseId());
-
-                // 户主
-                ownerId = house.getOwnerId();
-                userHouseAdd.setWxUserId(ownerId);
-                userHouseAdd.setBelongFlag(0);
-                userHouseService.save(userHouseAdd);
+    // 获取家人id列表
+    public List<Long> getFamilyIds(Long houseId) {
+        LambdaQueryWrapper<UserHouse> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(UserHouse::getHouseId,houseId);
+        wrapper.eq(UserHouse::getBelongFlag,1);
+        List<UserHouse> familyHouse = userHouseService.list(wrapper);
+        List<Long> family = new ArrayList<>();
+        if(familyHouse.size() > 0) {
+            for(UserHouse userHouse:familyHouse) {
+                family.add(userHouse.getWxUserId());
             }
         }
-        if(state == 2) {
-            LambdaQueryWrapper<UserHouse> wrapper2 = new LambdaQueryWrapper<>();
-            wrapper2.eq(UserHouse::getHouseId,house.getHouseId());
-            wrapper2.eq(UserHouse::getBelongFlag,2);
-            userHouseService.remove(wrapper2);
-            // 租户
-            for(String idCard:tenantCards) {
-                LambdaQueryWrapper<UserHouse> wrapper = new LambdaQueryWrapper<>();
-                wrapper.eq(UserHouse::getHouseId,house.getHouseId());
-                wrapper.eq(UserHouse::getBelongFlag,2);
+        return family;
+    }
 
-                // 租户信息
-                LambdaQueryWrapper<WxUser> wrapper1 = new LambdaQueryWrapper<>();
-                wrapper1.eq(idCard != null,WxUser::getIdCard,idCard);
-                WxUser wxUser = wxUserService.getOne(wrapper1);
-                wrapper.eq(UserHouse::getWxUserId,wxUser.getId());
-                UserHouse userHouse = userHouseService.getOne(wrapper);
+    // 获取户主id
+    public Long getOwner(Long houseId) {
+        LambdaQueryWrapper<UserHouse> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(UserHouse::getHouseId,houseId);
+        wrapper.eq(UserHouse::getBelongFlag,0);
+        UserHouse owner = userHouseService.getOne(wrapper);
+        if(owner == null) {
+            return 0L;
+        }
+        return owner.getWxUserId();
+    }
 
-                // 如果不存在租户关系
-                if(userHouse == null) {
-                    UserHouse userHouseAdd = new UserHouse();
-                    userHouseAdd.setHouseId(house.getHouseId());
-                    userHouseAdd.setWxUserId(wxUser.getId());
-                    userHouseAdd.setBelongFlag(2);
-                    userHouseService.save(userHouseAdd);
-                }
+    public void saveWithUserHouseAndTopType(HouseVo house) {
+        Long houseId = house.getHouseId();
+        Long ownerId = house.getOwnerId();
+        List<String> idCards = house.getTenantCards();
+
+        // 重置房屋
+        resetWithUserHouseAndTopType(houseId);
+
+        // 增添新的关系
+        if(ownerId != 0) {
+            // 添加户主关系
+            addUserHouse(ownerId,houseId,0);
+            // 设置最高权限
+            setTopType(ownerId);
+        }
+        if(idCards.size() > 0) {
+            for(String idCard:idCards) {
+                WxUser tenant = getTenantByIdCard(idCard);
+                // 添加租户关系
+                addUserHouse(tenant.getId(), houseId,2);
+                // 设置最高权限
+                setTopType(tenant.getId());
             }
         }
-        if(state == 0) {
-            // 未出售 删除所有与该房屋有关系的记录
-            LambdaQueryWrapper<UserHouse> wrapper = new LambdaQueryWrapper<>();
-            wrapper.eq(house.getHouseId() != null,UserHouse::getHouseId,house.getHouseId());
-            userHouseService.remove(wrapper);
+    }
+
+    public void resetWithUserHouseAndTopType(Long houseId) {
+        // 获取以前的户主、租户和家人
+        List<Long> originFamily = getFamilyIds(houseId);
+        Long originOwner = getOwner(houseId);
+        List<WxUser> originTenants = getTenants(houseId);
+
+        // 清空房屋所有关系
+        deleteAllWithUserHouse(houseId);
+
+        // 为以前的户主，租户和家人重新设置最高权限
+        if(originOwner != 0) {
+            setTopType(originOwner);
+        }
+        for(WxUser tenant:originTenants) {
+            setTopType(tenant.getId());
+        }
+        for(Long member:originFamily) {
+            setTopType(member);
         }
     }
 
     @Override
     public void deleteWithUser(Long houseId) {
-        //删除用户房屋关系
-        LambdaQueryWrapper<UserHouse> userHouseWrapper = new LambdaQueryWrapper<>();
-        userHouseWrapper.eq(houseId != null,UserHouse::getHouseId,houseId);
-        userHouseService.remove(userHouseWrapper);
-
-        // 删除房屋信息
-        LambdaQueryWrapper<House> houseWrapper = new LambdaQueryWrapper<>();
-        houseWrapper.eq(houseId!=null,House::getHouseId,houseId);
-        this.remove(houseWrapper);
+        resetWithUserHouseAndTopType(houseId);
+        removeById(houseId);
     }
 
     @Override
@@ -149,4 +158,53 @@ public class HouseServiceImpl extends ServiceImpl<HouseMapper, House> implements
             deleteWithUser(houseId);
         }
     }
+
+    // 设置最高权限
+    public void setTopType(Long userId) {
+        LambdaQueryWrapper<UserHouse> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(userId != null, UserHouse::getWxUserId, userId);
+        List<UserHouse> userHouses = userHouseService.list(wrapper);
+
+        // 获取最高权限
+        int topType = 3;
+        if (userHouses.size() > 0) {
+            for (UserHouse userHouse : userHouses) {
+                int flag = userHouse.getBelongFlag();
+                // 最高权限为户主
+                if (flag == 0) {
+                    topType = 0;
+                    break;
+                }
+            }
+            // 最高权限为业主
+            if (topType != 0) {
+                topType = 2;
+            }
+        }
+
+        // 设置最高权限
+        LambdaQueryWrapper<WxUser> userWrapper = new LambdaQueryWrapper<>();
+        userWrapper.eq(WxUser::getId,userId);
+        WxUser wxUser = wxUserService.getOne(userWrapper);
+        wxUser.setUserType(topType);
+        wxUserService.updateById(wxUser);
+    }
+
+    // 删除有关该房屋所有用户房屋关系
+    public void deleteAllWithUserHouse(Long houseId) {
+        LambdaQueryWrapper<UserHouse> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(houseId != null,UserHouse::getHouseId,houseId);
+        userHouseService.remove(wrapper);
+    }
+
+    // 添加用户房屋关系
+    public void addUserHouse(Long userId,Long houseId,Integer belongFlag) {
+        UserHouse userHouse = new UserHouse();
+        userHouse.setWxUserId(userId);
+        userHouse.setHouseId(houseId);
+        userHouse.setBelongFlag(belongFlag);
+        userHouseService.save(userHouse);
+    }
+
+
 }

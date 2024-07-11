@@ -55,7 +55,7 @@ public class HouseController {
     @PostMapping("/add")
     public CommonResult<String> addHouse(@RequestBody HouseVo house) {
         boolean save = houseService.save(house);
-        houseService.saveHouseWithUser(house.getTenantCards(), house);
+        houseService.saveWithUserHouseAndTopType(house);
         if (save) {
             return CommonResult.success("添加房屋信息成功！");
         }
@@ -71,7 +71,7 @@ public class HouseController {
     @PutMapping("/edit")
     public CommonResult<String> updateHouse(@RequestBody HouseVo house) {
         boolean update = houseService.updateById(house);
-        houseService.saveHouseWithUser(house.getTenantCards(), house);
+        houseService.saveWithUserHouseAndTopType(house);
         if (update) {
             return CommonResult.success("修改房屋信息成功！");
         }
