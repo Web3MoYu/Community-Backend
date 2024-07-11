@@ -5,7 +5,9 @@ import com.shixi3.communitybackend.Family.vo.CountUserInBuilding;
 import com.shixi3.communitybackend.Family.vo.WxUserVo;
 import com.shixi3.communitybackend.Family.entity.WxUser;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -28,4 +30,6 @@ public interface WxUserMapper extends BaseMapper<WxUser> {
             "group by building_number\n")
     List<CountUserInBuilding> countInBuilding();
 
+    @Update("update wx_user set face_image = #{name} where wx_id = #{id}")
+    void updateFaceImag(@Param("name") String imageName, @Param("id") String userID);
 }

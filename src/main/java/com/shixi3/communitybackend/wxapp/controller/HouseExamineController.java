@@ -56,7 +56,6 @@ public class HouseExamineController {
     //提交房屋认证信息
     @PostMapping("/addHouseRecord")
     public CommonResult<String> addHouseExamine(@RequestBody TenantExamineRecord record) {
-
         return houseExamineService.changeInfo(record);
     }
 

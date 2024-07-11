@@ -17,6 +17,7 @@ public class ImgUtils {
 
     @Resource
     RedisTemplate<String, Object> redisTemplate;
+
     private final String basePath = "c:/img/";
 
     public String uploadToSystem(String redisSuffix, String redisByte) {
@@ -30,6 +31,7 @@ public class ImgUtils {
     }
 
     public void uploadToRedis(MultipartFile file, String bytesKey, String suffixKey) throws IOException {
+
         // 首先将bytes和后缀放到redis中
         byte[] bytes = file.getBytes();
         String originalFilename = file.getOriginalFilename();

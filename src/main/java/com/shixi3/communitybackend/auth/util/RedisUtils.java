@@ -12,5 +12,8 @@ public class RedisUtils {
     public static String HOUSE_IMG_UPLOAD_BYTE = "house_img_upload_byte:";
     public static String HOUSE_IMG_UPLOAD_SUFFIX = "house_img_upload_suffix:";
 
+    public static String WX_PERSONAL_FACE_IMAGE_BYTE = "wx_personal_face_image_byte:";
+    public static String WX_PERSONAL_FACE_IMAGE_SUFFIX = "wx_person_face_image_suffix:";
+
     public static String WX_TOKEN = "wx_token:";
 }

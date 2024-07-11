@@ -10,6 +10,10 @@ spring:
       host: 203.189.215.50
       port: 6379
       password: Zmskwneds@%1
+  servlet:
+    multipart:
+      max-file-size: 4MB
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
