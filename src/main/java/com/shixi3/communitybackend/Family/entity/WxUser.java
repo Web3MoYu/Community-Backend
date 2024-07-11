@@ -22,6 +22,7 @@ public class WxUser {
     private Integer sex;
     private String idCard;
     private String avatar;
+    private String faceImage;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
     private Integer userType;
