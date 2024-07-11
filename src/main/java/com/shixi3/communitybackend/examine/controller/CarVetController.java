@@ -1,6 +1,5 @@
 package com.shixi3.communitybackend.examine.controller;
 
-import com.shixi3.communitybackend.car.entity.Car;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import com.shixi3.communitybackend.examine.entity.CarVet;
 import com.shixi3.communitybackend.examine.service.CarVetService;
@@ -9,6 +8,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -66,6 +66,8 @@ public class CarVetController {
      */
     @PostMapping("/add")
     public CommonResult<String> addCar(@RequestBody CarVet carVet){
+        carVet.setCreateTime(new Date());
+        carVet.setUpdateTime(new Date());
         boolean save = carVetService.save(carVet);
         if (save) {
             return CommonResult.success("新增车辆成功！");

@@ -12,4 +12,6 @@ public interface ParkingService extends IService<Parking> {
     ParkingVo getParkingById(Long parkingId);
 
     List<ParkingVo> getParkingByNumber(String number);
+
+    List<Parking> getParkingNoOwner();
 }
