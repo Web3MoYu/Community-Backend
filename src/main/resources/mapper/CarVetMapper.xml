@@ -10,4 +10,11 @@
         WHERE cv.vet_status = #{vetStatus}
         order by vet_id;
     </select>
+    <select id="getCarVetByUser" resultType="com.shixi3.communitybackend.examine.vo.CarVetVo">
+        SELECT cv.vet_id, cv.user_id, wx.name, cv.car_licence, cv.car_type, cv.vet_status, cv.vet_reason, cv.create_time, cv.update_time
+        FROM car_vet cv
+                 JOIN wx_user wx ON cv.user_id = wx.id
+        WHERE cv.user_id = #{userId}
+        order by vet_id;
+    </select>
 </mapper>

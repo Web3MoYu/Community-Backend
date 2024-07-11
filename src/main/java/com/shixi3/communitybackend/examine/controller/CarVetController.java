@@ -1,5 +1,6 @@
 package com.shixi3.communitybackend.examine.controller;
 
+import com.shixi3.communitybackend.car.entity.Car;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import com.shixi3.communitybackend.examine.entity.CarVet;
 import com.shixi3.communitybackend.examine.service.CarVetService;
@@ -73,5 +74,17 @@ public class CarVetController {
             return CommonResult.success("新增车辆成功！");
         }
         return CommonResult.error(500, "新增车辆失败！");
+    }
+
+    /**
+     * 查询个人申请车辆
+     * @param userId 用户id
+     * @return 车辆列表
+     */
+    @GetMapping("/list/{userId}")
+    public CommonResult<List<CarVetVo>> getCarVetByUser(@PathVariable Long userId){
+        List<CarVetVo> carVets=carVetService.getCarVetByUser(userId);
+        System.out.println(carVets);
+        return CommonResult.success(carVets);
     }
 }
