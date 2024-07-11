@@ -39,7 +39,7 @@ public class ImageRecognitionController {
         MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
         RequestBody body = RequestBody.create(mediaType, "image=" + recDto.getImage() + "&detect_direction=false&paragraph=false&probability=false");
         Request request = new Request.Builder()
-                .url("https://aip.baidubce.com/rest/2.0/ocr/v1/accurate?access_token=" + getAccessToken(WORDS_API_KEY, WORDS_SECRET_KEY))
+                .url("https://aip.baidubce.com/rest/2.0/ocr/v1/webimage?access_token=" + getAccessToken(WORDS_API_KEY, WORDS_SECRET_KEY))
                 .method("POST", body)
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .addHeader("Accept", "application/json")
