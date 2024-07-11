@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.shixi3.communitybackend.examine.entity.ParkingVet;
 import com.shixi3.communitybackend.examine.mapper.ParkingVetMapper;
 import com.shixi3.communitybackend.examine.service.ParkingVetService;
+import com.shixi3.communitybackend.examine.vo.ParkingVetVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ public class ParkingVetServiceImpl extends ServiceImpl<ParkingVetMapper, Parking
     @Autowired ParkingVetMapper parkingVetMapper;
 
     @Override
-    public List<ParkingVet> getParkingVetByStatus(Integer status){
+    public List<ParkingVetVo> getParkingVetByStatus(Integer status){
         return parkingVetMapper.getParkingVetByStatus(status);
     }
 }

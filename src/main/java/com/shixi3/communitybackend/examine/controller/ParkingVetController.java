@@ -3,6 +3,7 @@ package com.shixi3.communitybackend.examine.controller;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import com.shixi3.communitybackend.examine.entity.ParkingVet;
 import com.shixi3.communitybackend.examine.service.ParkingVetService;
+import com.shixi3.communitybackend.examine.vo.ParkingVetVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +24,8 @@ public class ParkingVetController {
      */
     @GetMapping("/getParking/{status}")
 //    @PreAuthorize("hasAuthority('')")
-    public CommonResult<List<ParkingVet>> getParkingVetByStatus(@PathVariable Integer status){
-        List<ParkingVet> parkingVets=parkingVetService.getParkingVetByStatus(status);
+    public CommonResult<List<ParkingVetVo>> getParkingVetByStatus(@PathVariable Integer status){
+        List<ParkingVetVo> parkingVets=parkingVetService.getParkingVetByStatus(status);
         return CommonResult.success(parkingVets);
     }
 
@@ -54,5 +55,14 @@ public class ParkingVetController {
             return CommonResult.success("修改车位信息成功！");
         }
         return CommonResult.error(500,"修改车位信息失败！");
+    }
+
+    @PostMapping("/add")
+    public CommonResult<String> addParking(@RequestBody ParkingVet parkingVet){
+        boolean save=parkingVetService.save(parkingVet);
+        if (save) {
+            return CommonResult.success("新增车位成功！");
+        }
+        return CommonResult.error(500, "新增车位失败！");
     }
 }

@@ -4,6 +4,7 @@ import com.shixi3.communitybackend.car.entity.Car;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import com.shixi3.communitybackend.examine.entity.CarVet;
 import com.shixi3.communitybackend.examine.service.CarVetService;
+import com.shixi3.communitybackend.examine.vo.CarVetVo;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +25,8 @@ public class CarVetController {
      * @return 车辆信息表
      */
     @GetMapping("/getCar/{status}")
-    public CommonResult<List<CarVet>> getCarVetByStatus(@PathVariable Integer status){
-        List<CarVet> carVets=carVetService.getCarVetByStatus(status);
+    public CommonResult<List<CarVetVo>> getCarVetByStatus(@PathVariable Integer status){
+        List<CarVetVo> carVets=carVetService.getCarVetByStatus(status);
         System.out.println(carVets);
         return CommonResult.success(carVets);
     }
@@ -56,5 +57,19 @@ public class CarVetController {
             return CommonResult.success("修改车辆信息成功！");
         }
         return CommonResult.error(500,"修改车辆信息失败！");
+    }
+
+    /**
+     * 新增审核车辆
+     * @param carVet 审核车辆信息
+     * @return 提示信息
+     */
+    @PostMapping("/add")
+    public CommonResult<String> addCar(@RequestBody CarVet carVet){
+        boolean save = carVetService.save(carVet);
+        if (save) {
+            return CommonResult.success("新增车辆成功！");
+        }
+        return CommonResult.error(500, "新增车辆失败！");
     }
 }

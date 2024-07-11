@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.shixi3.communitybackend.examine.mapper.ParkingVetMapper">
-    <select id="getParkingVetByStatus" resultType="com.shixi3.communitybackend.examine.entity.ParkingVet">
+    <select id="getParkingVetByStatus" resultType="com.shixi3.communitybackend.examine.vo.ParkingVetVo">
         SELECT pv.vet_id, pv.user_id, wx.name, pv.parking_number, pv.vet_status, pv.vet_reason, pv.create_time, pv.update_time
         FROM parking_vet pv
                  JOIN wx_user wx ON pv.user_id = wx.id

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.shixi3.communitybackend.examine.entity.CarVet;
 import com.shixi3.communitybackend.examine.mapper.CarVetMapper;
 import com.shixi3.communitybackend.examine.service.CarVetService;
+import com.shixi3.communitybackend.examine.vo.CarVetVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ public class CarVetServiceImpl extends ServiceImpl<CarVetMapper, CarVet> impleme
     @Autowired CarVetMapper carVetMapper;
 
     @Override
-    public List<CarVet> getCarVetByStatus(Integer status){
+    public List<CarVetVo> getCarVetByStatus(Integer status){
         return carVetMapper.getCarVetByStatus(status);
     }
 }

@@ -16,10 +16,6 @@ public class CarVet {
     @TableId(value = "vet_id",type = IdType.AUTO)
     private Long vetId;
     /**
-     * 用户id
-     */
-    private Long userId;
-    /**
      * 用户名称
      */
     private String name;
