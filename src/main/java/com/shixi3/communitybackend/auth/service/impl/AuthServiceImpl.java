@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -93,7 +92,7 @@ public class AuthServiceImpl implements AuthService {
         String redisSuffix = RedisUtils.PERSONAL_IMG_UPLOAD_SUFFIX + userID;
         String redisByte = RedisUtils.PERSONAL_IMG_UPLOAD_BYTE + userID;
         // 上传
-        String avatar = imgUtils.redisUploadImg(redisSuffix, redisByte);
+        String avatar = imgUtils.uploadToSystem(redisSuffix, redisByte);
         // 修改数据库
         userMapper.updatePhoneAndAvatar(phone, userID, avatar);
 
