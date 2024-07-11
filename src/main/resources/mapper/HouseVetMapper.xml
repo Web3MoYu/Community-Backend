@@ -12,7 +12,7 @@
               and r.house_id = house.house_id
               and house.building_id = building.building_id
             <if test="status == 0">
-                and r.status = #{status}
+                and r.status = 0
             </if>
 
             <if test="status != 0">
