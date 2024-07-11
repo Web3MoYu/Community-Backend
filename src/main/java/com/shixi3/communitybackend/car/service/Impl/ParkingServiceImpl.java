@@ -27,4 +27,9 @@ public class ParkingServiceImpl extends ServiceImpl<ParkingMapper,Parking> imple
     public List<ParkingVo> getParkingByNumber(String number){
         return parkingMapper.getParkingByNumber(number);
     }
+
+    @Override
+    public List<Parking> getParkingNoOwner() {
+        return parkingMapper.getParkingNoOwner();
+    }
 }
