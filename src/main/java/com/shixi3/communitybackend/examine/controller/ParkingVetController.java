@@ -65,4 +65,10 @@ public class ParkingVetController {
         }
         return CommonResult.error(500, "新增车位失败！");
     }
+
+    @GetMapping("/list/{userId}")
+    public CommonResult<List<ParkingVetVo>> getParkingVetByUser(@PathVariable Long userId){
+        List<ParkingVetVo> parkingVetVos=parkingVetService.getParkingVetByUser(userId);
+        return CommonResult.success(parkingVetVos);
+    }
 }

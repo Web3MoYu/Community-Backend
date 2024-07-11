@@ -10,4 +10,6 @@ import java.util.List;
 @Mapper
 public interface ParkingVetMapper extends BaseMapper<ParkingVet> {
     List<ParkingVetVo> getParkingVetByStatus(Integer status);
+
+    List<ParkingVetVo> getParkingVetByUser(Long userId);
 }
