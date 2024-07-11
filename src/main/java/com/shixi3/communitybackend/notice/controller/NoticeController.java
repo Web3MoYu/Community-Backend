@@ -118,4 +118,10 @@ public class NoticeController {
         return CommonResult.error(500, "批量删除失败");
     }
 
+    @GetMapping("/wxList")
+    public CommonResult<List<Notice>> wxList() {
+        List<Notice> result = noticeMapper.listFiveNoticesByTime();
+        return CommonResult.success(result);
+    }
+
 }
