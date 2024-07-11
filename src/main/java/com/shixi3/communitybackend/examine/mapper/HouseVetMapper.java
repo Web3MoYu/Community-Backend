@@ -7,9 +7,13 @@ import com.shixi3.communitybackend.examine.vo.HouseVetVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 @Mapper
 public interface HouseVetMapper extends BaseMapper<TenantExamineRecord> {
     Page<HouseVetVo> page(@Param("page") Page<HouseVetVo> page,@Param("status") Integer status);
 
     HouseVetVo getHouseVetVoById(@Param("id") Long id);
+
+    List<HouseVetVo> getHouseVetVoByUserId(@Param("wxUserId") Long wxUserId);
 }

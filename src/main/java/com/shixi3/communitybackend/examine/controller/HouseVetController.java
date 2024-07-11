@@ -5,7 +5,10 @@ import com.shixi3.communitybackend.common.model.CommonResult;
 import com.shixi3.communitybackend.examine.service.HouseVetService;
 import com.shixi3.communitybackend.examine.vo.HouseVetVo;
 import jakarta.annotation.Resource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/houseVet")
@@ -38,6 +41,20 @@ public class HouseVetController {
     @GetMapping("/getOne/{id}")
     public CommonResult<HouseVetVo> getHouseVetVoById(@PathVariable Long id) {
         HouseVetVo houseVetVo = houseVetService.getHouseVetVoById(id);
+        return CommonResult.success(houseVetVo);
+    }
+
+    /**
+     * 通过用户id获取审核信息
+     * @param wxUserId 用户id
+     * @return 审核信息
+     */
+    @GetMapping("/getOneByUserId/{wxUserId}")
+    @PreAuthorize("isAuthenticated()")
+    public CommonResult<List<HouseVetVo>> getHouseVetVoByUserId(@PathVariable Long wxUserId) {
+
+        List<HouseVetVo> houseVetVo = houseVetService.getHouseVetVoByUserId(wxUserId);
+
         return CommonResult.success(houseVetVo);
     }
 
