@@ -58,7 +58,7 @@ public class WechatServiceImpl implements WechatService {
         WxUser wxUser = wxUserMapper.selectOne(wrapper);
         if (wxUser == null) {
             wxUser = new WxUser(null, openId, null, "微信用户", null, null,
-                    DEFAULT_AVATAR, LocalDateTime.now(), LocalDateTime.now(),
+                    DEFAULT_AVATAR,null, LocalDateTime.now(), LocalDateTime.now(),
                     null, null, "昵称");
             wxUserMapper.insert(wxUser);
         }
