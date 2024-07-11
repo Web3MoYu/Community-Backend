@@ -14,6 +14,8 @@ import com.shixi3.communitybackend.examine.vo.HouseVetVo;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class HouseVetServiceImpl extends ServiceImpl<HouseVetMapper, TenantExamineRecord> implements HouseVetService {
     @Resource
@@ -35,7 +37,10 @@ public class HouseVetServiceImpl extends ServiceImpl<HouseVetMapper, TenantExami
     public HouseVetVo getHouseVetVoById(Long id) {
         return houseVetMapper.getHouseVetVoById(id);
     }
-
+    @Override
+    public List<HouseVetVo> getHouseVetVoByUserId(Long wxUserId) {
+        return houseVetMapper.getHouseVetVoByUserId(wxUserId);
+    }
     @Override
     public void auditHouseWithUser(HouseVetVo houseVetVo) {
         Integer status = houseVetVo.getStatus();
