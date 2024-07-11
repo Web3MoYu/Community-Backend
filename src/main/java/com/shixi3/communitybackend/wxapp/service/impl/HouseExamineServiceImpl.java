@@ -1,11 +1,9 @@
 package com.shixi3.communitybackend.wxapp.service.impl;
 
 import com.shixi3.communitybackend.auth.util.RedisUtils;
-import com.shixi3.communitybackend.auth.util.SecurityUtil;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import com.shixi3.communitybackend.common.util.ImgUtils;
 import com.shixi3.communitybackend.examine.entity.TenantExamineRecord;
-import com.shixi3.communitybackend.examine.mapper.HouseVetMapper;
 import com.shixi3.communitybackend.examine.service.HouseVetService;
 import com.shixi3.communitybackend.wxapp.service.HouseExamineService;
 import jakarta.annotation.Resource;
@@ -32,7 +30,7 @@ public class HouseExamineServiceImpl implements HouseExamineService {
         String redisSuffix = RedisUtils.HOUSE_IMG_UPLOAD_SUFFIX + userID;
         String redisByte = RedisUtils.HOUSE_IMG_UPLOAD_BYTE + userID;
         // 上传
-        String avatar = imgUtils.redisUploadImg(redisSuffix, redisByte);
+        String avatar = imgUtils.uploadToSystem(redisSuffix, redisByte);
         record.setCertImg(avatar);
         // 将数据添加进数据库
         houseVetService.save(record);
