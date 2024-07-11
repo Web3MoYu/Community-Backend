@@ -16,4 +16,10 @@ public interface HouseService extends IService<House> {
 
     void delBatchWithUser(List<Long> houseIds);
 
+    Long getOwner(Long houseId);
+
+    void setTopType(Long userId);
+
+    void addUserHouse(Long userId,Long houseId,Integer belongFlag);
+
 }
