@@ -29,6 +29,8 @@ public class LoginController {
     @Resource
     WxUserMapper wxUserMapper;
 
+    @Resource
+    RedisTemplate<String, Object> redisTemplate;
 
 
     @PostMapping("/wxlogin")
@@ -49,6 +51,17 @@ public class LoginController {
         wrapper.eq(WxUser::getWxId, wxId);
         WxUser wxUser = wxUserMapper.selectOne(wrapper);
         return CommonResult.success(wxUser);
+    }
+
+    @GetMapping("/logout")
+    public CommonResult<String> logout() {
+        String wxId = ((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        // 删除redis中的token
+        Boolean delete = redisTemplate.delete(RedisUtils.WX_TOKEN + wxId);
+        if (!Boolean.TRUE.equals(delete)) {
+            throw new BizException("退出登录失败");
+        }
+        return CommonResult.success("退出成功");
     }
 
 
