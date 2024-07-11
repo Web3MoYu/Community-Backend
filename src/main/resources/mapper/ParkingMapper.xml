@@ -6,7 +6,7 @@
     <select id="getAllParking" resultType="com.shixi3.communitybackend.car.Vo.ParkingVo">
         SELECT p.parking_id,p.number,p.owner,u.name
         FROM parking p
-                 JOIN wx_user u ON p.owner = u.id
+                 LEFT JOIN wx_user u ON p.owner = u.id
         order by parking_id;
     </select>
     <select id="getParkingById" resultType="com.shixi3.communitybackend.car.Vo.ParkingVo">

@@ -6,4 +6,6 @@ import lombok.Data;
 @Data
 public class CarVo extends Car {
     private String name;
+
+    private String idCard;
 }
