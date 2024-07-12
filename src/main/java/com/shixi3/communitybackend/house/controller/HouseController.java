@@ -39,6 +39,7 @@ public class HouseController {
      * @return 分页信息
      */
     @GetMapping("/list")
+    @PreAuthorize("hasAuthority('house:house:list')")
     public CommonResult<Page<HouseVo>> page(@RequestParam(defaultValue = "1") Integer page,
                                             @RequestParam(defaultValue = "5") Integer pageSize,
                                             @RequestParam(required = false) Long buildingId) {
@@ -53,6 +54,7 @@ public class HouseController {
      * @return 提示信息
      */
     @PostMapping("/add")
+    @PreAuthorize("hasAuthority('house:house:add')")
     public CommonResult<String> addHouse(@RequestBody HouseVo house) {
         boolean save = houseService.save(house);
         houseService.saveWithUserHouseAndTopType(house);
@@ -69,6 +71,7 @@ public class HouseController {
      * @return 提示信息
      */
     @PutMapping("/edit")
+    @PreAuthorize("hasAuthority('house:house:edit')")
     public CommonResult<String> updateHouse(@RequestBody HouseVo house) {
         boolean update = houseService.updateById(house);
         houseService.saveWithUserHouseAndTopType(house);
@@ -85,6 +88,7 @@ public class HouseController {
      * @return 房屋信息
      */
     @GetMapping("/getOne/{id}")
+    @PreAuthorize("hasAuthority('house:house:edit')")
     public CommonResult<HouseVo> getHouse(@PathVariable Long id) {
         HouseVo house = houseService.getHouseVoById(id);
         return CommonResult.success(house);
@@ -97,6 +101,7 @@ public class HouseController {
      * @return 提示信息
      */
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('house:house:delete')")
     public CommonResult<String> deleteHouse(@PathVariable Long id) {
         houseService.deleteWithUser(id);
         return CommonResult.success("删除房屋信息成功！");
@@ -109,6 +114,7 @@ public class HouseController {
      * @return 提示信息
      */
     @DeleteMapping("/delBatch")
+    @PreAuthorize("hasAuthority('house:house:delBatch')")
     public CommonResult<String> delBatch(@RequestBody List<Long> ids) {
         houseService.delBatchWithUser(ids);
         return CommonResult.success("批量删除房屋信息成功！");
