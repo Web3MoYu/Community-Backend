@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.shixi3.communitybackend.Family.entity.UserHouse;
 import com.shixi3.communitybackend.Family.service.UserHouseService;
-import com.shixi3.communitybackend.Family.service.WxUserService;
 import com.shixi3.communitybackend.examine.entity.TenantExamineRecord;
 import com.shixi3.communitybackend.examine.mapper.HouseVetMapper;
 import com.shixi3.communitybackend.examine.service.HouseVetService;
@@ -51,13 +50,16 @@ public class HouseVetServiceImpl extends ServiceImpl<HouseVetMapper, TenantExami
         Integer type = houseVetVo.getUserType();
         // 审核通过
         if(status == 2) {
+            LambdaQueryWrapper<House> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(House::getHouseId,houseVetVo.getHouseId());
+            House house = houseService.getOne(wrapper);
             if(type==0) {
                 // 设置户主为当前用户
-                LambdaQueryWrapper<House> wrapper = new LambdaQueryWrapper<>();
-                wrapper.eq(House::getHouseId,houseVetVo.getHouseId());
-                House house = houseService.getOne(wrapper);
                 house.setOwnerId(houseVetVo.getWxUserId());
-                houseService.updateById(house);
+                // 没有租户 状态为已售出
+                if(houseService.getTenants(house.getHouseId()).size() == 0) {
+                    house.setState(1);
+                }
 
                 Long owner = houseService.getOwner(houseVetVo.getHouseId());
                 if(owner != 0) {
@@ -72,11 +74,16 @@ public class HouseVetServiceImpl extends ServiceImpl<HouseVetMapper, TenantExami
                 houseService.setTopType(houseVetVo.getWxUserId());
             }
             else if(type == 1) {
+                // 没有租户 状态为出租中
+                if(house.getState() != 2) {
+                    house.setState(2);
+                }
                 // 设置当前用户为租户
                 houseService.addUserHouse(houseVetVo.getWxUserId(), houseVetVo.getHouseId(), 2);
                 // 设置当前用户最高权限
                 houseService.setTopType(houseVetVo.getWxUserId());
             }
+            houseService.updateById(house);
         }
     }
 

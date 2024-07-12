@@ -47,7 +47,7 @@ public class HouseServiceImpl extends ServiceImpl<HouseMapper, House> implements
         return houseVo;
     }
 
-    private List<WxUser> getTenants(Long houseId) {
+    public List<WxUser> getTenants(Long houseId) {
         LambdaQueryWrapper<UserHouse> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(UserHouse::getHouseId,houseId);
         wrapper.eq(UserHouse::getBelongFlag,2);
@@ -115,6 +115,7 @@ public class HouseServiceImpl extends ServiceImpl<HouseMapper, House> implements
             House newHouse = getOne(wrapper);
             newHouse.setOwnerId(ownerId);
             updateById(house);
+
             // 添加户主关系
             addUserHouse(ownerId,houseId,0);
             // 设置最高权限
