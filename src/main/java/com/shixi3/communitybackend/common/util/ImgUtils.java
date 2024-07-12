@@ -25,6 +25,9 @@ public class ImgUtils {
         String suffix = (String) redisTemplate.opsForValue().get(redisSuffix);
         byte[] bytes = (byte[]) redisTemplate.opsForValue().get(redisByte);
         String avatar = UUID.randomUUID() + suffix;
+        if (suffix == null || bytes == null) {
+            return null;
+        }
         // 上传
         upload(bytes, avatar);
         return avatar;
