@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.shixi3.communitybackend.building.entity.Building;
 import com.shixi3.communitybackend.building.service.BuildingService;
+import com.shixi3.communitybackend.building.vo.BuildingVo;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import jakarta.annotation.Resource;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,10 +42,10 @@ public class BuildingController {
      */
     @GetMapping("/list")
     @PreAuthorize("hasAuthority('house:building:list')")
-    public CommonResult<Page<Building>> page(@RequestParam(defaultValue = "1") Integer page,
-                                             @RequestParam(defaultValue = "5") Integer pageSize,
-                                             @RequestParam(required = false) Integer buildingNumber) {
-        Page<Building> result = buildingService.page(page, pageSize, buildingNumber);
+    public CommonResult<Page<BuildingVo>> page(@RequestParam(defaultValue = "1") Integer page,
+                                               @RequestParam(defaultValue = "5") Integer pageSize,
+                                               @RequestParam(required = false) Integer buildingNumber) {
+        Page<BuildingVo> result = buildingService.page(page, pageSize, buildingNumber);
         return CommonResult.success(result);
     }
 

@@ -18,7 +18,7 @@ public interface WxUserMapper extends BaseMapper<WxUser> {
     List<WxUserVo> getParentId();
 
     //    @Select("select * from wx_user where (user_type = 1 or user_type = 2) and parent_id = #{parentId} and name like concat('%',#{name}, '%');")
-    @Select("select * from wx_user where user_type != 3 and name like concat('%',#{name}, '%');")
+    @Select("select * from wx_user where name like concat('%',#{name}, '%');")
     List<WxUserVo> getGroups(String name);
 
     List<WxUserVo> getGroupsByParent(Long id, String name);

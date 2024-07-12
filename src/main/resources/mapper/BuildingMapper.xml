@@ -3,11 +3,18 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace= "com.shixi3.communitybackend.building.mapper.BuildingMapper">
-    <select id="page" resultType="com.shixi3.communitybackend.building.entity.Building">
-        select building_id,building_number,floor_num,house_num,create_time,update_time from building
+    <select id="page" resultType="com.shixi3.communitybackend.building.vo.BuildingVo">
+        select b.building_id,
+        building_number,
+        floor_num,house_num,
+        create_time,update_time,
+        (select count(*) from
+        user_house u,house h
+        where u.house_id = h.house_id and h.building_id = b.building_id) user_num
+        from building b
         <where>
             <if test="number != null and number !='' ">
-                building.building_number = #{number}
+                b.building_number = #{number}
             </if>
         </where>
     </select>

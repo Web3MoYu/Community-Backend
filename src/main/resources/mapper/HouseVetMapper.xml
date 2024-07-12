@@ -30,7 +30,7 @@
           and r.id = #{id}
     </select>
     <select id="getHouseVetVoByUserId" resultType="com.shixi3.communitybackend.examine.vo.HouseVetVo">
-        select	r.id,wx_user_id,r.user_type,cert_img,status,r.house_id,
+        select	r.id,wx_user_id,r.user_type,cert_img,status,r.house_id,r.notes,
                   name,id_card,phone,sex,building_number,house_number,r.create_time,r.update_time
         from building,house,wx_user,tenant_examine_record r
         where  r.wx_user_id = wx_user.id

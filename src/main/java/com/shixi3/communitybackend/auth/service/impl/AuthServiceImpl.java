@@ -94,7 +94,11 @@ public class AuthServiceImpl implements AuthService {
         // 上传
         String avatar = imgUtils.uploadToSystem(redisSuffix, redisByte);
         // 修改数据库
-        userMapper.updatePhoneAndAvatar(phone, userID, avatar);
+        if (avatar == null) {
+            userMapper.updatePhone(phone, userID);
+        } else {
+            userMapper.updatePhoneAndAvatar(phone, userID, avatar);
+        }
 
         // 删除redis图片数据
         redisTemplate.delete(redisSuffix);
