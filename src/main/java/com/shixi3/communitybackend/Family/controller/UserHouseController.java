@@ -5,6 +5,7 @@ import com.shixi3.communitybackend.Family.entity.WxUser;
 import com.shixi3.communitybackend.Family.entity.WxUserTree;
 import com.shixi3.communitybackend.Family.mapper.UserHouseMapper;
 import com.shixi3.communitybackend.Family.service.UserHouseService;
+import com.shixi3.communitybackend.Family.service.WxUserService;
 import com.shixi3.communitybackend.Family.vo.DeleteVo;
 import com.shixi3.communitybackend.common.entity.Page;
 import com.shixi3.communitybackend.common.exception.BizException;
@@ -28,6 +29,8 @@ public class UserHouseController {
     UserHouseService userHouseService;
     @Autowired
     private UserHouseMapper userHouseMapper;
+    @Autowired
+    private WxUserService wxUserService;
     /**
      * 获取房屋户主
      * @param id
@@ -99,7 +102,7 @@ public class UserHouseController {
     }
 
     /**
-     * 获取房屋所有成员
+     * 获取房屋所有住户
      * @param houseId
      * @return
      */
@@ -129,7 +132,7 @@ public class UserHouseController {
     }
 
     /**
-     * 或取房屋租户
+     * 获取房屋租户
      * @param houseId
      * @return
      */
@@ -144,22 +147,33 @@ public class UserHouseController {
     }
 
     /**
-     * 添加家庭成员
-     * @param houseId
-     * @param wxUserId
+     * 添加家庭成员,租客
+     * @param idCard
+     * @param userHouse
      * @return
      */
-    @PostMapping("/addHouseMember")
-    public CommonResult addHouseMember(Long houseId,Long wxUserId) {
-        UserHouse userHouse=new UserHouse();
-        userHouse.setHouseId(houseId);
-        userHouse.setWxUserId(wxUserId);
-        long count=userHouseService.addHouseMember(userHouse);
-        if(count!=0){
-            return CommonResult.success(count);
-        }else {
-            return CommonResult.error(0,"添加失败");
-        }
+    @PostMapping("/addHouseMemberTenant/{idCard}")
+    public CommonResult<String> addHouseMember(@PathVariable String idCard, @RequestBody UserHouse userHouse) {
+       WxUser wxUser=wxUserService.getWxUserByIdCard(idCard);
+       if (wxUser==null) {
+           return CommonResult.error(1,"用户未注册!");
+       }else {
+           List<Integer> relation=userHouseMapper.getUserHouseBelongFlag(wxUser.getId(),userHouse.getHouseId());
+           if(relation.contains(userHouse.getBelongFlag())){
+               return CommonResult.error(2,"用户已存在!");
+           }else {
+               UserHouse userHouse1=new UserHouse();
+               userHouse1.setHouseId(userHouse.getHouseId());
+               userHouse1.setWxUserId(wxUser.getId());
+               userHouse1.setBelongFlag(userHouse.getBelongFlag());
+               Long count=userHouseService.addHouseMemberTenant(userHouse1);
+               if (count!=0) {
+                   return CommonResult.success("添加成功!");
+               }else {
+                   throw new BizException("添加失败!");
+               }
+           }
+       }
     }
 
     /**
@@ -226,4 +240,15 @@ public class UserHouseController {
         }
     }
 
+    /**
+     * 获取房屋中用户的用户类型
+     * @param userId
+     * @param houseId
+     * @return
+     * @throws BizException
+     */
+    @GetMapping("/getUserHouseBelongFlag")
+    public CommonResult<List<Integer>> getUserHouseBelongFlag(Long userId,Long houseId) throws BizException {
+       return CommonResult.success(userHouseMapper.getUserHouseBelongFlag(userId,houseId));
+    }
 }

@@ -164,7 +164,7 @@ public class UserHouseServiceImpl extends ServiceImpl<UserHouseMapper,UserHouse>
      */
     @Override
     public WxUser getHouseholdByHouseId(Long houseId) {
-        return wxUserMapper.selectById(userHouseMapper.getHouseHoldIdByHouseId(houseId));
+        return userHouseMapper.getHouseHoldByHouseId(houseId);
     }
 
     /**
@@ -263,15 +263,14 @@ public class UserHouseServiceImpl extends ServiceImpl<UserHouseMapper,UserHouse>
     }
 
     /**
-     * 添加家庭成员
-     * 一个房屋会有多个成员，一个成员可以住多个房屋
+     * 添加家庭成员,租客
+     *
      *
      * @param userHouse
      * @return
      */
     @Override
-    public Long addHouseMember(UserHouse userHouse) {
-        userHouse.setBelongFlag(1);
+    public Long addHouseMemberTenant(UserHouse userHouse) {
         userHouseMapper.insert(userHouse);
         return userHouse.getId();
     }

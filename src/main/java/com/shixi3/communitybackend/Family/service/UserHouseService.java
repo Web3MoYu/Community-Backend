@@ -105,14 +105,14 @@ public interface UserHouseService extends IService<UserHouse> {
      */
     boolean updateHouseHold(Long houseId, Long wxUserId);
 
+
     /**
-     * 添加家庭成员
-     * 一个房屋会有多个成员，一个成员可以住多个房屋
+     * 添加家庭成员,租客
      *
      * @param userHouse
      * @return
      */
-    Long addHouseMember(UserHouse userHouse);
+    Long addHouseMemberTenant(UserHouse userHouse);
 
     /**
      * 删除用户房屋关系

@@ -16,8 +16,8 @@ public interface UserHouseMapper extends BaseMapper<UserHouse> {
      * @param houseId
      * @return
      */
-    @Select("select wx_user_id from user_house where belong_flag=0 and house_id=#{houseId}")
-    Long getHouseHoldIdByHouseId(Long houseId);
+    @Select("select * from wx_user join user_house on wx_user.id=user_house.wx_user_id where user_house.belong_flag=0 and user_house.house_id=#{houseId}")
+    WxUser getHouseHoldByHouseId(Long houseId);
 
     /**
      * 获取房屋的所有住户
@@ -57,5 +57,14 @@ public interface UserHouseMapper extends BaseMapper<UserHouse> {
      */
     @Select("select * from house join user_house on house.house_id=user_house.house_id where user_house.belong_flag!=0 and user_house.wx_user_id=#{wxUserId}")
     List<House> getLiveHouses(Long wxUserId);
+
+    /**
+     * 获取用户类型，0为户主，2为租户，1为成员
+     * @param userId
+     * @param houseId
+     * @return
+     */
+    @Select("select belong_flag from user_house where wx_user_id=#{userId} and house_id=#{houseId}")
+    List<Integer> getUserHouseBelongFlag(Long userId, Long houseId);
 
 }
