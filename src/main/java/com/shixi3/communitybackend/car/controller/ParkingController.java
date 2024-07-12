@@ -89,7 +89,7 @@ public class ParkingController {
      * @return 提示信息
      */
     @DeleteMapping("/delete/{parkingId}")
-    @PreAuthorize("hasAnyAuthority('car:parking:delete')")
+//    @PreAuthorize("hasAnyAuthority('car:parking:delete')")
     public CommonResult<String> deleteParking(@PathVariable Long parkingId) {
         LambdaQueryWrapper<Parking> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Parking::getParkingId, parkingId);

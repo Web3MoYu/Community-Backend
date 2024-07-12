@@ -102,8 +102,10 @@ public class CarController {
      * @return 提示信息
      */
     @DeleteMapping("/delete/{carId}")
-    @PreAuthorize("hasAnyAuthority('car:cars:delete')")
+//    @PreAuthorize("hasAnyAuthority('car:cars:delete')")
     public CommonResult<String> deleteCar(@PathVariable Long carId) {
+        System.out.println("****************************");
+        System.out.println(carId);
         LambdaQueryWrapper<Car> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Car::getCarId, carId);
         boolean delete = carService.remove(wrapper);
