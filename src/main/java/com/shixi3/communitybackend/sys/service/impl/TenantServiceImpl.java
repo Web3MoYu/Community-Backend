@@ -46,6 +46,8 @@ public class TenantServiceImpl extends ServiceImpl<TenantMapper, Tenant> impleme
     public void deleteWxUser(Long id, Integer userType) {
         if(userType == 0){
             tenantMapper.changeHouse(id);
+        }else if(userType == 3){
+            tenantMapper.deleteById(id);
         }
     }
 
