@@ -37,9 +37,10 @@ public class ImageRecognitionController {
     @PostMapping("/carRec")
     public CommonResult<String> carRec(@org.springframework.web.bind.annotation.RequestBody RecDto recDto) throws IOException {
         MediaType mediaType = MediaType.parse("application/x-www-form-urlencoded");
-        RequestBody body = RequestBody.create(mediaType, "image=" + recDto.getImage() + "&detect_direction=false&paragraph=false&probability=false");
+        String image = "image=" + recDto.getImage() + "&detect_direction=false&paragraph=false&probability=false";
+        RequestBody body = RequestBody.create(mediaType, image);
         Request request = new Request.Builder()
-                .url("https://aip.baidubce.com/rest/2.0/ocr/v1/webimage?access_token=" + getAccessToken(WORDS_API_KEY, WORDS_SECRET_KEY))
+                .url("https://aip.baidubce.com/rest/2.0/ocr/v1/accurate_basic?access_token=" + getAccessToken(WORDS_API_KEY, WORDS_SECRET_KEY))
                 .method("POST", body)
                 .addHeader("Content-Type", "application/x-www-form-urlencoded")
                 .addHeader("Accept", "application/json")
