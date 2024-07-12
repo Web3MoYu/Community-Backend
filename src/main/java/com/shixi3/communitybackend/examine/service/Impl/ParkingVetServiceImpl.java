@@ -20,4 +20,8 @@ public class ParkingVetServiceImpl extends ServiceImpl<ParkingVetMapper, Parking
     public List<ParkingVetVo> getParkingVetByStatus(Integer status){
         return parkingVetMapper.getParkingVetByStatus(status);
     }
+    @Override
+    public List<ParkingVetVo> getParkingVetByUser(Long userId){
+        return  parkingVetMapper.getParkingVetByUser(userId);
+    }
 }

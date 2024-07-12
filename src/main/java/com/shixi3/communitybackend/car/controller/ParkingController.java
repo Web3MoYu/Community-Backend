@@ -138,4 +138,14 @@ public class ParkingController {
         return CommonResult.success(parking);
     }
 
+    /**
+     * 查询所有无主车位
+     * @return 车位列表
+     */
+    @GetMapping("/getNoOwner")
+    public CommonResult<List<Parking>> getParkingNoOwner(){
+        List<Parking> parkings=parkingService.getParkingNoOwner();
+        return CommonResult.success(parkings);
+    }
+
 }

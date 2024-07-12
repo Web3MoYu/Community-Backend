@@ -23,4 +23,9 @@
         WHERE p.number = #{number}
         ORDER BY p.parking_id;
     </select>
+    <select id="getParkingNoOwner" resultType="com.shixi3.communitybackend.car.entity.Parking">
+        SELECT p.parking_id, p.number, p.owner
+        FROM parking p
+        WHERE p.owner IS NULL
+    </select>
 </mapper>

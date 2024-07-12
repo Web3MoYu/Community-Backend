@@ -5,8 +5,9 @@ import lombok.Data;
 
 @Data
 public class CarVetVo extends CarVet {
+
     /**
-     * 用户id
+     * 用户名称
      */
-    private Long userId;
+    private String name;
 }

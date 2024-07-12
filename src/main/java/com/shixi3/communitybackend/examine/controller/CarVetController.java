@@ -9,6 +9,7 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -66,10 +67,24 @@ public class CarVetController {
      */
     @PostMapping("/add")
     public CommonResult<String> addCar(@RequestBody CarVet carVet){
+        carVet.setCreateTime(new Date());
+        carVet.setUpdateTime(new Date());
         boolean save = carVetService.save(carVet);
         if (save) {
             return CommonResult.success("新增车辆成功！");
         }
         return CommonResult.error(500, "新增车辆失败！");
+    }
+
+    /**
+     * 查询个人申请车辆
+     * @param userId 用户id
+     * @return 车辆列表
+     */
+    @GetMapping("/list/{userId}")
+    public CommonResult<List<CarVetVo>> getCarVetByUser(@PathVariable Long userId){
+        List<CarVetVo> carVets=carVetService.getCarVetByUser(userId);
+        System.out.println(carVets);
+        return CommonResult.success(carVets);
     }
 }

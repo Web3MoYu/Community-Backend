@@ -4,13 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.shixi3.communitybackend.Family.entity.UserHouse;
-import com.shixi3.communitybackend.Family.entity.WxUser;
 import com.shixi3.communitybackend.Family.service.UserHouseService;
 import com.shixi3.communitybackend.Family.service.WxUserService;
 import com.shixi3.communitybackend.examine.entity.TenantExamineRecord;
 import com.shixi3.communitybackend.examine.mapper.HouseVetMapper;
 import com.shixi3.communitybackend.examine.service.HouseVetService;
 import com.shixi3.communitybackend.examine.vo.HouseVetVo;
+import com.shixi3.communitybackend.house.entity.House;
+import com.shixi3.communitybackend.house.service.HouseService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +22,9 @@ public class HouseVetServiceImpl extends ServiceImpl<HouseVetMapper, TenantExami
     @Resource
     private HouseVetMapper houseVetMapper;
     @Resource
-    private WxUserService wxUserService;
-    @Resource
     private UserHouseService userHouseService;
+    @Resource
+    private HouseService houseService;
     @Override
     public Page<HouseVetVo> page(Integer page, Integer pageSize, Integer status) {
 
@@ -46,27 +47,44 @@ public class HouseVetServiceImpl extends ServiceImpl<HouseVetMapper, TenantExami
         Integer status = houseVetVo.getStatus();
         // 修改状态
         this.updateById(houseVetVo);
+
+        Integer type = houseVetVo.getUserType();
         // 审核通过
         if(status == 2) {
-            Long userId = houseVetVo.getWxUserId();
-            // 获取用户身份
-            LambdaQueryWrapper<WxUser> wrapper = new LambdaQueryWrapper<>();
-            wrapper.eq(WxUser::getId,userId);
-            WxUser wxUser = wxUserService.getOne(wrapper);
-            // 修改用户类型
-            if(wxUser.getUserType() != 0) {
-                wxUser.setUserType(houseVetVo.getUserType());
-                wxUserService.updateById(wxUser);
+            if(type==0) {
+                // 设置户主为当前用户
+                LambdaQueryWrapper<House> wrapper = new LambdaQueryWrapper<>();
+                wrapper.eq(House::getHouseId,houseVetVo.getHouseId());
+                House house = houseService.getOne(wrapper);
+                house.setOwnerId(houseVetVo.getWxUserId());
+                houseService.updateById(house);
+
+                Long owner = houseService.getOwner(houseVetVo.getHouseId());
+                if(owner != 0) {
+                    // 删除原来户主关系表
+                    deleteOwnerUserHouse(owner, houseVetVo.getHouseId());
+                    // 设置原来户主最高权限
+                    houseService.setTopType(owner);
+                }
+                // 设置当前用户为户主
+                houseService.addUserHouse(houseVetVo.getWxUserId(), houseVetVo.getHouseId(), 0);
+                // 设置当前用户最高权限
+                houseService.setTopType(houseVetVo.getWxUserId());
             }
-            // 添加房屋用户关系
-            Integer type = houseVetVo.getUserType();
-            Integer belongFlag = 0;
-            if(type == 1) belongFlag = 2;
-            UserHouse userHouse = new UserHouse();
-            userHouse.setWxUserId(wxUser.getId());
-            userHouse.setHouseId(houseVetVo.getHouseId());
-            userHouse.setBelongFlag(belongFlag);
-            userHouseService.save(userHouse);
+            else if(type == 1) {
+                // 设置当前用户为租户
+                houseService.addUserHouse(houseVetVo.getWxUserId(), houseVetVo.getHouseId(), 2);
+                // 设置当前用户最高权限
+                houseService.setTopType(houseVetVo.getWxUserId());
+            }
         }
+    }
+
+    public void deleteOwnerUserHouse(Long ownerId,Long houseId) {
+        LambdaQueryWrapper<UserHouse> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(UserHouse::getWxUserId,ownerId);
+        wrapper.eq(UserHouse::getHouseId,houseId);
+        wrapper.eq(UserHouse::getBelongFlag,0);
+        userHouseService.remove(wrapper);
     }
 }

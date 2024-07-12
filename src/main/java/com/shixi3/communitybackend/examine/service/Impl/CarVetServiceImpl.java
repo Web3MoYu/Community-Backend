@@ -19,4 +19,7 @@ public class CarVetServiceImpl extends ServiceImpl<CarVetMapper, CarVet> impleme
     public List<CarVetVo> getCarVetByStatus(Integer status){
         return carVetMapper.getCarVetByStatus(status);
     }
+
+    @Override
+    public List<CarVetVo> getCarVetByUser(Long userId){return carVetMapper.getCarVetByUser(userId);};
 }

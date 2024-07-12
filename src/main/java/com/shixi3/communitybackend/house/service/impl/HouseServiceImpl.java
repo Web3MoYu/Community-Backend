@@ -109,6 +109,12 @@ public class HouseServiceImpl extends ServiceImpl<HouseMapper, House> implements
 
         // 增添新的关系
         if(ownerId != 0) {
+            // 设置户主为当前用户
+            LambdaQueryWrapper<House> wrapper = new LambdaQueryWrapper<>();
+            wrapper.eq(House::getHouseId,houseId);
+            House newHouse = getOne(wrapper);
+            newHouse.setOwnerId(ownerId);
+            updateById(house);
             // 添加户主关系
             addUserHouse(ownerId,houseId,0);
             // 设置最高权限

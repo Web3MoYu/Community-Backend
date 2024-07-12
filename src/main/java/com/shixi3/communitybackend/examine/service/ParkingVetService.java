@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface ParkingVetService extends IService<ParkingVet> {
     List<ParkingVetVo> getParkingVetByStatus(Integer status);
+
+    List<ParkingVetVo> getParkingVetByUser(Long userId);
 }
