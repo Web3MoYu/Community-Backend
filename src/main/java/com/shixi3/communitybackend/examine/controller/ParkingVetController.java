@@ -61,6 +61,11 @@ public class ParkingVetController {
         return CommonResult.error(500,"修改车位信息失败！");
     }
 
+    /**
+     * 添加审核车位信息
+     * @param parkingVet 车位信息
+     * @return 提示信息
+     */
     @PostMapping("/add")
     public CommonResult<String> addParking(@RequestBody ParkingVet parkingVet){
         boolean save=parkingVetService.save(parkingVet);
@@ -70,6 +75,11 @@ public class ParkingVetController {
         return CommonResult.error(500, "新增车位失败！");
     }
 
+    /**
+     * 查询个人审核车位信息
+     * @param userId 用户id
+     * @return 车位列表信息
+     */
     @GetMapping("/list/{userId}")
     public CommonResult<List<ParkingVetVo>> getParkingVetByUser(@PathVariable Long userId){
         List<ParkingVetVo> parkingVetVos=parkingVetService.getParkingVetByUser(userId);
