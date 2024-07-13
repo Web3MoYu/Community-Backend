@@ -279,12 +279,18 @@ public class UserHouseServiceImpl extends ServiceImpl<UserHouseMapper,UserHouse>
      * 删除用户房屋关系
      * 后台管理员可删除户主，成员，租户
      * 前台户主可删除家庭成员
-     * @param id
+     * @param userId
+     * @param houseId
+     * @param belongFlag
      * @return
      */
     @Override
-    public Integer deleteHouseMember(Long id) {
-        return  userHouseMapper.deleteById(id);
+    public Integer deleteHouseMemberTenant(Long userId,Long houseId,Integer belongFlag) {
+        LambdaQueryWrapper<UserHouse> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(UserHouse::getHouseId, houseId);
+        queryWrapper.eq(UserHouse::getBelongFlag, belongFlag);
+        queryWrapper.eq(UserHouse::getWxUserId, userId);
+        return userHouseMapper.delete(queryWrapper);
     }
 
 }

@@ -3,6 +3,7 @@ package com.shixi3.communitybackend.Family.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.shixi3.communitybackend.Family.entity.UserHouse;
 import com.shixi3.communitybackend.Family.entity.WxUser;
+import com.shixi3.communitybackend.Family.vo.MyHouseVo;
 import com.shixi3.communitybackend.house.entity.House;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -47,16 +48,23 @@ public interface UserHouseMapper extends BaseMapper<UserHouse> {
      * @param wxUserId
      * @return
      */
-    @Select("select * from house join user_house on house.house_id=user_house.house_id where user_house.belong_flag=0 and user_house.wx_user_id=#{wxUserId}")
-    List<House> getMyHouses(Long wxUserId);
+    @Select("SELECT house.house_id,house.house_number, building.building_number FROM user_house"+
+            " JOIN house ON user_house.house_id = house.house_id"+
+            " JOIN building ON house.building_id = building.building_id"+
+            " WHERE user_house.belong_flag = 0 AND user_house.wx_user_id=#{wxUserId}")
+    List<MyHouseVo> getMyHouses(Long wxUserId);
 
     /**
      * 获取用户所住的房
      * @param wxUserId
      * @return
      */
-    @Select("select * from house join user_house on house.house_id=user_house.house_id where user_house.belong_flag!=0 and user_house.wx_user_id=#{wxUserId}")
-    List<House> getLiveHouses(Long wxUserId);
+    @Select("SELECT house.house_id,house.house_number, building.building_number" +
+            " FROM user_house" +
+            " JOIN house ON user_house.house_id = house.house_id" +
+            " JOIN building ON house.building_id = building.building_id" +
+            " WHERE user_house.belong_flag != 0 AND user_house.wx_user_id=#{wxUserId}")
+    List<MyHouseVo> getLiveHouses(Long wxUserId);
 
     /**
      * 获取用户类型，0为户主，2为租户，1为成员
