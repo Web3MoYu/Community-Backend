@@ -110,8 +110,8 @@ public class UserController {
         // 修改其他信息
         wrapper.set(User::getUsername, user.getUsername())
                 .set(User::getPhone, user.getPhone())
-                .set(User::getPassword, user.getPassword())
-                .set(User::getSalt, user.getSalt())
+                .set(user.getPassword() != null, User::getPassword, user.getPassword())
+                .set(user.getPassword() != null, User::getSalt, user.getSalt())
                 .set(User::getName, user.getName())
                 .set(User::getSex, user.getSex())
                 .set(User::getUpdateTime, user.getUpdateTime())
