@@ -7,6 +7,7 @@ import com.shixi3.communitybackend.Family.mapper.UserHouseMapper;
 import com.shixi3.communitybackend.Family.service.UserHouseService;
 import com.shixi3.communitybackend.Family.service.WxUserService;
 import com.shixi3.communitybackend.Family.vo.DeleteVo;
+import com.shixi3.communitybackend.Family.vo.MyHouseVo;
 import com.shixi3.communitybackend.common.entity.Page;
 import com.shixi3.communitybackend.common.exception.BizException;
 import com.shixi3.communitybackend.common.model.CommonResult;
@@ -180,12 +181,12 @@ public class UserHouseController {
      * 删除用户房屋关系表的一条数据
      * 在前台户主先查询家庭成员后可删除家庭成员（先判断是否为户主）
      * 后台管理员可执行删除户主和该房屋成员
-     * @param id
+     * @param userHouse
      * @return
      */
-    @DeleteMapping("/deleteHouseMember/{id}")
-    public CommonResult<Integer> deleteHouseMember(@PathVariable Long id) {
-        int count=userHouseService.deleteHouseMember(id);
+    @DeleteMapping("/deleteHouseMemberTenant")
+    public CommonResult<Integer> deleteHouseMember(@RequestBody UserHouse userHouse) {
+        int count=userHouseService.deleteHouseMemberTenant(userHouse.getWxUserId(),userHouse.getHouseId(),userHouse.getBelongFlag());
         if(count!=0){
             return CommonResult.success(count);
         }else {
@@ -216,8 +217,8 @@ public class UserHouseController {
      * @return
      */
     @GetMapping("/getMyHousesById/{wxUserId}")
-    public CommonResult<List<House>> getMyHousesById(@PathVariable Long wxUserId) {
-        List<House> myHouses=userHouseMapper.getMyHouses(wxUserId);
+    public CommonResult<List<MyHouseVo>> getMyHousesById(@PathVariable Long wxUserId) {
+        List<MyHouseVo> myHouses=userHouseMapper.getMyHouses(wxUserId);
         if (myHouses!=null) {
             return CommonResult.success(myHouses);
         }else {
@@ -231,8 +232,8 @@ public class UserHouseController {
      * @return
      */
     @GetMapping("/getLiveHousesByUserId/{wxUserId}")
-    public CommonResult<List<House>> getLiveHousesByUserId(@PathVariable Long wxUserId) {
-        List<House> liveHouses=userHouseMapper.getLiveHouses(wxUserId);
+    public CommonResult<List<MyHouseVo>> getLiveHousesByUserId(@PathVariable Long wxUserId) {
+        List<MyHouseVo> liveHouses=userHouseMapper.getLiveHouses(wxUserId);
         if (liveHouses!=null) {
             return CommonResult.success(liveHouses);
         }else {
