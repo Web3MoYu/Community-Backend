@@ -1,5 +1,7 @@
 package com.shixi3.communitybackend.examine.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.shixi3.communitybackend.car.entity.Parking;
 import com.shixi3.communitybackend.common.model.CommonResult;
 import com.shixi3.communitybackend.examine.entity.ParkingVet;
 import com.shixi3.communitybackend.examine.service.ParkingVetService;
@@ -31,12 +33,14 @@ public class ParkingVetController {
 
     /**
      * 根据审核id删除车位
-     * @param id 审核车位编号
+     * @param vetId 审核车位编号
      * @return 提示信息
      */
-    @DeleteMapping("/delete/{id}")
-    public CommonResult<String> deleteParking(@PathVariable Long id){
-        boolean delete=parkingVetService.removeById(id);
+    @DeleteMapping("/delete/{vetId}")
+    public CommonResult<String> deleteParking(@PathVariable Long vetId){
+        LambdaQueryWrapper<ParkingVet> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ParkingVet::getVetId, vetId);
+        boolean delete=parkingVetService.remove(wrapper);
         if(delete){
             return CommonResult.success("删除车位成功!");
         }
@@ -57,6 +61,11 @@ public class ParkingVetController {
         return CommonResult.error(500,"修改车位信息失败！");
     }
 
+    /**
+     * 添加审核车位信息
+     * @param parkingVet 车位信息
+     * @return 提示信息
+     */
     @PostMapping("/add")
     public CommonResult<String> addParking(@RequestBody ParkingVet parkingVet){
         boolean save=parkingVetService.save(parkingVet);
@@ -66,6 +75,11 @@ public class ParkingVetController {
         return CommonResult.error(500, "新增车位失败！");
     }
 
+    /**
+     * 查询个人审核车位信息
+     * @param userId 用户id
+     * @return 车位列表信息
+     */
     @GetMapping("/list/{userId}")
     public CommonResult<List<ParkingVetVo>> getParkingVetByUser(@PathVariable Long userId){
         List<ParkingVetVo> parkingVetVos=parkingVetService.getParkingVetByUser(userId);

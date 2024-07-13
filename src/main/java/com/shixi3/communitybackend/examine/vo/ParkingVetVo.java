@@ -9,4 +9,8 @@ public class ParkingVetVo extends ParkingVet {
      * 用户名称
      */
     private String name;
+    /**
+     * 车位号
+     */
+    private String parkingNumber;
 }

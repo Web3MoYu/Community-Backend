@@ -4,17 +4,20 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.shixi3.communitybackend.examine.mapper.ParkingVetMapper">
     <select id="getParkingVetByStatus" resultType="com.shixi3.communitybackend.examine.vo.ParkingVetVo">
-        SELECT pv.vet_id, pv.user_id, wx.name, pv.parking_number, pv.vet_status, pv.vet_reason, pv.create_time, pv.update_time
+        SELECT pv.vet_id, pv.user_id, wx.name, pv.parking_id, pv.vet_status, pv.vet_reason, pv.create_time, pv.update_time, p.number as parking_number
         FROM parking_vet pv
                  JOIN wx_user wx ON pv.user_id = wx.id
+                 JOIN parking p ON pv.parking_id = p.parking_id
         WHERE pv.vet_status = #{vetStatus}
-        order by vet_id;
+        ORDER BY pv.vet_id;
     </select>
+
     <select id="getParkingVetByUser" resultType="com.shixi3.communitybackend.examine.vo.ParkingVetVo">
-        SELECT pv.vet_id, pv.user_id, wx.name, pv.parking_number, pv.vet_status, pv.vet_reason, pv.create_time, pv.update_time
+        SELECT pv.vet_id, pv.user_id, wx.name, pv.parking_id, pv.vet_status, pv.vet_reason, pv.create_time, pv.update_time, p.number as parking_number
         FROM parking_vet pv
                  JOIN wx_user wx ON pv.user_id = wx.id
+                 JOIN parking p ON pv.parking_id = p.parking_id
         WHERE pv.user_id = #{userId}
-        order by vet_id;
+        ORDER BY pv.vet_id;
     </select>
 </mapper>

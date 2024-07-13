@@ -3,13 +3,10 @@ package com.shixi3.communitybackend.sys.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.shixi3.communitybackend.Family.entity.WxUser;
 import com.shixi3.communitybackend.Family.mapper.WxUserMapper;
 import com.shixi3.communitybackend.Family.vo.WxUserVo;
 import com.shixi3.communitybackend.car.service.CarService;
 import com.shixi3.communitybackend.common.model.CommonResult;
-import com.shixi3.communitybackend.house.entity.House;
-import com.shixi3.communitybackend.house.service.HouseService;
 import com.shixi3.communitybackend.sys.entity.Tenant;
 import com.shixi3.communitybackend.sys.service.TenantService;
 import jakarta.annotation.Resource;
@@ -43,8 +40,7 @@ public class TenantController {
 //    @PreAuthorize("hasAuthority('sys:role:list')")
     public CommonResult<Page<Tenant>> pageSearch(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int pageSize, @RequestParam(required = false) String name) {
         LambdaQueryWrapper<Tenant> wrapper = new LambdaQueryWrapper<>();
-        wrapper.like(name != null, Tenant::getName, name)
-                .ne(Tenant::getUserType, 2);
+        wrapper.like(name != null, Tenant::getName, name);
         Page<Tenant> result = tenantService.page(new Page<>(page, pageSize), wrapper);
         return CommonResult.success(result);
     }
@@ -58,7 +54,7 @@ public class TenantController {
      * @return
      */
     @DeleteMapping("/delete")
-    @PreAuthorize("hasAuthority('sys:wxuser:delete')")
+    @PreAuthorize("hasAuthority('sys:wxUser:delete')")
     public CommonResult<String> deleteWxUser(@RequestParam Long id,@RequestParam Long parentId,@RequestParam Integer userType){
         if(userType == 0){        //是户主
             List<Long> list = new ArrayList<>();
@@ -77,7 +73,10 @@ public class TenantController {
                 //将用户改为游客
                 tenantService.changeUser(wxUserVo1.getId());
             }
-        }else {  //业主（户主家人）或 租户
+        }else if(userType == 3){
+            tenantService.deleteWxUser(id, userType);
+        }
+        else {  //业主（户主家人）或 租户
             //删除car
             carService.deleteByOwner(id);
             //删除user_house表中对应数据
@@ -108,6 +107,7 @@ public class TenantController {
     @PutMapping("/edit")
     @PreAuthorize("hasAuthority('sys:wxUser:edit')")
     public CommonResult<String> updateHouse(@RequestBody Tenant tenant) {
+        System.out.println(tenant.getIdCard());
         boolean update = tenantService.updateById(tenant);
         if(update) {
             return CommonResult.success("修改用户信息成功！");

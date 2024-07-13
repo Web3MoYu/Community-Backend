@@ -32,7 +32,6 @@ public class NoticeController {
      * @return 公告分页信息
      */
     @GetMapping("/list")
-    @PreAuthorize("hasAuthority('notice:list') or hasAuthority('wx_user')")
     public CommonResult<Page<NoticeVo>> getNotices(@RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "5") int pageSize, @RequestParam(required = false) String title) {
         Page<NoticeVo> result = new Page<>(page, pageSize);
         result = noticeMapper.page(result, title);
@@ -62,7 +61,6 @@ public class NoticeController {
      * @return 公告信息
      */
     @GetMapping("/getOne/{noticeId}")
-    @PreAuthorize("hasAuthority('notice:list')")
     public CommonResult<Notice> getOne(@PathVariable Long noticeId) {
         LambdaQueryWrapper<Notice> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Notice::getNoticeId, noticeId);

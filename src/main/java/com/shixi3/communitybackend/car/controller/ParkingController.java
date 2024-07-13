@@ -2,6 +2,7 @@ package com.shixi3.communitybackend.car.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.shixi3.communitybackend.car.Vo.ParkingVo;
+import com.shixi3.communitybackend.car.entity.Car;
 import com.shixi3.communitybackend.car.entity.Parking;
 import com.shixi3.communitybackend.car.service.ParkingService;
 import com.shixi3.communitybackend.common.model.CommonResult;
@@ -84,13 +85,15 @@ public class ParkingController {
     /**
      * 根据id删除车位信息
      *
-     * @param id 车位id
+     * @param parkingId 车位id
      * @return 提示信息
      */
-    @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAnyAuthority('car:parking:delete')")
-    public CommonResult<String> deleteParking(@PathVariable Long id) {
-        boolean delete = parkingService.removeById(id);
+    @DeleteMapping("/delete/{parkingId}")
+//    @PreAuthorize("hasAnyAuthority('car:parking:delete')")
+    public CommonResult<String> deleteParking(@PathVariable Long parkingId) {
+        LambdaQueryWrapper<Parking> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Parking::getParkingId, parkingId);
+        boolean delete = parkingService.remove(wrapper);
         if (delete) {
             return CommonResult.success("删除车位成功!");
         }

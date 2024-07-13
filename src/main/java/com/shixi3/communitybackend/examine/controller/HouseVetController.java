@@ -24,6 +24,7 @@ public class HouseVetController {
      * @return 分页信息
      */
     @GetMapping("/list")
+    @PreAuthorize("hasAuthority('examine:house:list')")
     public CommonResult<Page<HouseVetVo>> page(@RequestParam Integer page,
                                                @RequestParam Integer pageSize,
                                                @RequestParam(required = false) Integer status)
@@ -39,6 +40,7 @@ public class HouseVetController {
      * @return 审核信息
      */
     @GetMapping("/getOne/{id}")
+    @PreAuthorize("hasAuthority('examine:house:getOne')")
     public CommonResult<HouseVetVo> getHouseVetVoById(@PathVariable Long id) {
         HouseVetVo houseVetVo = houseVetService.getHouseVetVoById(id);
         return CommonResult.success(houseVetVo);
@@ -64,6 +66,7 @@ public class HouseVetController {
      * @return 提示信息
      */
     @PutMapping("/audit")
+    @PreAuthorize("hasAuthority('exmaine:house:audit')")
     public CommonResult<String> audit(@RequestBody HouseVetVo houseVetVo) {
         houseVetService.auditHouseWithUser(houseVetVo);
         return CommonResult.success("审核房屋信息完成");

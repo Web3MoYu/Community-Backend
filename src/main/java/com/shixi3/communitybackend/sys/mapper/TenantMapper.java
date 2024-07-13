@@ -48,6 +48,6 @@ public interface TenantMapper extends BaseMapper<Tenant> {
     void changeUser(Long id);
 
 
-    @Update("update house set owner_id = 0 where  ")
+    @Update("update house set owner_id = 0 where  1")
     void changeHouse(Long id);
 }

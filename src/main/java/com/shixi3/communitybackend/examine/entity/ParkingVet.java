@@ -22,7 +22,7 @@ public class ParkingVet {
     /**
      * 车位号
      */
-    private String parkingNumber;
+    private String parkingId;
     /**
      * 审核状态
      */
