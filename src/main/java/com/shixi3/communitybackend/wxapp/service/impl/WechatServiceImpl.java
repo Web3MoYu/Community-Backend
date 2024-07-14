@@ -57,7 +57,7 @@ public class WechatServiceImpl implements WechatService {
         wrapper.eq(WxUser::getWxId, openId);
         WxUser wxUser = wxUserMapper.selectOne(wrapper);
         if (wxUser == null) {
-            wxUser = new WxUser(null, openId, null, null, null, null,
+            wxUser = new WxUser(null, openId, "", "", null, "",
                     DEFAULT_AVATAR, null, LocalDateTime.now(), LocalDateTime.now(),
                     null, null, "昵称");
             wxUserMapper.insert(wxUser);
